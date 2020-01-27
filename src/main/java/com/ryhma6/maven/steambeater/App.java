@@ -3,7 +3,7 @@ package com.ryhma6.maven.steambeater;
 import model.Stat;
 import model.StatAccessObject;
 
-
+//Testing branch
 public class App 
 {
     public static void main( String[] args )
