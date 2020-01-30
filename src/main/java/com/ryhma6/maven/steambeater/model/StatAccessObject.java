@@ -1,4 +1,4 @@
-package model;
+package com.ryhma6.maven.steambeater.model;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

@@ -1,7 +1,7 @@
 package com.ryhma6.maven.steambeater;
 
-import model.Stat;
-import model.StatAccessObject;
+import com.ryhma6.maven.steambeater.model.Stat;
+import com.ryhma6.maven.steambeater.model.StatAccessObject;
 
 //Testing branch
 public class App 
