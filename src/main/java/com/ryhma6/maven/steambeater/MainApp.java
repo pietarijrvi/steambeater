@@ -1,6 +1,9 @@
 package com.ryhma6.maven.steambeater;
 import java.io.IOException;
 
+import com.ryhma6.maven.steambeater.view.GameListController;
+import com.ryhma6.maven.steambeater.view.TestViewController;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,8 +25,8 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Steambeater");
 
         initRootLayout();
-
-        showPersonOverview();
+        showGameList();
+        showTestView();
     }
     
     /**
@@ -47,19 +50,40 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
     }
-
+    
     /**
-     * Shows the person overview inside the root layout.
+     * Adds gamelist view to the root layout
      */
-    public void showPersonOverview() {
+    public void showGameList() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/GameList.fxml"));
+            AnchorPane gameList = (AnchorPane) loader.load();
+            // Set person overview into the center of root layout.
+            rootLayout.setCenter(gameList);
+         // Give the controller access to the main app.
+            GameListController controller = loader.getController();
+            controller.setMainApp(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Adds testview to the root layout
+     */
+    public void showTestView() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/TestView.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
-            
+            AnchorPane testi = (AnchorPane) loader.load();
             // Set person overview into the center of root layout.
-            rootLayout.setCenter(personOverview);
+            rootLayout.setLeft(testi);
+         // Give the controller access to the main app.
+            TestViewController controller = loader.getController();
+            controller.setMainApp(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
