@@ -2,22 +2,29 @@ package com.ryhma6.maven.steambeater;
 import java.io.IOException;
 
 import com.ryhma6.maven.steambeater.view.GameListController;
+import com.ryhma6.maven.steambeater.view.SearchBoxController;
 import com.ryhma6.maven.steambeater.view.TestViewController;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    
+    @FXML
+    private FlowPane sidebar;
 
     @Override
     public void start(Stage primaryStage) {
@@ -26,7 +33,8 @@ public class MainApp extends Application {
 
         initRootLayout();
         showGameList();
-        showTestView();
+        showSearchBox();
+        showFriendsList();
     }
     
     /**
@@ -73,14 +81,32 @@ public class MainApp extends Application {
     /**
      * Adds testview to the root layout
      */
-    public void showTestView() {
+    public void showSearchBox() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/searchBox.fxml"));
-            AnchorPane testi = (AnchorPane) loader.load();
+            AnchorPane box = (AnchorPane) loader.load();
             // Set person overview into the center of root layout.
-            rootLayout.setLeft(testi);
+            FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
+            sidebar.getChildren().add(box);
+         // Give the controller access to the main app.
+            SearchBoxController controller = loader.getController();
+            controller.setMainApp(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void showFriendsList() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/friendsList.fxml"));
+            AnchorPane friends = (AnchorPane) loader.load();
+            // Set person overview into the center of root layout.
+            FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
+            sidebar.getChildren().add(friends);
          // Give the controller access to the main app.
             TestViewController controller = loader.getController();
             controller.setMainApp(this);
@@ -88,6 +114,7 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
     }
+    
     
     /**
      * Returns the main stage.
