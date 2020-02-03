@@ -61,6 +61,11 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>5.4.10.Final</version>
 		</dependency>
+		<dependency> 
+			<groupId>org.expressme</groupId> 
+			<artifactId>JOpenId</artifactId> 
+			<version>1.08</version> 
+		</dependency>
 	</dependencies>
 </project>
 
