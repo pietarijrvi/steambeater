@@ -4,15 +4,21 @@ import java.io.IOException;
 import org.expressme.openid.Association;
 import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
+import com.ryhma6.maven.steambeater.view.GameListController;
+import com.ryhma6.maven.steambeater.view.SearchBoxController;
+import com.ryhma6.maven.steambeater.view.TestViewController;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
@@ -29,6 +35,9 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    
+    @FXML
+    private FlowPane sidebar;
 
     @Override
     public void start(Stage primaryStage) {
@@ -36,8 +45,9 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Steambeater");
 
         initRootLayout();
-
-        showPersonOverview();
+        showGameList();
+        showSearchBox();
+        showFriendsList();
     }
     
     /**
@@ -61,23 +71,63 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
     }
-
+    
     /**
-     * Shows the person overview inside the root layout.
+     * Adds gamelist view to the root layout
      */
-    public void showPersonOverview() {
+    public void showGameList() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/TestView.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
-            
+            loader.setLocation(MainApp.class.getResource("view/GameList.fxml"));
+            AnchorPane gameList = (AnchorPane) loader.load();
             // Set person overview into the center of root layout.
-            rootLayout.setCenter(personOverview);
+            rootLayout.setCenter(gameList);
+         // Give the controller access to the main app.
+            GameListController controller = loader.getController();
+            controller.setMainApp(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    
+    /**
+     * Adds testview to the root layout
+     */
+    public void showSearchBox() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/searchBox.fxml"));
+            AnchorPane box = (AnchorPane) loader.load();
+            // Set person overview into the center of root layout.
+            FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
+            sidebar.getChildren().add(box);
+         // Give the controller access to the main app.
+            SearchBoxController controller = loader.getController();
+            controller.setMainApp(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void showFriendsList() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/friendsList.fxml"));
+            AnchorPane friends = (AnchorPane) loader.load();
+            // Set person overview into the center of root layout.
+            FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
+            sidebar.getChildren().add(friends);
+         // Give the controller access to the main app.
+            TestViewController controller = loader.getController();
+            controller.setMainApp(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     
     /**
      * Returns the main stage.
