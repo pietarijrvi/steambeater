@@ -148,17 +148,28 @@ public class MainApp extends Application {
         //StackPane secondaryLayout = new StackPane();
         //secondaryLayout.getChildren().add(secondLabel);
         //Scene secondScene = new Scene(secondaryLayout, 230, 100);
+        
+        
+        OpenIdManager manager = new OpenIdManager(); 
+        //manager.setReturnTo("http://www.openid-example.com/openId"); 
+        manager.setReturnTo("http://localhost:8080"); 
+        manager.setRealm("http://localhost:8080"); 
+        Endpoint endpoint = manager.lookupEndpoint("https://steamcommunity.com/openid"); 
+        Association association = manager.lookupAssociation(endpoint);
+        String url = manager.getAuthenticationUrl(endpoint, association); 
+        System.out.println("Copy the authentication URL in browser:\n" + url); 
 
         
         WebView webView = new WebView();
-        webView.getEngine().load("http://google.com");
+        //webView.getEngine().load("http://google.com");
+        webView.getEngine().load(url);
         VBox vBox = new VBox(webView);
         Scene secondScene = new Scene(vBox, 960, 600);
 
 
         // New window (Stage)
         Stage newWindow = new Stage();
-        newWindow.setTitle("Second Stage");
+        newWindow.setTitle("Steam OpenID login");
         newWindow.setScene(secondScene);
 
         // Specifies the modality for new window.
@@ -174,14 +185,6 @@ public class MainApp extends Application {
         newWindow.setY(parentStage.getY() + 100);
 
         newWindow.show();
-        /*
-        OpenIdManager manager = new OpenIdManager(); 
-        manager.setReturnTo("http://www.openid-example.com/openId"); 
-        manager.setRealm("http://*.openid-example.com"); 
-        Endpoint endpoint = manager.lookupEndpoint("Google"); 
-        Association association = manager.lookupAssociation(endpoint);
-        String url = manager.getAuthenticationUrl(endpoint, association); 
-        System.out.println("Copy the authentication URL in browser:\n" + url); 
-        */
+        
     }
 }
