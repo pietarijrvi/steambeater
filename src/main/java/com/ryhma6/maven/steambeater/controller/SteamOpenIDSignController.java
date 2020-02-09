@@ -13,6 +13,8 @@ import org.expressme.openid.Association;
 import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
+import com.ryhma6.maven.steambeater.model.UserPreferences;
+
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +29,7 @@ import javafx.stage.Stage;
 public class SteamOpenIDSignController {
 
 	private Stage newWindow;
+	UserPreferences prefs = new UserPreferences();
 
 	@FXML
 	protected void handleBrowserButtonAction(ActionEvent event) {
@@ -105,7 +108,8 @@ public class SteamOpenIDSignController {
 			for (HttpCookie cookie : cookies) {
 				System.out.println("CookieHandler retrieved cookie: " + cookie);
 				if (cookie.getName().equals("steamLoginSecure")) {
-					System.out.println("gg");
+					System.out.println("SteamIDCookieValue:" + cookie.getValue());
+					prefs.setSteamID(cookie.getValue().substring(0,17));
 					newWindow.close();
 				}
 			}
