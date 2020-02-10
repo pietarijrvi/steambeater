@@ -7,22 +7,38 @@ import com.ryhma6.maven.steambeater.MainApp;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 
 public class GameListController implements Initializable {
 
 	@FXML
 	private ListView<String> gameList;
 
+	@FXML
+	Button hideStatsButton;
+
+	@FXML
+	AnchorPane statsWindow;
+	
+	@FXML
+	Label statLabel;
+
 	private MainApp mainApp;
 	private final Image IMAGE_TEST = new Image("test.png");
 
-	private Image[] listOfImages = {IMAGE_TEST};
+	private Image[] listOfImages = { IMAGE_TEST };
 
 	private void loadGames() {
 		ObservableList<String> names = FXCollections.observableArrayList("Pasianssi", "Minesweeper", "Sudoku");
@@ -49,6 +65,34 @@ public class GameListController implements Initializable {
 			}
 		});
 	}
+	
+	private void hideStats() {
+		statsWindow.setManaged(false);
+		statsWindow.setVisible(false);
+	}
+	
+	private void showStats() {
+		statsWindow.setManaged(true);
+		statsWindow.setVisible(true);
+	}
+
+	public void setStatsVisibility() {
+		System.out.println("Button clicked!");
+		boolean visible = statsWindow.isManaged();
+		if (visible == true) {
+			hideStats();
+		} else {
+			showStats();
+		}
+	}
+
+	@FXML
+	private void handleMouseClick(MouseEvent arg0) {
+		VBox statsBox = (VBox) statsWindow.lookup("#statsBox");
+		String text = gameList.getSelectionModel().getSelectedItem();
+		statLabel.setText(text);
+		showStats();
+	}
 
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
@@ -57,5 +101,6 @@ public class GameListController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		loadGames();
+		hideStats();
 	}
 }
