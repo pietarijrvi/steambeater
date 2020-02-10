@@ -4,9 +4,10 @@ import java.io.IOException;
 import org.expressme.openid.Association;
 import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
+
+import com.ryhma6.maven.steambeater.view.FriendsListController;
 import com.ryhma6.maven.steambeater.view.GameListController;
 import com.ryhma6.maven.steambeater.view.SearchBoxController;
-import com.ryhma6.maven.steambeater.view.TestViewController;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -121,7 +122,7 @@ public class MainApp extends Application {
             FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
             sidebar.getChildren().add(friends);
          // Give the controller access to the main app.
-            TestViewController controller = loader.getController();
+            FriendsListController controller = loader.getController();
             controller.setMainApp(this);
         } catch (IOException e) {
             e.printStackTrace();
