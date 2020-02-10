@@ -65,26 +65,33 @@ public class GameListController implements Initializable {
 			}
 		});
 	}
+	
+	private void hideStats() {
+		statsWindow.setManaged(false);
+		statsWindow.setVisible(false);
+	}
+	
+	private void showStats() {
+		statsWindow.setManaged(true);
+		statsWindow.setVisible(true);
+	}
 
 	public void setStatsVisibility() {
 		System.out.println("Button clicked!");
 		boolean visible = statsWindow.isManaged();
 		if (visible == true) {
-			statsWindow.setManaged(false);
-			statsWindow.setVisible(false);
+			hideStats();
 		} else {
-			statsWindow.setManaged(true);
-			statsWindow.setVisible(true);
+			showStats();
 		}
 	}
 
 	@FXML
-	public void handleMouseClick(MouseEvent arg0) {
+	private void handleMouseClick(MouseEvent arg0) {
 		VBox statsBox = (VBox) statsWindow.lookup("#statsBox");
 		String text = gameList.getSelectionModel().getSelectedItem();
 		statLabel.setText(text);
-		statsWindow.setManaged(true);
-		statsWindow.setVisible(true);
+		showStats();
 	}
 
 	public void setMainApp(MainApp mainApp) {
@@ -94,7 +101,6 @@ public class GameListController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		loadGames();
-		statsWindow.setManaged(false);
-		statsWindow.setVisible(false);
+		hideStats();
 	}
 }
