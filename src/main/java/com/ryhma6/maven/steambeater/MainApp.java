@@ -1,9 +1,6 @@
 package com.ryhma6.maven.steambeater;
 import java.io.IOException;
 
-import org.expressme.openid.Association;
-import org.expressme.openid.Endpoint;
-import org.expressme.openid.OpenIdManager;
 import com.ryhma6.maven.steambeater.view.GameListController;
 import com.ryhma6.maven.steambeater.view.SearchBoxController;
 import com.ryhma6.maven.steambeater.view.TestViewController;
@@ -18,18 +15,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.Node;
-import javafx.stage.Modality;
-import javafx.scene.web.WebView;
-import javafx.scene.layout.VBox;
+
 
 public class MainApp extends Application {
 
@@ -142,50 +129,4 @@ public class MainApp extends Application {
         launch(args);
     }
 
-    @FXML protected void handleBrowserButtonAction(ActionEvent event) {
-        
-        Label secondLabel = new Label("Steam OpenID login");
- 
-        //StackPane secondaryLayout = new StackPane();
-        //secondaryLayout.getChildren().add(secondLabel);
-        //Scene secondScene = new Scene(secondaryLayout, 230, 100);
-        
-        
-        OpenIdManager manager = new OpenIdManager(); 
-        //manager.setReturnTo("http://www.openid-example.com/openId"); 
-        manager.setReturnTo("http://localhost:8080"); 
-        manager.setRealm("http://localhost:8080"); 
-        Endpoint endpoint = manager.lookupEndpoint("https://steamcommunity.com/openid"); 
-        Association association = manager.lookupAssociation(endpoint);
-        String url = manager.getAuthenticationUrl(endpoint, association); 
-        System.out.println("Copy the authentication URL in browser:\n" + url); 
-
-        
-        WebView webView = new WebView();
-        //webView.getEngine().load("http://google.com");
-        webView.getEngine().load(url);
-        VBox vBox = new VBox(webView);
-        Scene secondScene = new Scene(vBox, 960, 600);
-
-
-        // New window (Stage)
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Steam OpenID login");
-        newWindow.setScene(secondScene);
-
-        // Specifies the modality for new window.
-        newWindow.initModality(Modality.WINDOW_MODAL);
-
-        // Specifies the owner Window (parent) for new window
-        Node source = (Node) event.getSource();
-        Stage parentStage = (Stage)source.getScene().getWindow();
-        newWindow.initOwner(parentStage);
-
-        // Set position of second window, related to primary window.
-        newWindow.setX(parentStage.getX() + 200);
-        newWindow.setY(parentStage.getY() + 100);
-
-        newWindow.show();
-        
-    }
 }
