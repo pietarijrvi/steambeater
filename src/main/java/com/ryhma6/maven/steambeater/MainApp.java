@@ -91,6 +91,7 @@ public class MainApp extends Application {
         }
     }
     
+    
     /**
      * Adds testview to the root layout
      */
