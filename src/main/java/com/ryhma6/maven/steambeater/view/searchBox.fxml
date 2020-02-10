@@ -9,8 +9,8 @@
    <children>
       <Button layoutX="207.0" layoutY="14.0" mnemonicParsing="false" text="Search" />
       <CheckBox layoutX="14.0" layoutY="53.0" mnemonicParsing="false" text="Include Ignored" />
-      <CheckBox layoutX="14.0" layoutY="77.0" mnemonicParsing="false" text="Exclude Beaten" />
-      <CheckBox layoutX="14.0" layoutY="101.0" mnemonicParsing="false" text="Exclude Unbeaten" />
+      <CheckBox layoutX="14.0" layoutY="77.0" mnemonicParsing="false" text="Include Beaten" />
+      <CheckBox layoutX="14.0" layoutY="101.0" mnemonicParsing="false" text="Include Unbeaten" />
       <TextField layoutX="14.0" layoutY="14.0" />
    </children>
 </AnchorPane>
