@@ -37,7 +37,7 @@ public class MainApp extends Application {
 
         initRootLayout();
         showGameList();
-        showSearchBox();
+//        showSearchBox();
         showFriendsList();
     }
     
@@ -86,22 +86,22 @@ public class MainApp extends Application {
     /**
      * Adds testview to the root layout
      */
-    public void showSearchBox() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/searchBox.fxml"));
-            AnchorPane box = (AnchorPane) loader.load();
-            // Set person overview into the center of root layout.
-            FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
-            sidebar.getChildren().add(box);
-         // Give the controller access to the main app.
-            SearchBoxController controller = loader.getController();
-            controller.setMainApp(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void showSearchBox() {
+//        try {
+//            // Load person overview.
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(MainApp.class.getResource("view/searchBox.fxml"));
+//            AnchorPane box = (AnchorPane) loader.load();
+//            // Set person overview into the center of root layout.
+//            FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
+//            sidebar.getChildren().add(box);
+//         // Give the controller access to the main app.
+//            SearchBoxController controller = loader.getController();
+//            controller.setMainApp(this);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
     
     public void showFriendsList() {
         try {
