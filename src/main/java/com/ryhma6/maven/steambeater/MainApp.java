@@ -37,7 +37,6 @@ public class MainApp extends Application {
 
         initRootLayout();
         showGameList();
-        showSearchBox();
         showFriendsList();
     }
     

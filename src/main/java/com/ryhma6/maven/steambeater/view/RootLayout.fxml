@@ -12,6 +12,6 @@
         onAction="#handleBrowserButtonAction"/>
    </top>
    <left>
-      <FlowPane fx:id="sidebar" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <FlowPane fx:id="sidebar" prefHeight="200.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
    </left>
 </BorderPane>
