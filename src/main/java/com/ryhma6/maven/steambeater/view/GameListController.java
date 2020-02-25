@@ -51,49 +51,33 @@ public class GameListController implements Initializable {
 	private final Image IMAGE_TEST = new Image("test.png");
 
 	private Image[] listOfImages = { IMAGE_TEST };
-	private ObservableList<String> names = FXCollections.observableArrayList("Pasianssi", "Minesweeper", "Sudoku");
-	private ImageView imageView = new ImageView();
-	private Button ignoreButton = new Button();
-	private Button setAsBeaten = new Button();
+	private ObservableList<String> names = FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
 	
 	
-	private void loadGames() {
-		HBox hbox = new HBox();
-		Label gameName = new Label();
-		hbox.getChildren().addAll(imageView,gameName);
-		HBox.setHgrow(imageView, Priority.ALWAYS);
-		hbox.setSpacing(20);
-		ignoreButton.setText("Ignore this game");
-		setAsBeaten.setText("Set game as beaten");
-		
-		hbox.setAlignment(Pos.CENTER_LEFT);
-		gameName.setPadding(new Insets(10,300,10,10));
-
-//		ignoreButton.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent event) {
-//				String selectedGame = gameList.getSelectionModel().getSelectedItem();
-//				gameList.getItems().remove(selectedGame);
-//			}
-//		});
+	private void loadGames() {	
 		
 		gameList.setCellFactory(param -> new ListCell<String>() {
+			private Label gameName = new Label();
+			private HBox hbox = new HBox();
+			private Button ignoreButton = new Button();
+			private Button setAsBeaten = new Button();
+			private ImageView imageView = new ImageView();
 			
 			@Override
 			public void updateItem(String name, boolean empty) {
 				super.updateItem(name, empty);
-				if (empty || name == null) {
+				if (empty) {
 					setText(null);
 					setGraphic(null);
 				} else {
-					if (name.equals("Sudoku")) {
-						imageView.setImage(listOfImages[0]);
-					} else if (name.equals("Pasianssi"))
-						imageView.setImage(listOfImages[0]);
-				
+					ignoreButton.setText("Ignore this game");
+					setAsBeaten.setText("Set game as beaten");	
 					gameName.setText(name);
+					hbox.setSpacing(50);
+					hbox.setAlignment(Pos.CENTER_LEFT);
+					imageView.setImage(listOfImages[0]);
+					hbox.getChildren().addAll(imageView,gameName,ignoreButton);
 					setGraphic(hbox);
-					
 				}
 			}
 		});
@@ -126,11 +110,7 @@ public class GameListController implements Initializable {
 		statLabel.setText(text);
 		showStats();
 	}
-	
-	private String getName(){
-		String name = names.toString();
-		return name;
-	}
+
 	
 	@FXML
 	/**
@@ -167,7 +147,6 @@ public class GameListController implements Initializable {
         
         //Add sorted (and filtered) data to the table.
         gameList.setItems(sortedData);
-    	
 	}
 	
 	public void setMainApp(MainApp mainApp) {
