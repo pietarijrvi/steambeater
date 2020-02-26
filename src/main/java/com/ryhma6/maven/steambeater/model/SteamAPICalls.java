@@ -10,13 +10,26 @@ import java.util.Scanner;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 import com.ryhma6.maven.steambeater.model.steamAPI.OwnedGames;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class SteamAPICalls {
+	private static ObservableList<GameData> playerGames = FXCollections.observableArrayList();
 	private ObjectMapper mapper = new ObjectMapper();
 	
 	public SteamAPICalls() {
 		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+
+		GameData g = new GameData();
+		g.setName("test");
+		playerGames.add(g);
+	}
+	
+	public static ObservableList<GameData> getOwnedGames() {
+		return playerGames;
 	}
 	
 	public void init() {
@@ -42,8 +55,9 @@ public class SteamAPICalls {
 				sc.close();
 				
 				//JSON string to Java Object			
-				OwnedGames ownedGames = mapper.readValue(str, OwnedGames.class);
-				System.out.println(ownedGames.getGame_count());
+				OwnedGames games = mapper.readValue(str, OwnedGames.class);
+				playerGames = FXCollections.observableArrayList(games.getGames());
+				System.out.println(games.getGame_count());
 			}
 
 		} catch (IOException e1) {

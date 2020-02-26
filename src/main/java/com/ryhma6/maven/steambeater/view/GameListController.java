@@ -3,6 +3,8 @@ package com.ryhma6.maven.steambeater.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 import com.ryhma6.maven.steambeater.MainApp;
+import com.ryhma6.maven.steambeater.model.SteamAPICalls;
+import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +32,7 @@ import javafx.scene.layout.Priority;
 public class GameListController implements Initializable {
 
 	@FXML
-	private ListView<String> gameList;
+	private ListView<GameData> gameList;
 
 	@FXML
 	Button hideStatsButton;
@@ -51,12 +53,13 @@ public class GameListController implements Initializable {
 	private final Image IMAGE_TEST = new Image("test.png");
 
 	private Image[] listOfImages = { IMAGE_TEST };
-	private ObservableList<String> names = FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
+	//private ObservableList<String> names = FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
+	private ObservableList<GameData> names = SteamAPICalls.getOwnedGames();
 	
 	
 	private void loadGames() {	
 		
-		gameList.setCellFactory(param -> new ListCell<String>() {
+		gameList.setCellFactory(param -> new ListCell<GameData>() {
 			private Label gameName = new Label();
 			private HBox hbox = new HBox();
 			private Button ignoreButton = new Button();
@@ -64,18 +67,19 @@ public class GameListController implements Initializable {
 			private ImageView imageView = new ImageView();
 			
 			@Override
-			public void updateItem(String name, boolean empty) {
-				super.updateItem(name, empty);
+			public void updateItem(GameData game, boolean empty) {
+				super.updateItem(game, empty);
 				if (empty) {
 					setText(null);
 					setGraphic(null);
 				} else {
 					ignoreButton.setText("Ignore this game");
 					setAsBeaten.setText("Set game as beaten");	
-					gameName.setText(name);
+					gameName.setText(game.getName());
 					hbox.setSpacing(50);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					imageView.setImage(listOfImages[0]);
+					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView,gameName,ignoreButton);
 					setGraphic(hbox);
 				}
@@ -106,9 +110,11 @@ public class GameListController implements Initializable {
 
 	@FXML
 	private void handleMouseClick(MouseEvent arg0) {
+		/*
 		String text = gameList.getSelectionModel().getSelectedItem();
 		statLabel.setText(text);
 		showStats();
+		*/
 	}
 
 	
@@ -131,19 +137,19 @@ public class GameListController implements Initializable {
 	 * Filtering gamelist with searchfield
 	 */
 	private void filterByName() {
-        FilteredList<String> filteredData = new FilteredList<>(names, p -> true);
+        FilteredList<GameData> filteredData = new FilteredList<>(names, p -> true);
         searchField.textProperty().addListener(obs->{
             String filter = searchField.getText(); 
             if(filter == null || filter.length() == 0) {
                 filteredData.setPredicate(s -> true);
             }
             else {
-                filteredData.setPredicate(s -> s.contains(filter));
+                filteredData.setPredicate(s -> s.getName().contains(filter));
             }
         });
         
         //Wrap the FilteredList in a SortedList. 
-        SortedList<String> sortedData = new SortedList<>(filteredData);
+        SortedList<GameData> sortedData = new SortedList<>(filteredData);
         
         //Add sorted (and filtered) data to the table.
         gameList.setItems(sortedData);
@@ -155,6 +161,14 @@ public class GameListController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
+		/*
+		names = FXCollections.observableArrayList();
+		GameData g = new GameData();
+		g.setName("testGame");
+		names.add(g);
+		*/	
+		
 		loadGames();
 		hideStats();
 		filterByName();

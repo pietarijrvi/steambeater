@@ -12,6 +12,11 @@ public class GameData {
 	private int playtime_linux_forever;
 	private int playtime_2weeks;
 	
+	private boolean unbeatable = false;
+	private boolean ignored = false;
+	private boolean beaten = false;
+	
+	
 	public int getAppid() {
 		return appid;
 	}
@@ -72,4 +77,23 @@ public class GameData {
 	public void setPlaytime_2weeks(int playtime_2weeks) {
 		this.playtime_2weeks = playtime_2weeks;
 	}
+	public boolean isUnbeatable() {
+		return unbeatable;
+	}
+	public void setUnbeatable(boolean unbeatable) {
+		this.unbeatable = unbeatable;
+	}
+	public boolean isIgnored() {
+		return ignored;
+	}
+	public void setIgnored(boolean ignored) {
+		this.ignored = ignored;
+	}
+	public boolean isBeaten() {
+		return beaten;
+	}
+	public void setBeaten(boolean beaten) {
+		this.beaten = beaten;
+	}
+	
 }
