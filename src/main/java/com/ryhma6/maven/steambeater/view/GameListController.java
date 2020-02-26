@@ -1,6 +1,7 @@
 package com.ryhma6.maven.steambeater.view;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
@@ -126,8 +127,8 @@ public class GameListController implements Initializable {
 		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs->{
 			//sorting in alphabetical order
 			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
-				gameList.setItems(names.sorted());
-				loadGames();
+				gameList.setItems(names.sorted(Comparator.comparing(GameData::getName)));
+				filterByName();
 			}
 		});
 	}
@@ -138,13 +139,18 @@ public class GameListController implements Initializable {
 	 */
 	private void filterByName() {
         FilteredList<GameData> filteredData = new FilteredList<>(names, p -> true);
+        
+        if(searchField.getText()!=null) {
+        	filteredData.setPredicate(s -> s.getName().toLowerCase().contains(searchField.getText().toLowerCase()));
+        }
+        
         searchField.textProperty().addListener(obs->{
             String filter = searchField.getText(); 
             if(filter == null || filter.length() == 0) {
                 filteredData.setPredicate(s -> true);
             }
             else {
-                filteredData.setPredicate(s -> s.getName().contains(filter));
+                filteredData.setPredicate(s -> s.getName().toLowerCase().contains(filter.toLowerCase()));
             }
         });
         
