@@ -30,13 +30,20 @@ public class GameData {
 		this.name = name;
 	}
 	public String getImg_icon_url() {
-		return img_icon_url;
+		String imgUrl = null;
+		if(img_logo_url!=null)
+			imgUrl = String.format("http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg", appid, img_icon_url);
+		return imgUrl;
 	}
 	public void setImg_icon_url(String img_icon_url) {
 		this.img_icon_url = img_icon_url;
 	}
 	public String getImg_logo_url() {
-		return img_logo_url;
+		String imgUrl = null;
+		if(img_logo_url!=null)
+			imgUrl = String.format("http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg", appid, img_logo_url);
+		return imgUrl;
+		
 	}
 	public void setImg_logo_url(String img_logo_url) {
 		this.img_logo_url = img_logo_url;

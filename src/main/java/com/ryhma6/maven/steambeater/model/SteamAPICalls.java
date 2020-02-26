@@ -48,16 +48,15 @@ public class SteamAPICalls {
 				Scanner sc = new Scanner(url.openStream());
 				while(sc.hasNext())
 				{
-				str+=sc.nextLine();
+					str+=sc.nextLine();
 				}
-				System.out.println("\nJSON data in string format");
-				System.out.println(str);
 				sc.close();
+				System.out.println(str);
 				
 				//JSON string to Java Object			
 				OwnedGames games = mapper.readValue(str, OwnedGames.class);
 				playerGames = FXCollections.observableArrayList(games.getGames());
-				System.out.println(games.getGame_count());
+				System.out.println("Owned games: " + games.getGame_count());
 			}
 
 		} catch (IOException e1) {

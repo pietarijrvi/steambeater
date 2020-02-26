@@ -78,7 +78,7 @@ public class GameListController implements Initializable {
 					gameName.setText(game.getName());
 					hbox.setSpacing(50);
 					hbox.setAlignment(Pos.CENTER_LEFT);
-					imageView.setImage(listOfImages[0]);
+					imageView.setImage(new Image(game.getImg_logo_url(), true)); //true: load in background
 					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView,gameName,ignoreButton);
 					setGraphic(hbox);
