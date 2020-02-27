@@ -11,7 +11,7 @@ class testiTesti {
 	
 	@Test
 	void test2() {
-		assertTrue(true,"Test implemented");
+		assertTrue(true);
 	}
 
 }
