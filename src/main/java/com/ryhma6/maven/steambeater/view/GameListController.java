@@ -128,7 +128,7 @@ public class GameListController implements Initializable {
 			//sorting in alphabetical order
 			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
 				gameList.setItems(names.sorted(Comparator.comparing(GameData::getName)));
-				filterByName();
+				//filterByName();
 			}
 		});
 	}
