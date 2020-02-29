@@ -62,6 +62,7 @@ public class GameListController implements Initializable {
 		
 		gameList.setCellFactory(param -> new ListCell<GameData>() {
 			private Label gameName = new Label();
+			private Label timePlayed = new Label();
 			private HBox hbox = new HBox();
 			private Button ignoreButton = new Button();
 			private Button setAsBeaten = new Button();
@@ -76,12 +77,13 @@ public class GameListController implements Initializable {
 				} else {
 					ignoreButton.setText("Ignore this game");
 					setAsBeaten.setText("Set game as beaten");	
+					timePlayed.setText("Time played: "+game.getPlaytime_forever()+" hours");
 					gameName.setText(game.getName());
 					hbox.setSpacing(50);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					imageView.setImage(new Image(game.getImg_logo_url(), true)); //true: load in background
 					hbox.getChildren().clear();
-					hbox.getChildren().addAll(imageView,gameName,ignoreButton);
+					hbox.getChildren().addAll(imageView,gameName,timePlayed,ignoreButton);
 					setGraphic(hbox);
 				}
 			}
@@ -129,6 +131,8 @@ public class GameListController implements Initializable {
 			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
 				gameList.setItems(names.sorted(Comparator.comparing(GameData::getName)));
 				//filterByName();
+			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 1){
+				gameList.setItems(names.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
 			}
 		});
 	}
