@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.ryhma6.maven.steambeater.MainApp;
+import com.ryhma6.maven.steambeater.model.SteamAPICalls;
+import com.ryhma6.maven.steambeater.model.steamAPI.Friend;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,10 +33,10 @@ public class FriendsListController implements Initializable {
 	private AnchorPane deepAnchor; 
 	
 	@FXML
-	private ListView<String> friendsList;
+	private ListView<Friend> friendsList;
 	
 	@FXML
-	private ListView<String> friendsListSmall;
+	private ListView<Friend> friendsListSmall;
 
 	private MainApp mainApp;
 	private final Image IMAGE_TEST = new Image("test.png");
@@ -47,11 +49,12 @@ public class FriendsListController implements Initializable {
 	Button resizeButton = new Button("<-|");
 	
 	private void loadFriends() {
-		ObservableList<String> names = FXCollections.observableArrayList("Friendo", "A what now", "twat", "NAme");
+		//ObservableList<String> names = FXCollections.observableArrayList("Friendo", "A what now", "twat", "NAme");
+		ObservableList<Friend> names = SteamAPICalls.getFriendList();
 		friendsList.setItems(names);
 		friendsListSmall.setItems(names);
 
-		friendsList.setCellFactory(param -> new ListCell<String>() {
+		friendsList.setCellFactory(param -> new ListCell<Friend>() {
 
 			private HBox hbox = new HBox();
 			private ImageView imageView = new ImageView();
@@ -60,7 +63,7 @@ public class FriendsListController implements Initializable {
 			private Pane pane = new Pane();
 			
 			@Override
-			public void updateItem(String name, boolean empty) {
+			public void updateItem(Friend name, boolean empty) {
 				
 				super.updateItem(name, empty);
 				
@@ -69,27 +72,42 @@ public class FriendsListController implements Initializable {
 					setGraphic(null);
 				} else {
 					
-					imageView.setImage(listOfImages[0]);
+					Image profileImage;
+					try {
+						profileImage = new Image(name.getPlayerProfile().getAvatarmedium(), true); //true: load in background
+					}catch (Exception e) {
+						profileImage = IMAGE_TEST;
+						//e.printStackTrace();
+					}
+					imageView.setImage(profileImage); 
 					
 					imageView.setPreserveRatio(true);
 		            HBox.setHgrow(pane, Priority.ALWAYS);
 					
-					label.setText(name);
+		            try {
+					label.setText(name.getPlayerProfile().getPersonaname());
+		            }catch(Exception e) {
+		            	System.out.println("ERR - PlayerProfile: " + name.getPlayerProfile());
+		            	System.out.println("ERR - personaname: " + name.getPlayerProfile().getPersonaname());
+		            }
+					
+					
 					imageView.setFitHeight(50);
 
+					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView, label, pane, button);
 					setGraphic(hbox);
 				}
 			}
 		});
 		
-		friendsListSmall.setCellFactory(param -> new ListCell<String>() {
+		friendsListSmall.setCellFactory(param -> new ListCell<Friend>() {
 
 			private HBox hbox = new HBox();
 			private ImageView imageView = new ImageView();
 			
 			@Override
-			public void updateItem(String name, boolean empty) {
+			public void updateItem(Friend name, boolean empty) {
 				
 				super.updateItem(name, empty);
 				
@@ -98,10 +116,19 @@ public class FriendsListController implements Initializable {
 					setGraphic(null);
 				} else {
 					
-					imageView.setImage(listOfImages[0]);
+					Image profileImage;
+					try {
+						profileImage = new Image(name.getPlayerProfile().getAvatarmedium(), true); //true: load in background
+					}catch (Exception e) {
+						profileImage = IMAGE_TEST;
+						e.printStackTrace();
+					}
+					imageView.setImage(profileImage); 
+					
 					imageView.setPreserveRatio(true);
 					imageView.setFitHeight(50);
 
+					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView);
 					setGraphic(hbox);
 				}

@@ -39,6 +39,7 @@ public class MainApp extends Application {
         
         steamAPI = new SteamAPICalls();
         steamAPI.init();
+        steamAPI.loadSteamFriends();
         
         initRootLayout();
         showGameList();

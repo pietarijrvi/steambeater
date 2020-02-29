@@ -4,7 +4,7 @@ public class Friend {
 	private String steamid;
 	private String relationship;
 	private String friend_since;
-	private PlayerProfile playerProfile;
+	private PlayerProfile playerProfile = new PlayerProfile();
 	
 	public String getSteamid() {
 		return steamid;

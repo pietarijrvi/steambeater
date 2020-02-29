@@ -1,15 +1,22 @@
 package com.ryhma6.maven.steambeater.model;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.ryhma6.maven.steambeater.model.steamAPI.Friend;
 import com.ryhma6.maven.steambeater.model.steamAPI.FriendList;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
@@ -101,18 +108,33 @@ public class SteamAPICalls {
 		} catch (IOException e1) {
 			//e1.printStackTrace();
 		}
+		List<String> friendSteamIDList = new ArrayList<>();
 		for(Friend f:friendList) {
-			f.setPlayerProfile(loadSteamPlayerProfile(f.getSteamid()));
+			//temporary limit (api allows max 100 per request)
+			if(friendSteamIDList.size()<100)
+				friendSteamIDList.add(f.getSteamid());
+		}
+		Map<String, PlayerProfile> profiles = loadSteamPlayerProfiles(friendSteamIDList);
+		
+		for(Friend f:friendList) {
+			PlayerProfile profile = profiles.get(f.getSteamid());
+			if(profile!=null)
+				f.setPlayerProfile(profile);
 		}
 	}
-	private PlayerProfile loadSteamPlayerProfile(String steamID) {
+	private Map<String, PlayerProfile> loadSteamPlayerProfiles(List<String> steamIDList) {
 		URL url;
 		HttpURLConnection con;
-		PlayerProfile profile = new PlayerProfile();
+		Map<String, PlayerProfile> profileMap = new HashMap<String, PlayerProfile>();
 		try {
-			String key = "38FB06680EA5CA6B526B31CBD4E43593";
-			String parameters = String.format("key=%s&steamid=%s", key,steamID);
+			String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
+			String separatedIDList = String.join(",", steamIDList);
+			System.out.println("Friendlist size: " + steamIDList.size());
+			String parameters = String.format("key=%s&steamids=%s", apiKey, separatedIDList);
 			url = new URL("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?"+parameters);
+			
+			System.out.println(url);
+			
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-Type", "application/json");
@@ -130,11 +152,24 @@ public class SteamAPICalls {
 				System.out.println(str);
 				
 				//JSON string to Java Object			
-				profile = mapper.readValue(str, PlayerProfile.class);
+				JsonNode rootNode = new ObjectMapper().readTree(new StringReader(str));
+				JsonNode innerNode = rootNode.get("response");
+				ObjectReader objectReader = mapper.readerFor(new TypeReference<List<PlayerProfile>>() {})
+                        .withRootName("players");
+				List<PlayerProfile> profiles = objectReader.readValue(innerNode);
+				
+				//PlayerProfile[] profiles = mapper.readValue(str, PlayerProfile[].class);
+				
+				
+				for(PlayerProfile p:profiles) {
+					profileMap.put(p.getSteamid(), p);
+				}
+				
+				System.out.println("profileMap first name: " + profileMap.get(steamIDList.get(0)).getPersonaname());
 			}
 		} catch (IOException e1) {
-			//e1.printStackTrace();
+			e1.printStackTrace();
 		}
-		return profile;
+		return profileMap;
 	}
 }
