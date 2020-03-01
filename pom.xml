@@ -54,7 +54,7 @@
 						</goals>
 						<configuration>
 							<dataFile>./target/jacoco/jacoco-unit.exec</dataFile>
-							<outputDirectory>./jacoco-files</outputDirectory>
+							<outputDirectory>./target/generated-jacoco-files</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
