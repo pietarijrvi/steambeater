@@ -40,26 +40,27 @@ public class GameListController implements Initializable {
 
 	@FXML
 	AnchorPane statsWindow;
-	
+
 	@FXML
 	Label statLabel;
-	
+
 	@FXML
 	ComboBox sortingChoice;
-	
+
 	@FXML
 	TextField searchField;
-	
+
 	private MainApp mainApp;
 	private final Image IMAGE_TEST = new Image("test.png");
 
 	private Image[] listOfImages = { IMAGE_TEST };
-	//private ObservableList<String> names = FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
+	// private ObservableList<String> names =
+	// FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
 	private ObservableList<GameData> names = SteamAPICalls.getOwnedGames();
-	
-	
-	private void loadGames() {	
-		
+	private ObservableList<GameData> ignoredGames = FXCollections.observableArrayList();
+
+	private void loadGames() {
+
 		gameList.setCellFactory(param -> new ListCell<GameData>() {
 			private Label gameName = new Label();
 			private Label timePlayed = new Label();
@@ -67,7 +68,7 @@ public class GameListController implements Initializable {
 			private Button ignoreButton = new Button();
 			private Button setAsBeaten = new Button();
 			private ImageView imageView = new ImageView();
-			
+
 			@Override
 			public void updateItem(GameData game, boolean empty) {
 				super.updateItem(game, empty);
@@ -76,30 +77,52 @@ public class GameListController implements Initializable {
 					setGraphic(null);
 				} else {
 					ignoreButton.setText("Ignore this game");
-					setAsBeaten.setText("Set game as beaten");	
-					timePlayed.setText("Time played: "+game.getPlaytime_forever()+" hours");
+					setAsBeaten.setText("Set game as beaten");
+					timePlayed.setText("Time played: " + game.getPlaytime_forever() + " hours");
 					gameName.setText(game.getName());
 					hbox.setSpacing(50);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
-						imageView.setImage(new Image(game.getImg_logo_url(), true)); //true: load in background
-					}catch(Exception e) {
+						imageView.setImage(new Image(game.getImg_logo_url(), true)); // true: load in background
+					} catch (Exception e) {
 						System.out.println("Loading game img failed (null or invalid url)");
 						imageView.setImage(IMAGE_TEST);
 					}
 					hbox.getChildren().clear();
-					hbox.getChildren().addAll(imageView,gameName,timePlayed,ignoreButton);
+					hbox.getChildren().addAll(imageView, gameName, timePlayed, ignoreButton);
 					setGraphic(hbox);
 				}
+//				EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+//
+//					@Override
+//					public void handle(MouseEvent event) {
+//						// TODO Auto-generated method stub
+//						game.setIgnored(true);
+//						if (game.isIgnored()) {
+//							FilteredList<GameData> filteredData = new FilteredList<>(names, p -> true);
+//							boolean filter = game.isIgnored();
+//							if (filter == true) {
+//								filteredData.setPredicate(s -> s.isIgnored());
+//								System.out.println(game.isIgnored());
+//							} else {
+//
+//							}
+//							gameList.setItems(filteredData);
+//							ignoredGames.add(game);
+//						}
+//					}
+//
+//				};
+//				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
 			}
 		});
 	}
-	
+
 	private void hideStats() {
 		statsWindow.setManaged(false);
 		statsWindow.setVisible(false);
 	}
-	
+
 	private void showStats() {
 		gameList.maxWidth(250);
 		statsWindow.setManaged(true);
@@ -119,71 +142,65 @@ public class GameListController implements Initializable {
 	@FXML
 	private void handleMouseClick(MouseEvent arg0) {
 		/*
-		String text = gameList.getSelectionModel().getSelectedItem();
-		statLabel.setText(text);
-		showStats();
-		*/
+		 * String text = gameList.getSelectionModel().getSelectedItem();
+		 * statLabel.setText(text); showStats();
+		 */
 	}
 
-	
 	@FXML
 	/**
 	 * Dropdown options to sort gamelist
 	 */
 	private void sortGameList() {
-		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs->{
-			//sorting in alphabetical order
-			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
+		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
+			// sorting in alphabetical order
+			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
 				gameList.setItems(names.sorted(Comparator.comparing(GameData::getName)));
-				//filterByName();
-			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 1){
+				// filterByName();
+			} else if (sortingChoice.getSelectionModel().getSelectedIndex() == 1) {
 				gameList.setItems(names.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
 			}
 		});
 	}
-	
-	
+
 	/**
 	 * Filtering gamelist with searchfield
 	 */
 	private void filterByName() {
-        FilteredList<GameData> filteredData = new FilteredList<>(names, p -> true);
-        
-        if(searchField.getText()!=null) {
-        	filteredData.setPredicate(s -> s.getName().toLowerCase().contains(searchField.getText().toLowerCase()));
-        }
-        
-        searchField.textProperty().addListener(obs->{
-            String filter = searchField.getText(); 
-            if(filter == null || filter.length() == 0) {
-                filteredData.setPredicate(s -> true);
-            }
-            else {
-                filteredData.setPredicate(s -> s.getName().toLowerCase().contains(filter.toLowerCase()));
-            }
-        });
-        
-        //Wrap the FilteredList in a SortedList. 
-        SortedList<GameData> sortedData = new SortedList<>(filteredData);
-        
-        //Add sorted (and filtered) data to the table.
-        gameList.setItems(sortedData);
+		FilteredList<GameData> filteredData = new FilteredList<>(names, p -> true);
+
+		if (searchField.getText() != null) {
+			filteredData.setPredicate(s -> s.getName().toLowerCase().contains(searchField.getText().toLowerCase()));
+		}
+
+		searchField.textProperty().addListener(obs -> {
+			String filter = searchField.getText();
+			if (filter == null || filter.length() == 0) {
+				filteredData.setPredicate(s -> true);
+			} else {
+				filteredData.setPredicate(s -> s.getName().toLowerCase().contains(filter.toLowerCase()));
+			}
+		});
+
+		// Wrap the FilteredList in a SortedList.
+		SortedList<GameData> sortedData = new SortedList<>(filteredData);
+
+		// Add sorted (and filtered) data to the table.
+		gameList.setItems(sortedData);
 	}
-	
+
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+
 		/*
-		names = FXCollections.observableArrayList();
-		GameData g = new GameData();
-		g.setName("testGame");
-		names.add(g);
-		*/	
-		
+		 * names = FXCollections.observableArrayList(); GameData g = new GameData();
+		 * g.setName("testGame"); names.add(g);
+		 */
+
 		loadGames();
 		hideStats();
 		filterByName();
