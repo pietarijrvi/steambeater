@@ -41,13 +41,13 @@ public class FriendsListController implements Initializable {
 
 	private Image[] listOfImages = {IMAGE_TEST};
 	
-	int smallWidth = 75;
-	int normalWidth = 250;
+	double smallWidth = 75.0;
+	double normalWidth = 250.0;
 	BorderPane borderPane = new BorderPane();
 	Button resizeButton = new Button("<-|");
 	
 	private void loadFriends() {
-		ObservableList<String> names = FXCollections.observableArrayList("Friendo", "A what now", "twat", "NAme");
+		ObservableList<String> names = FXCollections.observableArrayList("Friendo", "A what now", "twat", "NAme", "Friendo1", "A what now1", "PUTIN", "Xxx_SuperSlayer69_xxX");
 		friendsList.setItems(names);
 		friendsListSmall.setItems(names);
 
@@ -75,7 +75,15 @@ public class FriendsListController implements Initializable {
 		            HBox.setHgrow(pane, Priority.ALWAYS);
 					
 					label.setText(name);
+					label.setMaxWidth(99);
 					imageView.setFitHeight(50);
+					
+					button.setOnAction( new EventHandler<ActionEvent>() {
+			            @Override
+			            public void handle(ActionEvent event) {
+			                toggleComparisonView();
+			            }
+			        });
 
 					hbox.getChildren().addAll(imageView, label, pane, button);
 					setGraphic(hbox);
@@ -109,6 +117,11 @@ public class FriendsListController implements Initializable {
 		});
 	}
 	
+	public void toggleComparisonView() {
+		System.out.println("toggleComparisonView");
+		//CODE HERE
+	}
+	
 	public void toggleSize() {
 		boolean visible = friendsList.isManaged();
 		if (visible == true) {
@@ -119,6 +132,8 @@ public class FriendsListController implements Initializable {
 			borderPane.setPrefWidth(smallWidth);
 			deepAnchor.setPrefWidth(smallWidth);
 			
+			resizeButton.setText("|->");
+			
 		} else {
 			friendsListSmall.setManaged(false);
 			friendsListSmall.setVisible(false);
@@ -126,6 +141,8 @@ public class FriendsListController implements Initializable {
 			friendsList.setVisible(true);
 			borderPane.setPrefWidth(normalWidth);
 			deepAnchor.setPrefWidth(normalWidth);
+			
+			resizeButton.setText("<-|");
 		}
 	}
 	
