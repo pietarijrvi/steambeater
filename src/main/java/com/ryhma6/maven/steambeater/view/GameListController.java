@@ -81,7 +81,12 @@ public class GameListController implements Initializable {
 					gameName.setText(game.getName());
 					hbox.setSpacing(50);
 					hbox.setAlignment(Pos.CENTER_LEFT);
-					imageView.setImage(new Image(game.getImg_logo_url(), true)); //true: load in background
+					try {
+						imageView.setImage(new Image(game.getImg_logo_url(), true)); //true: load in background
+					}catch(Exception e) {
+						System.out.println("Loading game img failed (null or invalid url)");
+						imageView.setImage(IMAGE_TEST);
+					}
 					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView,gameName,timePlayed,ignoreButton);
 					setGraphic(hbox);

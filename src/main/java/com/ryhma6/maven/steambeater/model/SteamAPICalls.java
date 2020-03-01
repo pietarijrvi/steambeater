@@ -71,7 +71,11 @@ public class SteamAPICalls {
 				
 				//JSON string to Java Object			
 				OwnedGames games = mapper.readValue(str, OwnedGames.class);
-				playerGames = FXCollections.observableArrayList(games.getGames());
+				try {
+					playerGames = FXCollections.observableArrayList(games.getGames());
+				}catch(Exception e) {
+					System.out.println("SteamAPI: loading gamelist failed");
+				}
 				System.out.println("Owned games: " + games.getGame_count());
 			}
 
