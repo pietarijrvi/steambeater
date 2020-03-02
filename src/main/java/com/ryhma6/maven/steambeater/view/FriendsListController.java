@@ -121,7 +121,7 @@ public class FriendsListController implements Initializable {
 						profileImage = new Image(name.getPlayerProfile().getAvatarmedium(), true); //true: load in background
 					}catch (Exception e) {
 						profileImage = IMAGE_TEST;
-						e.printStackTrace();
+						//e.printStackTrace();
 					}
 					imageView.setImage(profileImage); 
 					

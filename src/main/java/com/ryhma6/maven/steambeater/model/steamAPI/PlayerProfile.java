@@ -29,4 +29,5 @@ public class PlayerProfile {
 	@Getter @Setter private String loccountrycode;
 	@Getter @Setter private String locstatecode;
 	@Getter @Setter private String loccityid;
+	@Getter @Setter private String lobbysteamid;
 }

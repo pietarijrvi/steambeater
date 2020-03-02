@@ -54,11 +54,19 @@ public class GameListController implements Initializable {
 	private final Image IMAGE_TEST = new Image("test.png");
 
 	private Image[] listOfImages = { IMAGE_TEST };
-	//private ObservableList<String> names = FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
-	private ObservableList<GameData> names = SteamAPICalls.getOwnedGames();
+	//private ObservableList<String> games = FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
+	private ObservableList<GameData> games = SteamAPICalls.getOwnedGames();
 	
 	
-	private void loadGames() {	
+	public ObservableList<GameData> getGames() {
+		return games;
+	}
+
+	public void setGames(ObservableList<GameData> games) {
+		this.games = games;
+	}
+
+	public void loadGames() {	
 		
 		gameList.setCellFactory(param -> new ListCell<GameData>() {
 			private Label gameName = new Label();
@@ -93,6 +101,7 @@ public class GameListController implements Initializable {
 				}
 			}
 		});
+		filterByName();
 	}
 	
 	private void hideStats() {
@@ -134,10 +143,10 @@ public class GameListController implements Initializable {
 		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs->{
 			//sorting in alphabetical order
 			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
-				gameList.setItems(names.sorted(Comparator.comparing(GameData::getName)));
+				gameList.setItems(games.sorted(Comparator.comparing(GameData::getName)));
 				//filterByName();
 			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 1){
-				gameList.setItems(names.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
+				gameList.setItems(games.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
 			}
 		});
 	}
@@ -147,7 +156,7 @@ public class GameListController implements Initializable {
 	 * Filtering gamelist with searchfield
 	 */
 	private void filterByName() {
-        FilteredList<GameData> filteredData = new FilteredList<>(names, p -> true);
+        FilteredList<GameData> filteredData = new FilteredList<>(games, p -> true);
         
         if(searchField.getText()!=null) {
         	filteredData.setPredicate(s -> s.getName().toLowerCase().contains(searchField.getText().toLowerCase()));
