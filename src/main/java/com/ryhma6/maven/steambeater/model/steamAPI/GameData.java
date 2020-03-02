@@ -16,6 +16,13 @@ public class GameData {
 	private boolean ignored = false;
 	private boolean beaten = false;
 	
+	public GameData() {
+	}
+	public GameData(int appid, String name, int playtime_forever) {
+		this.appid=appid;
+		this.name=name;
+		this.playtime_forever=playtime_forever;
+	}
 	
 	public int getAppid() {
 		return appid;

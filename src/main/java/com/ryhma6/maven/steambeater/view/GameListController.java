@@ -40,26 +40,33 @@ public class GameListController implements Initializable {
 
 	@FXML
 	AnchorPane statsWindow;
-
+	
 	@FXML
 	Label statLabel;
-
+	
 	@FXML
 	ComboBox sortingChoice;
-
+	
 	@FXML
 	TextField searchField;
-
+	
 	private MainApp mainApp;
 	private final Image IMAGE_TEST = new Image("test.png");
 
 	private Image[] listOfImages = { IMAGE_TEST };
-	// private ObservableList<String> names =
-	// FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
-	private ObservableList<GameData> names = SteamAPICalls.getOwnedGames();
+	//private ObservableList<String> games = FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
+	private ObservableList<GameData> games = SteamAPICalls.getOwnedGames();
 	private ObservableList<GameData> ignoredGames = FXCollections.observableArrayList();
+	
+	public ObservableList<GameData> getGames() {
+		return games;
+	}
 
-	private void loadGames() {
+	public void setGames(ObservableList<GameData> games) {
+		this.games = games;
+	}
+
+	public void loadGames() {	
 
 		gameList.setCellFactory(param -> new ListCell<GameData>() {
 			private Label gameName = new Label();
@@ -116,6 +123,7 @@ public class GameListController implements Initializable {
 //				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
 			}
 		});
+		filterByName();
 	}
 
 	private void hideStats() {
@@ -152,13 +160,13 @@ public class GameListController implements Initializable {
 	 * Dropdown options to sort gamelist
 	 */
 	private void sortGameList() {
-		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
-			// sorting in alphabetical order
-			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
-				gameList.setItems(names.sorted(Comparator.comparing(GameData::getName)));
-				// filterByName();
-			} else if (sortingChoice.getSelectionModel().getSelectedIndex() == 1) {
-				gameList.setItems(names.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
+		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs->{
+			//sorting in alphabetical order
+			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
+				gameList.setItems(games.sorted(Comparator.comparing(GameData::getName)));
+				//filterByName();
+			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 1){
+				gameList.setItems(games.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
 			}
 		});
 	}
@@ -167,26 +175,27 @@ public class GameListController implements Initializable {
 	 * Filtering gamelist with searchfield
 	 */
 	private void filterByName() {
-		FilteredList<GameData> filteredData = new FilteredList<>(names, p -> true);
-
-		if (searchField.getText() != null) {
-			filteredData.setPredicate(s -> s.getName().toLowerCase().contains(searchField.getText().toLowerCase()));
-		}
-
-		searchField.textProperty().addListener(obs -> {
-			String filter = searchField.getText();
-			if (filter == null || filter.length() == 0) {
-				filteredData.setPredicate(s -> true);
-			} else {
-				filteredData.setPredicate(s -> s.getName().toLowerCase().contains(filter.toLowerCase()));
-			}
-		});
-
-		// Wrap the FilteredList in a SortedList.
-		SortedList<GameData> sortedData = new SortedList<>(filteredData);
-
-		// Add sorted (and filtered) data to the table.
-		gameList.setItems(sortedData);
+        FilteredList<GameData> filteredData = new FilteredList<>(games, p -> true);
+        
+        if(searchField.getText()!=null) {
+        	filteredData.setPredicate(s -> s.getName().toLowerCase().contains(searchField.getText().toLowerCase()));
+        }
+        
+        searchField.textProperty().addListener(obs->{
+            String filter = searchField.getText(); 
+            if(filter == null || filter.length() == 0) {
+                filteredData.setPredicate(s -> true);
+            }
+            else {
+                filteredData.setPredicate(s -> s.getName().toLowerCase().contains(filter.toLowerCase()));
+            }
+        });
+        
+        //Wrap the FilteredList in a SortedList. 
+        SortedList<GameData> sortedData = new SortedList<>(filteredData);
+        
+        //Add sorted (and filtered) data to the table.
+        gameList.setItems(sortedData);
 	}
 
 	public void setMainApp(MainApp mainApp) {
