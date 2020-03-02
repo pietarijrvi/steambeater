@@ -8,6 +8,7 @@ import org.expressme.openid.OpenIdManager;
 import com.ryhma6.maven.steambeater.view.FriendsListController;
 import com.ryhma6.maven.steambeater.view.GameListController;
 import com.ryhma6.maven.steambeater.view.SearchBoxController;
+import com.ryhma6.maven.steambeater.view.StatComparisonController;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -111,14 +112,32 @@ public class MainApp extends Application {
             // Set person overview into the center of root layout.
             FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
             sidebar.getChildren().add(friends);
-         // Give the controller access to the main app.
+            // Give the controller access to the main app.
             FriendsListController controller = loader.getController();
             controller.setMainApp(this);
+            loadStatComparison(controller);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     
+    public void loadStatComparison(FriendsListController flCont) {
+    	try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/statComparison.fxml"));
+            AnchorPane statComparison = (AnchorPane) loader.load();
+            // Set person overview into the center of root layout.
+            rootLayout.setRight(statComparison);
+            // Give the controller access to the main app.
+            StatComparisonController controller = loader.getController();
+            controller.setMainApp(this);
+            flCont.setStatComparisonController(controller);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }    
     
     /**
      * Returns the main stage.

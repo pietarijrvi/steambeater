@@ -37,8 +37,9 @@ public class FriendsListController implements Initializable {
 	private ListView<String> friendsListSmall;
 
 	private MainApp mainApp;
+	private StatComparisonController scCont;
+	
 	private final Image IMAGE_TEST = new Image("test.png");
-
 	private Image[] listOfImages = {IMAGE_TEST};
 	
 	double smallWidth = 75.0;
@@ -119,7 +120,7 @@ public class FriendsListController implements Initializable {
 	
 	public void toggleComparisonView() {
 		System.out.println("toggleComparisonView");
-		//CODE HERE
+		scCont.openComparison();
 	}
 	
 	public void toggleSize() {
@@ -148,6 +149,10 @@ public class FriendsListController implements Initializable {
 	
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	}
+	
+	public void setStatComparisonController(StatComparisonController scCont) {
+		this.scCont = scCont;
 	}
 
 	@Override
