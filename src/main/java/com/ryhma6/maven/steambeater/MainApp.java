@@ -5,6 +5,7 @@ import org.expressme.openid.Association;
 import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
+import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.view.FriendsListController;
 import com.ryhma6.maven.steambeater.view.GameListController;
 import com.ryhma6.maven.steambeater.view.SearchBoxController;
@@ -27,6 +28,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    SteamAPICalls steamAPI;
     
     @FXML
     private FlowPane sidebar;
@@ -35,7 +37,11 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Steambeater");
-
+        
+        steamAPI = new SteamAPICalls();
+        steamAPI.init();
+        steamAPI.loadSteamFriends();
+        
         initRootLayout();
         showGameList();
         showFriendsList();
