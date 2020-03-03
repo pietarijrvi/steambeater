@@ -151,10 +151,9 @@ public class GameListController implements Initializable {
 
 	@FXML
 	private void handleMouseClick(MouseEvent arg0) {
-		/*
-		 * String text = gameList.getSelectionModel().getSelectedItem();
-		 * statLabel.setText(text); showStats();
-		 */
+		 GameData game = gameList.getSelectionModel().getSelectedItem();
+		 statLabel.setText(game.getName()); 
+		 showStats();
 	}
 
 	@FXML
