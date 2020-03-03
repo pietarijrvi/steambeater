@@ -52,7 +52,7 @@ public class SteamAPICalls {
 		URL url;
 		HttpURLConnection con;
 		try {
-			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=38FB06680EA5CA6B526B31CBD4E43593&steamid=76561197960434622&include_appinfo=1&format=json");
+			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=38FB06680EA5CA6B526B31CBD4E43593&steamid=76561197960434622&include_appinfo=1&include_played_free_games=1&format=json");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-Type", "application/json");
@@ -102,7 +102,6 @@ public class SteamAPICalls {
 					str+=sc.nextLine();
 				}
 				sc.close();
-				System.out.println(str);
 				
 				//JSON string to Java Object			
 				FriendList response = mapper.readValue(str, FriendList.class);
@@ -168,8 +167,6 @@ public class SteamAPICalls {
 				for(PlayerProfile p:profiles) {
 					profileMap.put(p.getSteamid(), p);
 				}
-				
-				System.out.println("profileMap first name: " + profileMap.get(steamIDList.get(0)).getPersonaname());
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
