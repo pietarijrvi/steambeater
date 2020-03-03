@@ -58,6 +58,8 @@ public class GameListController implements Initializable {
 	private ObservableList<GameData> games = SteamAPICalls.getOwnedGames();
 	private ObservableList<GameData> ignoredGames = FXCollections.observableArrayList();
 	
+	FilteredList<GameData> filteredData;
+	
 	public ObservableList<GameData> getGames() {
 		return games;
 	}
@@ -163,23 +165,19 @@ public class GameListController implements Initializable {
 		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs->{
 			//sorting in alphabetical order
 			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
-				gameList.setItems(games.sorted(Comparator.comparing(GameData::getName)));
-				//filterByName();
+				gameList.setItems(filteredData.sorted(Comparator.comparing(GameData::getName)));
 			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 1){
-				gameList.setItems(games.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
+				gameList.setItems(filteredData.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
 			}
 		});
 	}
+	
 
 	/**
 	 * Filtering gamelist with searchfield
 	 */
 	private void filterByName() {
-        FilteredList<GameData> filteredData = new FilteredList<>(games, p -> true);
-        
-        if(searchField.getText()!=null) {
-        	filteredData.setPredicate(s -> s.getName().toLowerCase().contains(searchField.getText().toLowerCase()));
-        }
+		filteredData = new FilteredList<>(games, p -> true);
         
         searchField.textProperty().addListener(obs->{
             String filter = searchField.getText(); 
