@@ -92,7 +92,8 @@ public class FriendsListController implements Initializable {
 		            	System.out.println("ERR - personaname: " + name.getPlayerProfile().getPersonaname());
 		            }
 					
-					
+					label.setPrefWidth(82);
+					label.setWrapText(true);
 					imageView.setFitHeight(50);
 					
 					button.setOnAction( new EventHandler<ActionEvent>() {
