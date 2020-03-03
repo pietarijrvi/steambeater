@@ -8,7 +8,6 @@ import org.expressme.openid.OpenIdManager;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.view.FriendsListController;
 import com.ryhma6.maven.steambeater.view.GameListController;
-import com.ryhma6.maven.steambeater.view.SearchBoxController;
 import com.ryhma6.maven.steambeater.view.StatComparisonController;
 
 import javafx.application.Application;
@@ -89,25 +88,6 @@ public class MainApp extends Application {
     }
     
     
-    /**
-     * Adds testview to the root layout
-     */
-    public void showSearchBox() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/searchBox.fxml"));
-            AnchorPane box = (AnchorPane) loader.load();
-            // Set person overview into the center of root layout.
-            FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
-            sidebar.getChildren().add(box);
-         // Give the controller access to the main app.
-            SearchBoxController controller = loader.getController();
-            controller.setMainApp(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     
     public void showFriendsList() {
         try {
