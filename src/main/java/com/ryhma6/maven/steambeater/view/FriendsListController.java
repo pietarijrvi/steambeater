@@ -39,12 +39,13 @@ public class FriendsListController implements Initializable {
 	private ListView<Friend> friendsListSmall;
 
 	private MainApp mainApp;
+	private StatComparisonController scCont;
+	
 	private final Image IMAGE_TEST = new Image("test.png");
-
 	private Image[] listOfImages = {IMAGE_TEST};
 	
-	int smallWidth = 75;
-	int normalWidth = 250;
+	double smallWidth = 75.0;
+	double normalWidth = 250.0;
 	BorderPane borderPane = new BorderPane();
 	Button resizeButton = new Button("<-|");
 	
@@ -93,6 +94,13 @@ public class FriendsListController implements Initializable {
 					
 					
 					imageView.setFitHeight(50);
+					
+					button.setOnAction( new EventHandler<ActionEvent>() {
+			            @Override
+			            public void handle(ActionEvent event) {
+			                toggleComparisonView();
+			            }
+			        });
 
 					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView, label, pane, button);
@@ -136,6 +144,11 @@ public class FriendsListController implements Initializable {
 		});
 	}
 	
+	public void toggleComparisonView() {
+		System.out.println("toggleComparisonView");
+		scCont.openComparison();
+	}
+	
 	public void toggleSize() {
 		boolean visible = friendsList.isManaged();
 		if (visible == true) {
@@ -146,6 +159,8 @@ public class FriendsListController implements Initializable {
 			borderPane.setPrefWidth(smallWidth);
 			deepAnchor.setPrefWidth(smallWidth);
 			
+			resizeButton.setText("|->");
+			
 		} else {
 			friendsListSmall.setManaged(false);
 			friendsListSmall.setVisible(false);
@@ -153,11 +168,17 @@ public class FriendsListController implements Initializable {
 			friendsList.setVisible(true);
 			borderPane.setPrefWidth(normalWidth);
 			deepAnchor.setPrefWidth(normalWidth);
+			
+			resizeButton.setText("<-|");
 		}
 	}
 	
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	}
+	
+	public void setStatComparisonController(StatComparisonController scCont) {
+		this.scCont = scCont;
 	}
 
 	@Override
