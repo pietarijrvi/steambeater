@@ -38,14 +38,14 @@ class JavaFXGameListTest extends ApplicationTest {
 	@BeforeEach
 	public void testSetupGameList() {
 		gameList = new ArrayList<GameData>();
-		gameList.add(new GameData(1, "Ada", 8));
+		gameList.add(new GameData(8, "Ada", 8));
 		gameList.add(new GameData(2, "Bill", 7));
 		gameList.add(new GameData(3, "Cathy", 6));
 		gameList.add(new GameData(4, "Dave", 5));
 		gameList.add(new GameData(5, "Ethan", 4));
 		gameList.add(new GameData(6, "Fred", 3));
 		gameList.add(new GameData(7, "Gideon", 2));
-		gameList.add(new GameData(8, "Ann", 1));
+		gameList.add(new GameData(1, "Ann", 4));
 
 		gameListController.setGames(FXCollections.observableArrayList(gameList));
 		gameListController.loadGames();
@@ -70,7 +70,8 @@ class JavaFXGameListTest extends ApplicationTest {
 				List<GameData> actual = gameList.getItems();
 				
 				System.out.println("nameExp: " + orderedByNameList.get(orderedByNameList.size() - 1).getName());
-				System.out.println("nameAct: " + actual.get(actual.size() - 1).getName());
+				System.out.println("first nameAct: " + actual.get(0).getName());
+				System.out.println("last nameAct: " + actual.get(actual.size() - 1).getName());
 				
 				assertEquals(orderedByNameList, actual, "ordering by name failed");
 			});

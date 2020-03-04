@@ -31,7 +31,7 @@ import javafx.collections.ObservableList;
 public class SteamAPICalls {
 	private static ObservableList<GameData> playerGames = FXCollections.observableArrayList();
 	private static ObservableList<Friend> friendList = FXCollections.observableArrayList();
-	private Map<Integer,GameData> gamesMappedByGameID;
+	private Map<Integer,GameData> gamesMappedByGameID = new HashMap<Integer,GameData>();
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	

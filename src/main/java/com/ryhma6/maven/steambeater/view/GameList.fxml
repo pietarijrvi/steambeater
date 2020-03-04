@@ -47,7 +47,7 @@
 								<Insets bottom="10.0" top="10.0" />
 							</padding>
 						</VBox>
-						<ComboBox fx:id="sortingChoice" onMouseClicked="#sortGameList" prefWidth="150.0" promptText="Sort by">
+						<ComboBox fx:id="sortingChoice" prefWidth="150.0" promptText="Sort by">
 							<items>
 								<FXCollections fx:factory="observableArrayList">
 									<String fx:value="Name" />

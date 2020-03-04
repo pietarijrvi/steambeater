@@ -156,12 +156,13 @@ public class GameListController implements Initializable {
 		 showStats();
 	}
 
-	@FXML
+
 	/**
 	 * Dropdown options to sort gamelist
 	 */
-	private void sortGameList() {
+	private void initListenerSortGameList(){
 		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs->{
+			System.out.println("sorting games");
 			//sorting in alphabetical order
 			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
 				gameList.setItems(filteredData.sorted(Comparator.comparing(GameData::getName)));
@@ -169,6 +170,8 @@ public class GameListController implements Initializable {
 				gameList.setItems(filteredData.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
 			}
 		});
+		
+		sortingChoice.getSelectionModel().select(0);
 	}
 	
 
@@ -201,7 +204,6 @@ public class GameListController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
 		/*
 		 * names = FXCollections.observableArrayList(); GameData g = new GameData();
 		 * g.setName("testGame"); names.add(g);
@@ -210,5 +212,7 @@ public class GameListController implements Initializable {
 		loadGames();
 		hideStats();
 		filterByName();
+		
+		initListenerSortGameList();
 	}
 }
