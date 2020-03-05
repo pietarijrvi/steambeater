@@ -29,10 +29,10 @@ import javafx.stage.Stage;
 public class SteamOpenIDSignController {
 
 	private Stage newWindow;
-	private UserPreferences prefs = new UserPreferences();
+	UserPreferences prefs = new UserPreferences();
 
 	@FXML
-	private void handleBrowserButtonAction(ActionEvent event) {
+	protected void handleBrowserButtonAction(ActionEvent event) {
 
 		Label secondLabel = new Label("Steam OpenID login");
 

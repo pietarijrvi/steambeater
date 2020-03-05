@@ -118,12 +118,6 @@
 			<version>4.0.16-alpha</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>openjfx-monocle</artifactId>
-			<version>8u76-b04</version> <!-- jdk-11+26 for Java 11, jdk-9+181 for Java 9, 8u76-b04 for Java 8 -->
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 </project>
 
