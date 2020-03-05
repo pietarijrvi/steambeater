@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -42,6 +43,14 @@ class JavaFXGameListTest extends ApplicationTest {
 		gameListController = loader.getController();
 	}
 
+	@BeforeAll
+	public static void setupSpec() throws Exception {
+			System.setProperty("testfx.robot", "glass");
+			System.setProperty("testfx.headless", "true");
+			System.setProperty("prism.order", "sw");
+			System.setProperty("prism.text", "t2k");
+	}
+	
 	/**
 	 * Create test data (unordered list of GameData entries) for gameListController. 
 	 * Test data represents the game list that would be retrieved from SteamAPI.
