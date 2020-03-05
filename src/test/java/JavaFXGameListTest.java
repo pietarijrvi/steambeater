@@ -37,7 +37,7 @@ class JavaFXGameListTest extends ApplicationTest {
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("com/ryhma6/maven/steambeater/view/GameList.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ryhma6/maven/steambeater/view/GameList.fxml"));
 		stage.setScene(scene = new Scene(loader.load(), 300, 300));
 		stage.show();
 		gameListController = loader.getController();
