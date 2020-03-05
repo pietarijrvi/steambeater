@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,16 @@ class JavaFXGameListTest extends ApplicationTest {
 		gameListController = loader.getController();
 	}
 
+	@BeforeAll
+	public static void setupSpec() throws Exception {
+		if(Boolean.getBoolean("headless")) {
+			System.setProperty("testfx.robot", "glass");
+			System.setProperty("testfx.headless", "true");
+			System.setProperty("prism.order", "sw");
+			System.setProperty("prism.text", "t2k");
+		}
+	}
+	
 	@BeforeEach
 	public void testSetupGameList() {
 		gameList = new ArrayList<GameData>();
