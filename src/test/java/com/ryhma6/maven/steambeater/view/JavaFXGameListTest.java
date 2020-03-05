@@ -1,3 +1,5 @@
+package com.ryhma6.maven.steambeater.view;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -13,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
-import com.ryhma6.maven.steambeater.view.GameListController;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -37,7 +38,7 @@ class JavaFXGameListTest extends ApplicationTest {
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ryhma6/maven/steambeater/view/GameList.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("GameList.fxml"));
 		stage.setScene(scene = new Scene(loader.load(), 300, 300));
 		stage.show();
 		gameListController = loader.getController();
