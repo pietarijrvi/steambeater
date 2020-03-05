@@ -51,7 +51,7 @@ public class GameListController implements Initializable {
 	private TextField searchField;
 	
 	private MainApp mainApp;
-	private final Image IMAGE_TEST = new Image("test.png");
+	private final Image IMAGE_TEST = new Image("/test.png");
 
 	private ObservableList<GameData> games = SteamAPICalls.getOwnedGames();
 	
