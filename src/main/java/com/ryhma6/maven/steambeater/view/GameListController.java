@@ -36,29 +36,27 @@ public class GameListController implements Initializable {
 	private ListView<GameData> gameList;
 
 	@FXML
-	Button hideStatsButton;
+	private Button hideStatsButton;
 
 	@FXML
-	AnchorPane statsWindow;
+	private AnchorPane statsWindow;
 	
 	@FXML
-	Label statLabel;
+	private Label statLabel;
 	
 	@FXML
-	ComboBox sortingChoice;
+	private ComboBox sortingChoice;
 	
 	@FXML
-	TextField searchField;
+	private TextField searchField;
 	
 	private MainApp mainApp;
 	private final Image IMAGE_TEST = new Image("test.png");
 
-	private Image[] listOfImages = { IMAGE_TEST };
-	//private ObservableList<String> games = FXCollections.observableArrayList("Sudoku","Pasianssi", "Minesweeper");
 	private ObservableList<GameData> games = SteamAPICalls.getOwnedGames();
-	private ObservableList<GameData> ignoredGames = FXCollections.observableArrayList();
 	
-	FilteredList<GameData> filteredData;
+	private FilteredList<GameData> filteredData;
+	private SortedList<GameData>sortedFilteredData;
 	
 	public ObservableList<GameData> getGames() {
 		return games;
@@ -69,14 +67,29 @@ public class GameListController implements Initializable {
 	}
 
 	public void loadGames() {	
-
-		gameList.setCellFactory(param -> new ListCell<GameData>() {
-			private Label gameName = new Label();
-			private Label timePlayed = new Label();
-			private HBox hbox = new HBox();
-			private Button ignoreButton = new Button();
-			private Button setAsBeaten = new Button();
-			private ImageView imageView = new ImageView();
+		abstract class CustomCell extends ListCell<GameData>{
+			public Label gameName = new Label();
+			public Label timePlayed = new Label();
+			public HBox hbox = new HBox();
+			public Button ignoreButton = new Button();
+			public Button setAsBeaten = new Button();
+			public ImageView imageView = new ImageView();
+			public GameData cellGame;
+			
+			public CustomCell() {
+				super();
+				EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						cellGame.setIgnored(true);
+						System.out.println("ignored: " +  cellGame.getName());
+					}
+				};
+				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+			}
+		}
+		
+		gameList.setCellFactory(param -> new CustomCell() {
 
 			@Override
 			public void updateItem(GameData game, boolean empty) {
@@ -85,6 +98,7 @@ public class GameListController implements Initializable {
 					setText(null);
 					setGraphic(null);
 				} else {
+					cellGame = game;
 					ignoreButton.setText("Ignore this game");
 					setAsBeaten.setText("Set game as beaten");
 					timePlayed.setText("Time played: " + game.getPlaytime_forever() + " hours");
@@ -101,31 +115,11 @@ public class GameListController implements Initializable {
 					hbox.getChildren().addAll(imageView, gameName, timePlayed, ignoreButton);
 					setGraphic(hbox);
 				}
-//				EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
-//
-//					@Override
-//					public void handle(MouseEvent event) {
-//						// TODO Auto-generated method stub
-//						game.setIgnored(true);
-//						if (game.isIgnored()) {
-//							FilteredList<GameData> filteredData = new FilteredList<>(names, p -> true);
-//							boolean filter = game.isIgnored();
-//							if (filter == true) {
-//								filteredData.setPredicate(s -> s.isIgnored());
-//								System.out.println(game.isIgnored());
-//							} else {
-//
-//							}
-//							gameList.setItems(filteredData);
-//							ignoredGames.add(game);
-//						}
-//					}
-//
-//				};
-//				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
 			}
 		});
 		filterByName();
+		initListenerSortGameList();
+		hideStats();
 	}
 
 	private void hideStats() {
@@ -152,7 +146,7 @@ public class GameListController implements Initializable {
 	@FXML
 	private void handleMouseClick(MouseEvent arg0) {
 		 GameData game = gameList.getSelectionModel().getSelectedItem();
-		 statLabel.setText(game.getName()); 
+		 statLabel.setText(game.getName() + " ignored: " + game.isIgnored()); 
 		 showStats();
 	}
 
@@ -161,16 +155,17 @@ public class GameListController implements Initializable {
 	 * Dropdown options to sort gamelist
 	 */
 	private void initListenerSortGameList(){
+		sortingChoice.getSelectionModel().clearSelection();
 		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs->{
 			System.out.println("sorting games");
 			//sorting in alphabetical order
 			if(sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
-				gameList.setItems(filteredData.sorted(Comparator.comparing(GameData::getName)));
+				sortedFilteredData=filteredData.sorted(Comparator.comparing(GameData::getName));
 			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 1){
-				gameList.setItems(filteredData.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed()));
+				sortedFilteredData=filteredData.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed());
 			}
+			gameList.setItems(sortedFilteredData);
 		});
-		
 		sortingChoice.getSelectionModel().select(0);
 	}
 	
@@ -189,13 +184,14 @@ public class GameListController implements Initializable {
             else {
                 filteredData.setPredicate(s -> s.getName().toLowerCase().contains(filter.toLowerCase()));
             }
+            //filteredData.setPredicate(s -> s.isIgnored());
         });
         
         //Wrap the FilteredList in a SortedList. 
-        SortedList<GameData> sortedData = new SortedList<>(filteredData);
+        //SortedList<GameData> sortedData = new SortedList<>(filteredData);
         
         //Add sorted (and filtered) data to the table.
-        gameList.setItems(sortedData);
+        //gameList.setItems(sortedData);
 	}
 
 	public void setMainApp(MainApp mainApp) {
@@ -204,15 +200,6 @@ public class GameListController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		/*
-		 * names = FXCollections.observableArrayList(); GameData g = new GameData();
-		 * g.setName("testGame"); names.add(g);
-		 */
-
 		loadGames();
-		hideStats();
-		filterByName();
-		
-		initListenerSortGameList();
 	}
 }

@@ -7,6 +7,7 @@ import java.util.concurrent.CountDownLatch;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -23,10 +24,16 @@ import javafx.stage.Stage;
 
 class JavaFXGameListTest extends ApplicationTest {
 
+	//JavaFX scene of GameList.fxml
 	private Scene scene;
+	//JavaFX controller of GameList.fxml
 	private GameListController gameListController;
-	private List<GameData> gameList;
+	//GameData entries created before tests
+	private List<GameData> testGameList;
 
+	/**
+	 * Starting JavaFX environment (loading GameList.fxml) as a base for testing
+	 */
 	@Override
 	public void start(Stage stage) throws Exception {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("com/ryhma6/maven/steambeater/view/GameList.fxml"));
@@ -35,45 +42,57 @@ class JavaFXGameListTest extends ApplicationTest {
 		gameListController = loader.getController();
 	}
 
+	/**
+	 * Create test data (unordered list of GameData entries) for gameListController. 
+	 * Test data represents the game list that would be retrieved from SteamAPI.
+	 */
 	@BeforeEach
 	public void testSetupGameList() {
-		gameList = new ArrayList<GameData>();
-		gameList.add(new GameData(8, "Ada", 8));
-		gameList.add(new GameData(2, "Bill", 7));
-		gameList.add(new GameData(3, "Cathy", 6));
-		gameList.add(new GameData(4, "Dave", 5));
-		gameList.add(new GameData(5, "Ethan", 4));
-		gameList.add(new GameData(6, "Fred", 3));
-		gameList.add(new GameData(7, "Gideon", 2));
-		gameList.add(new GameData(1, "Ann", 4));
+		testGameList = new ArrayList<GameData>();
+		testGameList.add(new GameData(8, "Ada", 8));
+		testGameList.add(new GameData(2, "Bill", 7));
+		testGameList.add(new GameData(3, "Cathy", 6));
+		testGameList.add(new GameData(4, "Dave", 5));
+		testGameList.add(new GameData(5, "Ethan", 4));
+		testGameList.add(new GameData(6, "Fred", 3));
+		testGameList.add(new GameData(7, "Gideon", 2));
+		testGameList.add(new GameData(1, "Ann", 4));
 
-		gameListController.setGames(FXCollections.observableArrayList(gameList));
-		gameListController.loadGames();
+		gameListController.setGames(FXCollections.observableList(testGameList));
+		
+		//FX application thread
+		Platform.runLater(() -> {
+			gameListController.loadGames();
+		});
 	}
 
 	@Test
+	@DisplayName("Test that the sorting selection (name) sorts the UI game list")
 	public void testOrderByName() {
 
-		List<GameData> orderedByNameList = new ArrayList<GameData>(gameList);
+		/*Copying test data list and arranging it based on the game names of the entries. This list
+		is used as a reference - expected result after sorting.*/
+		List<GameData> orderedByNameList = new ArrayList<GameData>(testGameList);
 		orderedByNameList.sort(Comparator.comparing(GameData::getName));
 
+		//FX application thread
 		Platform.runLater(() -> {
+			@SuppressWarnings("unchecked")
 			ComboBox<String> combo = (ComboBox<String>) scene.lookup("#sortingChoice");
+			combo.getSelectionModel().select(1);
 			combo.getSelectionModel().select(0);
-			System.out.println("Selected sorting by: " + combo.getSelectionModel().selectedItemProperty().getValue());
-
 		});
 		
 		try {
+			//Tests will be run after the events on FX application thread have finished
 			assertAfterJavaFxPlatformEventsAreDone(() -> {
+				@SuppressWarnings("unchecked")
 				ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
 				List<GameData> actual = gameList.getItems();
+				System.out.println(gameList);
+				System.out.println("actual size: " + actual.size());
 				
-				System.out.println("nameExp: " + orderedByNameList.get(orderedByNameList.size() - 1).getName());
-				System.out.println("first nameAct: " + actual.get(0).getName());
-				System.out.println("last nameAct: " + actual.get(actual.size() - 1).getName());
-				
-				assertEquals(orderedByNameList, actual, "ordering by name failed");
+				assertEquals(orderedByNameList, actual, "ordering by name failed - gameList in unexpected order");
 			});
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -93,20 +112,15 @@ class JavaFXGameListTest extends ApplicationTest {
 
 	}
 
-	@Test
-	void test2() {
-		assertTrue(true);
-	}
 
+	/**
+	 * Helper method for ensuring that the actual tests won't be run until Runnables on the JavaFX application
+	 * thread have finished
+	 */
 	private void assertAfterJavaFxPlatformEventsAreDone(Runnable runnable) throws InterruptedException {
-		waitOnJavaFxPlatformEventsDone();
-		runnable.run();
-	}
-
-	private void waitOnJavaFxPlatformEventsDone() throws InterruptedException {
 		CountDownLatch countDownLatch = new CountDownLatch(1);
 		Platform.runLater(countDownLatch::countDown);
 		countDownLatch.await();
+		runnable.run();
 	}
-
 }
