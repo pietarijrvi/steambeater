@@ -17,9 +17,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.ryhma6.maven.steambeater.model.steamAPI.Achievement;
 import com.ryhma6.maven.steambeater.model.steamAPI.Friend;
 import com.ryhma6.maven.steambeater.model.steamAPI.FriendList;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
+import com.ryhma6.maven.steambeater.model.steamAPI.GameStatistics;
 import com.ryhma6.maven.steambeater.model.steamAPI.OwnedGames;
 import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
 
@@ -29,6 +31,7 @@ import javafx.collections.ObservableList;
 public class SteamAPICalls {
 	private static ObservableList<GameData> playerGames = FXCollections.observableArrayList();
 	private static ObservableList<Friend> friendList = FXCollections.observableArrayList();
+	private Map<Integer,GameData> gamesMappedByGameID = new HashMap<Integer,GameData>();
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
@@ -73,6 +76,9 @@ public class SteamAPICalls {
 				OwnedGames games = mapper.readValue(str, OwnedGames.class);
 				try {
 					playerGames = FXCollections.observableArrayList(games.getGames());
+					for(GameData g: playerGames) {
+						gamesMappedByGameID.put(g.getAppid(), g);
+					}
 				}catch(Exception e) {
 					System.out.println("SteamAPI: loading gamelist failed");
 				}
@@ -82,6 +88,7 @@ public class SteamAPICalls {
 		} catch (IOException e1) {
 			//e1.printStackTrace();
 		}
+		getGameSchema(218620);
 	}
 	public void loadSteamFriends() {
 		URL url;
@@ -172,5 +179,83 @@ public class SteamAPICalls {
 			e1.printStackTrace();
 		}
 		return profileMap;
+	}
+	
+	public void getGameSchema(int appID) {
+		URL url;
+		HttpURLConnection con;
+		try {
+			String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
+			String parameters = String.format("key=%s&appid=%s", apiKey, appID);
+			url = new URL(" http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?" + parameters);
+			con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Content-Type", "application/json");
+			int responsecode = con.getResponseCode(); 
+
+			if(responsecode == 200)
+			{
+				String str="";
+				Scanner sc = new Scanner(url.openStream());
+				while(sc.hasNext())
+				{
+					str+=sc.nextLine();
+				}
+				sc.close();
+				
+				//JSON string to Java Object
+				
+				GameStatistics gameStats = mapper.readValue(str, GameStatistics.class);
+				gamesMappedByGameID.get(appID).setGameStatistics(gameStats);
+				getAchievementCompletionInfo(appID);	
+			}
+
+		} catch (IOException e1) {
+			//e1.printStackTrace();
+		}
+	}
+	private void getAchievementCompletionInfo(int appID) {
+		URL url;
+		HttpURLConnection con;
+		try {
+			String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
+			String parameters = String.format("key=%s&appid=%s", apiKey, appID);
+			url = new URL(" http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?" + parameters);
+			con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Content-Type", "application/json");
+			int responsecode = con.getResponseCode(); 
+
+			if(responsecode == 200)
+			{
+				String str="";
+				Scanner sc = new Scanner(url.openStream());
+				while(sc.hasNext())
+				{
+					str+=sc.nextLine();
+				}
+				sc.close();
+				
+				//JSON string to Java Object
+				GameStatistics achievementCompletionInfo = mapper.readValue(str, GameStatistics.class);
+				
+				//Mapping achievement schema of the requested game, using name (not display name) as identifier
+				Map<String, Achievement> achievements = new HashMap<String, Achievement>();
+				for(Achievement ach: gamesMappedByGameID.get(appID).getGameStatistics().getAchievements()) {
+					achievements.put(ach.getName(), ach);
+				}
+				
+				//Filling the completion info from this API request to the achievement schema of the game
+				for(Achievement a: achievementCompletionInfo.getAchievements()) {
+					Achievement achievementSchema = achievements.get(a.getApiname());
+					achievementSchema.setAchieved(a.getAchieved());
+					achievementSchema.setUnlocktime(a.getUnlocktime());
+				}
+				
+			}
+
+		} catch (IOException e1) {
+			//e1.printStackTrace();
+		}
 	}
 }

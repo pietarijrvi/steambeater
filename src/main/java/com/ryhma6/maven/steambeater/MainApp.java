@@ -27,7 +27,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
-    SteamAPICalls steamAPI;
+    private SteamAPICalls steamAPI;
     
     @FXML
     private FlowPane sidebar;
