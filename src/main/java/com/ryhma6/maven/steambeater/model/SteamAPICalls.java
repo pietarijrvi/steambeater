@@ -55,7 +55,7 @@ public class SteamAPICalls {
 		URL url;
 		HttpURLConnection con;
 		try {
-			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=38FB06680EA5CA6B526B31CBD4E43593&steamid=76561197960434622&include_appinfo=1&include_played_free_games=1&format=json");
+			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=38FB06680EA5CA6B526B31CBD4E43593&steamid=76561197960505737&include_appinfo=1&include_played_free_games=1&format=json");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-Type", "application/json");
@@ -94,7 +94,7 @@ public class SteamAPICalls {
 		URL url;
 		HttpURLConnection con;
 		try {
-			url = new URL("http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=38FB06680EA5CA6B526B31CBD4E43593&steamid=76561197960435530&relationship=friend");
+			url = new URL("http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=38FB06680EA5CA6B526B31CBD4E43593&steamid=76561197960505737&relationship=friend");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-Type", "application/json");
