@@ -85,22 +85,22 @@ public class GameListController implements Initializable {
 				EventHandler<MouseEvent> eventIgnored = new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						cellGame.setIgnored(true);
-						System.out.println("ignored: " +  cellGame.getName());
+						cellGame.setIgnored(!cellGame.isIgnored());
+						System.out.println(cellGame.getName() + " ignored: " + cellGame.isIgnored());
 					}
 				};
 				EventHandler<MouseEvent> eventBeaten = new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						cellGame.setBeaten(true);
-						System.out.println(cellGame.getName() + " beaten");
+						cellGame.setBeaten(!cellGame.isBeaten());
+						System.out.println(cellGame.getName() + " beaten: " + cellGame.isBeaten());
 					}
 				};
 				EventHandler<MouseEvent> eventUnbeatable = new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						cellGame.setUnbeatable(true);
-						System.out.println(cellGame.getName() + " set as unbeatable");
+						cellGame.setUnbeatable(!cellGame.isBeaten());
+						System.out.println(cellGame.getName() + " beatable: " + cellGame.isBeaten());
 					}
 				};
 				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventIgnored);
