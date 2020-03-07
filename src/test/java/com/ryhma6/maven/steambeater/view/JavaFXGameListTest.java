@@ -112,10 +112,39 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
-	@Disabled("not implemented")
+	//@Disabled("not implemented")
 	@Test
+	@DisplayName("Test that the sorting selection (playtime) sorts the UI game list")
 	public void testOrderByPlaytime() {
+		/*Copying test data list and arranging it based on the game names of the entries. This list
+		is used as a reference - expected result after sorting.*/
+		List<GameData> orderedByPlaytimeList = new ArrayList<GameData>(testGameList);
+		orderedByPlaytimeList.sort(Comparator.comparing(GameData::getPlaytime_forever));
 
+		//FX application thread
+		Platform.runLater(() -> {
+			@SuppressWarnings("unchecked")
+			ComboBox<String> combo = (ComboBox<String>) scene.lookup("#sortingChoice");
+			combo.getSelectionModel().select(0);
+			combo.getSelectionModel().select(1);
+			//combo.getSelectionModel().select(2);
+		});
+		
+		try {
+			//Tests will be run after the events on FX application thread have finished
+			assertAfterJavaFxPlatformEventsAreDone(() -> {
+				@SuppressWarnings("unchecked")
+				ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
+				List<GameData> actual = gameList.getItems();
+				System.out.println(gameList);
+				System.out.println("actual size: " + actual.size());
+				
+				assertEquals(orderedByPlaytimeList, actual, "ordering by playtime failed - gameList in unexpected order");
+			});
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Disabled("not implemented")

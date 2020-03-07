@@ -23,11 +23,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
 public class GameListController implements Initializable {
@@ -72,20 +74,38 @@ public class GameListController implements Initializable {
 			public Label timePlayed = new Label();
 			public HBox hbox = new HBox();
 			public Button ignoreButton = new Button();
+			public Button setUnbeatable = new Button();
 			public Button setAsBeaten = new Button();
 			public ImageView imageView = new ImageView();
 			public GameData cellGame;
+			public Pane pane = new Pane();
 			
 			public CustomCell() {
 				super();
-				EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+				EventHandler<MouseEvent> eventIgnored = new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
 						cellGame.setIgnored(true);
 						System.out.println("ignored: " +  cellGame.getName());
 					}
 				};
-				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+				EventHandler<MouseEvent> eventBeaten = new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						cellGame.setBeaten(true);
+						System.out.println(cellGame.getName() + " beaten");
+					}
+				};
+				EventHandler<MouseEvent> eventUnbeatable = new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						cellGame.setUnbeatable(true);
+						System.out.println(cellGame.getName() + " set as unbeatable");
+					}
+				};
+				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventIgnored);
+				setAsBeaten.addEventFilter(MouseEvent.MOUSE_CLICKED, eventBeaten);
+				setUnbeatable.addEventFilter(MouseEvent.MOUSE_CLICKED, eventUnbeatable);
 			}
 		}
 		
@@ -99,11 +119,30 @@ public class GameListController implements Initializable {
 					setGraphic(null);
 				} else {
 					cellGame = game;
-					ignoreButton.setText("Ignore this game");
-					setAsBeaten.setText("Set game as beaten");
+					ImageView ignoreImage = new ImageView("/hide.png");
+					ignoreImage.setFitHeight(40);
+				    ignoreImage.setFitWidth(40);
+				    ignoreButton.setGraphic(ignoreImage);
+				    Tooltip ignoreTip = new Tooltip();
+				    Tooltip beatenTip = new Tooltip();
+				    Tooltip unbeatableTip = new Tooltip();
+				    ignoreTip.setText("Ignore game");
+				    beatenTip.setText("Set game as beaten");
+				    unbeatableTip.setText("Set game as unbeatable");
+				    ignoreButton.setTooltip(ignoreTip);
+				    setAsBeaten.setTooltip(beatenTip);
+				    setUnbeatable.setTooltip(unbeatableTip);
+				    ImageView beatenImage = new ImageView("/trophy.png");
+					beatenImage.setFitHeight(40);
+				    beatenImage.setFitWidth(40);
+					setAsBeaten.setGraphic(beatenImage);
+					ImageView unbeatableImage = new ImageView("/unbeatable.png");
+					unbeatableImage.setFitHeight(40);
+				    unbeatableImage.setFitWidth(40);
+				    setUnbeatable.setGraphic(unbeatableImage);
 					timePlayed.setText("Time played: " + game.getPlaytime_forever() + " hours");
 					gameName.setText(game.getName());
-					hbox.setSpacing(50);
+					hbox.setSpacing(35);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
 						imageView.setImage(new Image(game.getImg_logo_url(), true)); // true: load in background
@@ -112,7 +151,8 @@ public class GameListController implements Initializable {
 						imageView.setImage(IMAGE_TEST);
 					}
 					hbox.getChildren().clear();
-					hbox.getChildren().addAll(imageView, gameName, timePlayed, ignoreButton);
+					hbox.getChildren().addAll(imageView, gameName, timePlayed, pane, setAsBeaten,setUnbeatable, ignoreButton);
+					HBox.setHgrow(pane, Priority.ALWAYS);
 					setGraphic(hbox);
 				}
 			}

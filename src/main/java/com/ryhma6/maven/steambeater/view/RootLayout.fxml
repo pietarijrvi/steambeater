@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.FlowPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
    <top>
       <MenuBar prefHeight="72.0" prefWidth="1280.0" BorderPane.alignment="CENTER" />
-      <Button text="Sign In"    
-        onAction="#handleBrowserButtonAction"/>
+      <Button onAction="#handleBrowserButtonAction" text="Sign In" />
    </top>
    <left>
       <FlowPane fx:id="sidebar" prefHeight="200.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
