@@ -146,7 +146,21 @@ public class GameListController implements Initializable {
 					unbeatableImage.setFitHeight(40);
 				    unbeatableImage.setFitWidth(40);
 				    setUnbeatable.setGraphic(unbeatableImage);
-					timePlayed.setText("Time played: " + game.getPlaytime_forever() + " hours");
+				    
+				    int timePlayedInHours = game.getPlaytime_forever() / 60;
+				    if(game.getPlaytime_forever() < 60) {
+				    	timePlayed.setText("Time played: " + game.getPlaytime_forever() + " minutes");
+				    }
+				    if(game.getPlaytime_forever() < 1){
+				    	timePlayed.setText("Time played: none");
+				    }else if(timePlayedInHours > 1) {
+				    	timePlayed.setText("Time played: " + timePlayedInHours + " hours");
+				    }
+				    
+				    if(timePlayedInHours == 1) {
+				    	timePlayed.setText("Time played: " + timePlayedInHours + " hour");
+				    }
+				    
 					gameName.setText(game.getName());
 					hbox.setSpacing(35);
 					hbox.setAlignment(Pos.CENTER_LEFT);
