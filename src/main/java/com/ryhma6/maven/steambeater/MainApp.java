@@ -36,14 +36,20 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Steambeater");
-        
-        steamAPI = new SteamAPICalls();
-        steamAPI.init();
-        steamAPI.loadSteamFriends();
-        
+
         initRootLayout();
         showGameList();
         showFriendsList();
+        
+        Thread steamAPIThread = new Thread(){
+        	public void run() {
+        		steamAPI = new SteamAPICalls(); 
+                steamAPI.init();
+                steamAPI.loadSteamFriends();
+        	}
+        };
+        
+        steamAPIThread.start();
     }
     
     /**

@@ -34,13 +34,17 @@ public class SteamAPICalls {
 	private Map<Integer,GameData> gamesMappedByGameID = new HashMap<Integer,GameData>();
 	
 	private ObjectMapper mapper = new ObjectMapper();
+	private String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
+	private String steamID = "76561197960505737";
 	
 	public SteamAPICalls() {
 		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 
+		/*
 		GameData g = new GameData();
 		g.setName("test");
 		playerGames.add(g);
+		*/
 	}
 	
 	public static ObservableList<GameData> getOwnedGames() {
@@ -55,7 +59,7 @@ public class SteamAPICalls {
 		URL url;
 		HttpURLConnection con;
 		try {
-			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=38FB06680EA5CA6B526B31CBD4E43593&steamid=76561197960434622&include_appinfo=1&include_played_free_games=1&format=json");
+			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + apiKey + "&steamid=" + steamID + "&include_appinfo=1&include_played_free_games=1&format=json");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-Type", "application/json");
@@ -75,7 +79,7 @@ public class SteamAPICalls {
 				//JSON string to Java Object			
 				OwnedGames games = mapper.readValue(str, OwnedGames.class);
 				try {
-					playerGames = FXCollections.observableArrayList(games.getGames());
+					playerGames.addAll(games.getGames());
 					for(GameData g: playerGames) {
 						gamesMappedByGameID.put(g.getAppid(), g);
 					}
@@ -88,18 +92,18 @@ public class SteamAPICalls {
 		} catch (IOException e1) {
 			//e1.printStackTrace();
 		}
-		getGameSchema(218620);
 	}
 	public void loadSteamFriends() {
 		URL url;
 		HttpURLConnection con;
+		List<Friend> friendIdList = new ArrayList<Friend>();
 		try {
-			url = new URL("http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=38FB06680EA5CA6B526B31CBD4E43593&steamid=76561197960435530&relationship=friend");
+			url = new URL("http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=" + apiKey + "&steamid=" + steamID + "&relationship=friend");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-Type", "application/json");
 			int responsecode = con.getResponseCode(); 
-
+			
 			if(responsecode == 200)
 			{
 				String str="";
@@ -112,32 +116,46 @@ public class SteamAPICalls {
 				
 				//JSON string to Java Object			
 				FriendList response = mapper.readValue(str, FriendList.class);
-				friendList = FXCollections.observableArrayList(response.getFriends());
+				friendIdList.addAll(response.getFriends());
 				System.out.println("Friends: " + friendList.size());
 			}
 		} catch (IOException e1) {
 			//e1.printStackTrace();
 		}
-		List<String> friendSteamIDList = new ArrayList<>();
-		for(Friend f:friendList) {
-			//temporary limit (api allows max 100 per request)
-			if(friendSteamIDList.size()<100)
-				friendSteamIDList.add(f.getSteamid());
-		}
-		Map<String, PlayerProfile> profiles = loadSteamPlayerProfiles(friendSteamIDList);
 		
-		for(Friend f:friendList) {
+		List<String> friendSteamIDList = new ArrayList<>();
+		
+		for(Friend f:friendIdList) {
+			friendSteamIDList.add(f.getSteamid());
+		}
+		
+		//friend list has to be split for requesting profile info (Steam api allows max 100 per request)
+		int requiredSplitLists = (int) Math.ceil(friendSteamIDList.size() / 100f);
+			
+		Map<String, PlayerProfile> profiles = new HashMap<String, PlayerProfile>();
+		for(int i = 0; i < requiredSplitLists;i++) {
+			List<String> friendSubList; 
+			if(i<(requiredSplitLists-1))
+				friendSubList = friendSteamIDList.subList(i*100, i*100+100);
+			else
+				friendSubList = friendSteamIDList.subList(i*100, friendSteamIDList.size());
+			profiles.putAll(loadSteamPlayerProfiles(friendSubList));
+		}
+		
+		for(Friend f:friendIdList) {
 			PlayerProfile profile = profiles.get(f.getSteamid());
-			if(profile!=null)
+			if(profile!=null) {
 				f.setPlayerProfile(profile);
+				friendList.add(f);
+			}
 		}
 	}
+	
 	private Map<String, PlayerProfile> loadSteamPlayerProfiles(List<String> steamIDList) {
 		URL url;
 		HttpURLConnection con;
 		Map<String, PlayerProfile> profileMap = new HashMap<String, PlayerProfile>();
 		try {
-			String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
 			String separatedIDList = String.join(",", steamIDList);
 			System.out.println("Friendlist size: " + steamIDList.size());
 			String parameters = String.format("key=%s&steamids=%s", apiKey, separatedIDList);
@@ -168,9 +186,6 @@ public class SteamAPICalls {
                         .withRootName("players");
 				List<PlayerProfile> profiles = objectReader.readValue(innerNode);
 				
-				//PlayerProfile[] profiles = mapper.readValue(str, PlayerProfile[].class);
-				
-				
 				for(PlayerProfile p:profiles) {
 					profileMap.put(p.getSteamid(), p);
 				}
@@ -185,7 +200,6 @@ public class SteamAPICalls {
 		URL url;
 		HttpURLConnection con;
 		try {
-			String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
 			String parameters = String.format("key=%s&appid=%s", apiKey, appID);
 			url = new URL(" http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?" + parameters);
 			con = (HttpURLConnection)url.openConnection();
@@ -218,7 +232,6 @@ public class SteamAPICalls {
 		URL url;
 		HttpURLConnection con;
 		try {
-			String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
 			String parameters = String.format("key=%s&appid=%s", apiKey, appID);
 			url = new URL(" http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?" + parameters);
 			con = (HttpURLConnection)url.openConnection();

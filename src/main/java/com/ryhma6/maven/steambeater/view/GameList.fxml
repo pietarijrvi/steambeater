@@ -14,8 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="606.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.view.GameListController">
+<AnchorPane prefHeight="606.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.view.GameListController">
 	<children>
 		<VBox prefHeight="606.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<children>
@@ -52,7 +51,6 @@
 								<FXCollections fx:factory="observableArrayList">
 									<String fx:value="Name" />
 									<String fx:value="Playtime" />
-									<String fx:value="Achievements" />
 								</FXCollections>
 							</items>
 							<HBox.margin>
@@ -63,21 +61,21 @@
 				</HBox>
 				<HBox prefHeight="536.0" prefWidth="1000.0">
 					<children>
-						<ListView fx:id="gameList" fixedCellSize="100.0" onMouseClicked="#handleMouseClick" prefHeight="536.0" prefWidth="1060.0">
+						<ListView fx:id="gameList" fixedCellSize="100.0" onMouseClicked="#handleMouseClick" prefHeight="516.0" prefWidth="1301.0">
 							<opaqueInsets>
 								<Insets />
 							</opaqueInsets>
 						</ListView>
-						<AnchorPane fx:id="statsWindow" prefHeight="536.0" prefWidth="657.0">
+						<AnchorPane fx:id="statsWindow" prefHeight="516.0" prefWidth="891.0">
 							<children>
-								<VBox fx:id="statsBox" alignment="TOP_RIGHT" layoutX="-195.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="216.0" prefWidth="195.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+								<VBox fx:id="statsBox" alignment="TOP_RIGHT" layoutX="68.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="216.0" prefWidth="257.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 									<children>
 										<Button fx:id="hideStatsButton" mnemonicParsing="false" onAction="#setStatsVisibility" prefHeight="40.0" prefWidth="80.0" text="Close">
 											<VBox.margin>
 												<Insets right="10.0" top="10.0" />
 											</VBox.margin>
 										</Button>
-										<Label fx:id="statLabel" alignment="TOP_LEFT" prefHeight="0.0" prefWidth="289.0" text="testi">
+										<Label fx:id="statLabel" alignment="TOP_LEFT" prefHeight="40.0" prefWidth="392.0" text="testi">
 											<font>
 												<Font size="28.0" />
 											</font>
