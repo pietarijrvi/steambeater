@@ -5,7 +5,9 @@ import org.expressme.openid.Association;
 import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
+import com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
+import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.view.FriendsListController;
 import com.ryhma6.maven.steambeater.view.GameListController;
 import com.ryhma6.maven.steambeater.view.StatComparisonController;
@@ -13,6 +15,8 @@ import com.ryhma6.maven.steambeater.view.StatComparisonController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,7 +31,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
-    private SteamAPICalls steamAPI;
+    private Service steamAPIService;
     
     @FXML
     private FlowPane sidebar;
@@ -41,26 +45,45 @@ public class MainApp extends Application {
         showGameList();
         showFriendsList();
         
-        Thread steamAPIThread = new Thread(){
-        	public void run() {
-        		steamAPI = new SteamAPICalls(); 
-                steamAPI.init();
-                steamAPI.loadSteamFriends();
-        	}
+        steamAPIService = new Service() {
+            @Override
+            protected Task createTask() {
+                return new Task() {
+                    @Override
+                    protected Void call() throws Exception {
+                    	SteamAPICalls steamAPI = new SteamAPICalls();
+                        steamAPI.loadSteamGames();
+                        steamAPI.loadSteamFriends();
+                        return null;
+                    }
+                };
+            }
         };
         
-        steamAPIThread.start();
+        UserPreferences prefs = new UserPreferences();
+        if(prefs.getSteamID()!=null)
+        	loadSteamAPIData();
+    }
+    
+    public void loadSteamAPIData() {
+    	if (!steamAPIService.isRunning()) {
+    		steamAPIService.reset();
+    		steamAPIService.start();
+        }
     }
     
     /**
      * Initializes the root layout.
      */
-    public void initRootLayout() {
+    private void initRootLayout() {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
+            // Give the controller access to the main app.
+            SteamOpenIDSignController controller = loader.getController();
+            controller.setMainApp(this);
             ListView<String> list = new ListView<String>();
             ObservableList<String> items =FXCollections.observableArrayList (
                 "Single", "Double", "Suite", "Family App");
@@ -77,7 +100,7 @@ public class MainApp extends Application {
     /**
      * Adds gamelist view to the root layout
      */
-    public void showGameList() {
+    private void showGameList() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -95,7 +118,7 @@ public class MainApp extends Application {
     
     
     
-    public void showFriendsList() {
+    private void showFriendsList() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -113,7 +136,7 @@ public class MainApp extends Application {
         }
     }
     
-    public void loadStatComparison(FriendsListController flCont) {
+    private void loadStatComparison(FriendsListController flCont) {
     	try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();

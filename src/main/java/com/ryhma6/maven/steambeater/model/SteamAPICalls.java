@@ -25,17 +25,22 @@ import com.ryhma6.maven.steambeater.model.steamAPI.GameStatistics;
 import com.ryhma6.maven.steambeater.model.steamAPI.OwnedGames;
 import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class SteamAPICalls {
+	private List<GameData> playerGamesTemp = new ArrayList<GameData>();
+	private List<Friend> friendListTemp = new ArrayList<Friend>();
+	
 	private static ObservableList<GameData> playerGames = FXCollections.observableArrayList();
 	private static ObservableList<Friend> friendList = FXCollections.observableArrayList();
 	private Map<Integer,GameData> gamesMappedByGameID = new HashMap<Integer,GameData>();
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	private String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
-	private String steamID = "76561197960505737";
+	//private String steamID = "76561197960505737";
+	private UserPreferences prefs = new UserPreferences(); 
 	
 	public SteamAPICalls() {
 		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
@@ -47,6 +52,10 @@ public class SteamAPICalls {
 		*/
 	}
 	
+	private String getSteamID() {
+		return prefs.getSteamID();
+	}
+	
 	public static ObservableList<GameData> getOwnedGames() {
 		return playerGames;
 	}
@@ -55,11 +64,26 @@ public class SteamAPICalls {
 		return friendList;
 	}
 	
-	public void init() {
+	public void resetItems() {
+		new Thread(new Runnable() {
+		    @Override public void run() {
+		        Platform.runLater(new Runnable() {
+		            @Override public void run() {
+		            	playerGames.clear();
+		        		friendList.clear();
+		            }
+		        });
+		    }
+		}).start();
+	}
+	
+	public void loadSteamGames() {
+		resetItems();
+		gamesMappedByGameID.clear();
 		URL url;
 		HttpURLConnection con;
 		try {
-			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + apiKey + "&steamid=" + steamID + "&include_appinfo=1&include_played_free_games=1&format=json");
+			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + apiKey + "&steamid=" + getSteamID() + "&include_appinfo=1&include_played_free_games=1&format=json");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-Type", "application/json");
@@ -79,8 +103,8 @@ public class SteamAPICalls {
 				//JSON string to Java Object			
 				OwnedGames games = mapper.readValue(str, OwnedGames.class);
 				try {
-					playerGames.addAll(games.getGames());
-					for(GameData g: playerGames) {
+					playerGamesTemp.addAll(games.getGames());
+					for(GameData g: playerGamesTemp) {
 						gamesMappedByGameID.put(g.getAppid(), g);
 					}
 				}catch(Exception e) {
@@ -88,17 +112,25 @@ public class SteamAPICalls {
 				}
 				System.out.println("Owned games: " + games.getGame_count());
 			}
-
 		} catch (IOException e1) {
 			//e1.printStackTrace();
 		}
+		new Thread(new Runnable() {
+		    @Override public void run() {
+		        Platform.runLater(new Runnable() {
+		            @Override public void run() {
+		            	playerGames.addAll(playerGamesTemp);
+		            }
+		        });
+		    }
+		}).start();
 	}
 	public void loadSteamFriends() {
 		URL url;
 		HttpURLConnection con;
 		List<Friend> friendIdList = new ArrayList<Friend>();
 		try {
-			url = new URL("http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=" + apiKey + "&steamid=" + steamID + "&relationship=friend");
+			url = new URL("http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=" + apiKey + "&steamid=" + getSteamID() + "&relationship=friend");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-Type", "application/json");
@@ -146,9 +178,18 @@ public class SteamAPICalls {
 			PlayerProfile profile = profiles.get(f.getSteamid());
 			if(profile!=null) {
 				f.setPlayerProfile(profile);
-				friendList.add(f);
+				friendListTemp.add(f);
 			}
 		}
+		new Thread(new Runnable() {
+		    @Override public void run() {
+		        Platform.runLater(new Runnable() {
+		            @Override public void run() {
+		            	friendList.addAll(friendListTemp);
+		            }
+		        });
+		    }
+		}).start();
 	}
 	
 	private Map<String, PlayerProfile> loadSteamPlayerProfiles(List<String> steamIDList) {
