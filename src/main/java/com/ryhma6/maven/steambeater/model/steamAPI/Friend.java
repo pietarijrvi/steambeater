@@ -1,33 +1,51 @@
 package com.ryhma6.maven.steambeater.model.steamAPI;
 
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * Object model of the friend details from SteamAPI JSON response. SteamAPI
+ * documentation: https://developer.valvesoftware.com/wiki/Steam_Web_API
+ */
 public class Friend {
+	/**
+	 * Steam id of the friend.
+	 * 
+	 * @param steamid Steamid of the friend from SteamAPI
+	 * @return Steam ID of the friend.
+	 */
+	@Getter
+	@Setter
 	private String steamid;
+	/**
+	 * Relationship filter. Possibles values: all, friend.
+	 * 
+	 * @param relationship Relationship value from SteamAPI.
+	 * @return Relationship value ("all" or "friend").
+	 */
+	@Getter
+	@Setter
 	private String relationship;
+	/**
+	 * Unix timestamp of the time when the friend relationship was created.
+	 * 
+	 * @param friend_since Timestamp from SteamAPI.
+	 * @return Unix timestamp of the friend relationship start.
+	 */
+	@Getter
+	@Setter
 	private String friend_since;
+	/**
+	 * Profile details of this friend.
+	 * 
+	 * @param playerProfile Profile information from SteamAPI.
+	 * @return Player profile information.
+	 */
+	@Getter
+	@Setter
 	private PlayerProfile playerProfile = new PlayerProfile();
-	
-	public String getSteamid() {
-		return steamid;
-	}
-	public void setSteamid(String steamid) {
-		this.steamid = steamid;
-	}
-	public String getRelationship() {
-		return relationship;
-	}
-	public void setRelationship(String relationship) {
-		this.relationship = relationship;
-	}
-	public String getFriend_since() {
-		return friend_since;
-	}
-	public void setFriend_since(String friend_since) {
-		this.friend_since = friend_since;
-	}
-	public PlayerProfile getPlayerProfile() {
-		return playerProfile;
-	}
-	public void setPlayerProfile(PlayerProfile playerProfile) {
-		this.playerProfile = playerProfile;
+
+	public Friend() {
+		playerProfile = new PlayerProfile();
 	}
 }
