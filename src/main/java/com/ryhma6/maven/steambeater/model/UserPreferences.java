@@ -13,7 +13,7 @@ public class UserPreferences {
 		System.out.println("Saved ID: " + prefs.get(steamIDKey, "null"));
 	  }
 	  
-	  public void getSteamID() {
-		  System.out.println(prefs.get(steamIDKey, "null"));
+	  public String getSteamID() {
+		  return prefs.get(steamIDKey, "null");
 	  }
 }

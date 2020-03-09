@@ -13,6 +13,7 @@ import org.expressme.openid.Association;
 import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
+import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 
 import javafx.concurrent.Worker;
@@ -28,20 +29,18 @@ import javafx.stage.Stage;
 
 public class SteamOpenIDSignController {
 
+	private MainApp mainApp;
 	private Stage newWindow;
-	UserPreferences prefs = new UserPreferences();
+	private CookieManager cookieManager;
+	private UserPreferences prefs = new UserPreferences();
 
 	@FXML
-	protected void handleBrowserButtonAction(ActionEvent event) {
-
-		Label secondLabel = new Label("Steam OpenID login");
-
-		// StackPane secondaryLayout = new StackPane();
-		// secondaryLayout.getChildren().add(secondLabel);
-		// Scene secondScene = new Scene(secondaryLayout, 230, 100);
-
+	private void handleBrowserButtonAction(ActionEvent event) {
+		cookieManager = new CookieManager();
+		cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+		CookieHandler.setDefault(cookieManager);
+		
 		OpenIdManager manager = new OpenIdManager();
-		// manager.setReturnTo("http://www.openid-example.com/openId");
 		manager.setReturnTo("http://localhost:8080");
 		manager.setRealm("http://localhost:8080");
 		Endpoint endpoint = manager.lookupEndpoint("https://steamcommunity.com/openid");
@@ -51,13 +50,12 @@ public class SteamOpenIDSignController {
 
 		WebView webView = new WebView();
 
-		// webView.getEngine().load("http://google.com");
 		webView.getEngine().load(url);
 
 		webView.getEngine().getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
 			if (Worker.State.SUCCEEDED.equals(newValue)) {
 				System.out.println(webView.getEngine().getLocation());
-				getCookieUsingCookieHandler();
+				getSteamIDFromCookie();
 			}
 		});
 
@@ -82,28 +80,17 @@ public class SteamOpenIDSignController {
 		newWindow.setY(parentStage.getY() + 100);
 
 		newWindow.show();
-
 	}
 
-	// Instantiate CookieManager;
-	// make sure to set CookiePolicy
-	CookieManager manager = new CookieManager();
-
-	public void getCookieUsingCookieHandler() {
+	private void getSteamIDFromCookie() {
 		try {
-
-			manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-			CookieHandler.setDefault(manager);
-
-			// get content from URLConnection;
-			// cookies are set by web site
+			// get content from URLConnection, cookies are set by web site
 			URL url = new URL("https://steamcommunity.com/");
 			URLConnection connection = url.openConnection();
 			connection.getContent();
 
-			// get cookies from underlying
-			// CookieStore
-			CookieStore cookieJar = manager.getCookieStore();
+			// get cookies from underlying CookieStore
+			CookieStore cookieJar = cookieManager.getCookieStore();
 			List<HttpCookie> cookies = cookieJar.getCookies();
 			for (HttpCookie cookie : cookies) {
 				System.out.println("CookieHandler retrieved cookie: " + cookie);
@@ -111,11 +98,22 @@ public class SteamOpenIDSignController {
 					System.out.println("SteamIDCookieValue:" + cookie.getValue());
 					prefs.setSteamID(cookie.getValue().substring(0,17));
 					newWindow.close();
+					mainApp.loadSteamAPIData();
 				}
 			}
 		} catch (Exception e) {
 			System.out.println("Unable to get cookie using CookieHandler");
 			e.printStackTrace();
 		}
+	}
+	
+	@FXML
+	private void loadWithTestValues() {
+		prefs.setSteamID("76561197960505737");
+		mainApp.loadSteamAPIData();
+	}
+
+	public void setMainApp(MainApp mainApp) {
+		this.mainApp = mainApp;	
 	}
 }

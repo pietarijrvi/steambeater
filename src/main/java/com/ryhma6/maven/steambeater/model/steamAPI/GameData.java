@@ -1,7 +1,5 @@
 package com.ryhma6.maven.steambeater.model.steamAPI;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
