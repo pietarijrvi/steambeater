@@ -14,14 +14,35 @@ public class DatabaseController {
 		sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 	}
 	
-	public void addGame(String gameID, String userID, Boolean beaten, Boolean unbeatable, Boolean ignored) {
+	public Boolean addGame(String gameID, String userID, Boolean beaten, Boolean unbeatable, Boolean ignored) {
+		try {
+			Session session = sf.openSession();
+			session.beginTransaction();
+	
+			GameListEntry gle = new GameListEntry(gameID, userID, beaten, unbeatable, ignored);
+	
+			session.saveOrUpdate(gle);
+			session.getTransaction().commit();
+			return true;
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
+	
+	public GameListEntry getUserGame(String gameID, String userID) {
+		try {
+			Session session = sf.openSession();
+			session.beginTransaction();
+			
+			GameListEntry gle = (GameListEntry) session.load(GameListEntry.class, gameID + userID);
+			session.getTransaction().commit();
+			
+			return gle;
+		} catch(Exception e) {
+			System.out.println(e);
+			return null;
+		}
 		
-		Session session = sf.openSession();
-		session.beginTransaction();
-
-		GameListEntry gle = new GameListEntry(gameID, userID, beaten, unbeatable, ignored);
-
-		session.saveOrUpdate(gle);
-		session.getTransaction().commit();
 	}
 }
