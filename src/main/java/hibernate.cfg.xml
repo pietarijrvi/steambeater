@@ -18,6 +18,6 @@
 		<property name="show_sql">false</property>
 
 		<!-- Mallitason DTO-oliot, pakkausnimet mukaan -->
-		<mapping class="model.Stat" />
+		<mapping class="com.ryhma6.maven.steambeater.model.GameListEntry" />
 	</session-factory>
 </hibernate-configuration>
