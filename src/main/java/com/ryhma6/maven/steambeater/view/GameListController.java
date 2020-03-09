@@ -28,6 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -70,7 +71,7 @@ public class GameListController implements Initializable {
 	public void setGames(ObservableList<GameData> games) {
 		this.games = games;
 	}
-
+	
 	public void loadGames() {	
 		abstract class CustomCell extends ListCell<GameData>{
 			public Label gameName = new Label();
@@ -99,6 +100,7 @@ public class GameListController implements Initializable {
 						cellGame.setBeaten(!cellGame.isBeaten());
 						filterGameData();
 						System.out.println(cellGame.getName() + " beaten: " + cellGame.isBeaten());
+						setAsBeaten.setStyle("-fx-border-color: #34eb40; -fx-border-width: 2 2 2 2");
 					}
 				};
 				EventHandler<MouseEvent> eventUnbeatable = new EventHandler<MouseEvent>() {
@@ -107,6 +109,7 @@ public class GameListController implements Initializable {
 						cellGame.setUnbeatable(!cellGame.isBeaten());
 						filterGameData();
 						System.out.println(cellGame.getName() + " beatable: " + cellGame.isBeaten());
+						setUnbeatable.setStyle("-fx-border-color: red; -fx-border-width: 2 2 2 2");
 					}
 				};
 				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventIgnored);
@@ -129,6 +132,9 @@ public class GameListController implements Initializable {
 					ignoreImage.setFitHeight(40);
 				    ignoreImage.setFitWidth(40);
 				    ignoreButton.setGraphic(ignoreImage);
+				    if(game.isIgnored()) {
+					ignoreButton.setStyle("-fx-border-color: red; -fx-border-width: 2 2 2 2");
+				    }
 				    Tooltip ignoreTip = new Tooltip();
 				    Tooltip beatenTip = new Tooltip();
 				    Tooltip unbeatableTip = new Tooltip();
