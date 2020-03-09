@@ -3,21 +3,21 @@ package com.ryhma6.maven.steambeater.view;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+
 import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -51,6 +51,9 @@ public class GameListController implements Initializable {
 	
 	@FXML
 	private TextField searchField;
+	
+	@FXML
+	private CheckBox includeUnbeatable,includeIgnored,includeBeaten,includeUnbeaten;
 	
 	private MainApp mainApp;
 	private final Image IMAGE_TEST = new Image("/test.png");
@@ -86,6 +89,7 @@ public class GameListController implements Initializable {
 					@Override
 					public void handle(MouseEvent event) {
 						cellGame.setIgnored(!cellGame.isIgnored());
+						filterGameData();
 						System.out.println(cellGame.getName() + " ignored: " + cellGame.isIgnored());
 					}
 				};
@@ -93,6 +97,7 @@ public class GameListController implements Initializable {
 					@Override
 					public void handle(MouseEvent event) {
 						cellGame.setBeaten(!cellGame.isBeaten());
+						filterGameData();
 						System.out.println(cellGame.getName() + " beaten: " + cellGame.isBeaten());
 					}
 				};
@@ -100,6 +105,7 @@ public class GameListController implements Initializable {
 					@Override
 					public void handle(MouseEvent event) {
 						cellGame.setUnbeatable(!cellGame.isBeaten());
+						filterGameData();
 						System.out.println(cellGame.getName() + " beatable: " + cellGame.isBeaten());
 					}
 				};
@@ -171,9 +177,11 @@ public class GameListController implements Initializable {
 				}
 			}
 		});
-		filterByName();
+		
+		initFilterListeners();
 		initListenerSortGameList();
 		hideStats();
+		setDefaultOptions();
 	}
 
 	private void hideStats() {
@@ -220,32 +228,72 @@ public class GameListController implements Initializable {
 			}
 			gameList.setItems(sortedFilteredData);
 		});
-		sortingChoice.getSelectionModel().select(0);
 	}
 	
-
 	/**
 	 * Filtering gamelist with searchfield
 	 */
-	private void filterByName() {
+	private Predicate<GameData> searchFilter(){
+		Predicate<GameData> filter = game -> true;
+		if(searchField.getText().length()>0)
+			filter = game -> game.getName().toLowerCase().contains(searchField.getText().toLowerCase());
+		return filter;	
+	}
+	private Predicate<GameData> includeUnbeatableFilter(){
+		Predicate<GameData> filter = game -> true;
+		if(!includeUnbeatable.isSelected())
+			filter = game -> game.isUnbeatable() == false;
+		return filter;	
+	}
+	private Predicate<GameData> includeIgnoredFilter(){
+		Predicate<GameData> filter = game -> true;
+		if(!includeIgnored.isSelected())
+			filter = game -> game.isIgnored() == false;
+		return filter;	
+	}
+	private Predicate<GameData> includeBeatenFilter(){
+		Predicate<GameData> filter = game -> true;
+		if(!includeBeaten.isSelected())
+			filter = game -> game.isBeaten() == false;
+		return filter;	
+	}
+	private Predicate<GameData> includeUnbeatenFilter(){
+		Predicate<GameData> filter = game -> true;
+		if(!includeUnbeaten.isSelected())
+			filter = game -> game.isBeaten() == true;
+		return filter;	
+	}
+	
+	private void filterGameData() {
+        filteredData.setPredicate(searchFilter().and(includeUnbeatableFilter().and(includeIgnoredFilter().and(includeBeatenFilter().and(includeUnbeatenFilter())))));
+	}
+
+	private void initFilterListeners() {
 		filteredData = new FilteredList<>(games, p -> true);
-        
+		
         searchField.textProperty().addListener(obs->{
-            String filter = searchField.getText(); 
-            if(filter == null || filter.length() == 0) {
-                filteredData.setPredicate(s -> true);
-            }
-            else {
-                filteredData.setPredicate(s -> s.getName().toLowerCase().contains(filter.toLowerCase()));
-            }
-            //filteredData.setPredicate(s -> s.isIgnored());
+            filterGameData();
         });
         
-        //Wrap the FilteredList in a SortedList. 
-        //SortedList<GameData> sortedData = new SortedList<>(filteredData);
+        includeUnbeatable.selectedProperty().addListener(obs->{
+            filterGameData();
+        });
         
-        //Add sorted (and filtered) data to the table.
-        //gameList.setItems(sortedData);
+        includeIgnored.selectedProperty().addListener(obs->{
+            filterGameData();
+        });
+        
+        includeBeaten.selectedProperty().addListener(obs->{
+            filterGameData();
+        });
+        
+        includeUnbeaten.selectedProperty().addListener(obs->{
+            filterGameData();
+        });
+	}
+	private void setDefaultOptions() {
+		includeUnbeaten.setSelected(true);
+		sortingChoice.getSelectionModel().select(0);
 	}
 
 	public void setMainApp(MainApp mainApp) {

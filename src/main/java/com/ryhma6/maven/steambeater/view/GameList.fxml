@@ -27,8 +27,8 @@
 						</TextField>
 						<VBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="67.0" prefWidth="195.0" spacing="5.0">
 							<children>
-								<CheckBox mnemonicParsing="false" text="Include Unbeatable" />
-								<CheckBox mnemonicParsing="false" text="Include Ignored" />
+								<CheckBox fx:id="includeUnbeatable" mnemonicParsing="false" text="Include Unbeatable" />
+								<CheckBox fx:id="includeIgnored" mnemonicParsing="false" text="Include Ignored" />
 							</children>
 							<HBox.margin>
 								<Insets />
@@ -39,8 +39,8 @@
 						</VBox>
 						<VBox prefHeight="66.0" prefWidth="171.0" spacing="5.0">
 							<children>
-								<CheckBox mnemonicParsing="false" text="Include Beaten" />
-								<CheckBox mnemonicParsing="false" text="Include Unbeaten" />
+								<CheckBox fx:id="includeBeaten" mnemonicParsing="false" text="Include Beaten" />
+								<CheckBox fx:id="includeUnbeaten" mnemonicParsing="false" text="Include Unbeaten" />
 							</children>
 							<padding>
 								<Insets bottom="10.0" top="10.0" />

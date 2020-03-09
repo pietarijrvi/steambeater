@@ -119,7 +119,7 @@ class JavaFXGameListTest extends ApplicationTest {
 		/*Copying test data list and arranging it based on the game names of the entries. This list
 		is used as a reference - expected result after sorting.*/
 		List<GameData> orderedByPlaytimeList = new ArrayList<GameData>(testGameList);
-		orderedByPlaytimeList.sort(Comparator.comparing(GameData::getPlaytime_forever));
+		orderedByPlaytimeList.sort(Comparator.comparing(GameData::getPlaytime_forever).reversed());
 
 		//FX application thread
 		Platform.runLater(() -> {
