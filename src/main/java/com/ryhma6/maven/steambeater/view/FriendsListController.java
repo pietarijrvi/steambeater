@@ -7,7 +7,6 @@ import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.steamAPI.Friend;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -92,7 +91,8 @@ public class FriendsListController implements Initializable {
 		            	System.out.println("ERR - personaname: " + name.getPlayerProfile().getPersonaname());
 		            }
 					
-					
+					label.setPrefWidth(82);
+					label.setWrapText(true);
 					imageView.setFitHeight(50);
 					
 					button.setOnAction( new EventHandler<ActionEvent>() {
@@ -145,7 +145,6 @@ public class FriendsListController implements Initializable {
 	}
 	
 	public void toggleComparisonView() {
-		System.out.println("toggleComparisonView");
 		scCont.openComparison();
 	}
 	

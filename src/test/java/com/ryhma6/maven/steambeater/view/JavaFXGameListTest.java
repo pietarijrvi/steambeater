@@ -14,6 +14,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
 import javafx.application.Platform;
@@ -22,6 +25,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 class JavaFXGameListTest extends ApplicationTest {
@@ -61,10 +65,10 @@ class JavaFXGameListTest extends ApplicationTest {
 	@BeforeEach
 	public void testSetupGameList() {
 		testGameList = new ArrayList<GameData>();
-		testGameList.add(new GameData(8, "Ada", 8));
+		testGameList.add(new GameData(8, "AdaGG", 8));
 		testGameList.add(new GameData(2, "Bill", 7));
 		testGameList.add(new GameData(3, "Cathy", 6));
-		testGameList.add(new GameData(4, "Dave", 5));
+		testGameList.add(new GameData(4, "DaveGG", 5));
 		testGameList.add(new GameData(5, "Ethan", 4));
 		testGameList.add(new GameData(6, "Fred", 3));
 		testGameList.add(new GameData(7, "Gideon", 2));
@@ -78,6 +82,7 @@ class JavaFXGameListTest extends ApplicationTest {
 		});
 	}
 
+	
 	@Test
 	@DisplayName("Test that the sorting selection (name) sorts the UI game list")
 	public void testOrderByName() {
@@ -147,10 +152,39 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
-	@Disabled("not implemented")
+	//@Disabled("not implemented")
 	@Test
 	public void testFilterByName() {
 
+		//FX application thread
+		Platform.runLater(() -> {
+			TextField searchField = (TextField) scene.lookup("#searchField");
+			searchField.setText("GG");
+		});
+		
+		try {
+			//Tests will be run after the events on FX application thread have finished
+			assertAfterJavaFxPlatformEventsAreDone(() -> {
+				@SuppressWarnings("unchecked")
+				ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
+				
+				
+				List<GameData> actual = gameList.getItems();
+				System.out.println(gameList);
+				System.out.println("actual size: " + actual.size());
+				/*Copying test data list and arranging it based on the game names of the entries. This list
+				is used as a reference - expected result after sorting.*/
+				List<String> gameNames = new ArrayList<String>();
+				for(GameData gd : actual) {
+					gameNames.add(gd.getName());
+				}
+				
+				assertThat(gameNames, containsInAnyOrder("AdaGG", "DaveGG"));
+			});
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
