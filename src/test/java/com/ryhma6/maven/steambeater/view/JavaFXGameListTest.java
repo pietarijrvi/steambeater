@@ -17,24 +17,30 @@ import org.testfx.framework.junit5.ApplicationTest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
+import static org.testfx.matcher.control.LabeledMatchers.hasText;
+
+
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 class JavaFXGameListTest extends ApplicationTest {
 
-	//JavaFX scene of GameList.fxml
+	// JavaFX scene of GameList.fxml
 	private Scene scene;
-	//JavaFX controller of GameList.fxml
+	// JavaFX controller of GameList.fxml
 	private GameListController gameListController;
-	//GameData entries created before tests
+	// GameData entries created before tests
 	private List<GameData> testGameList;
 
 	/**
@@ -50,16 +56,16 @@ class JavaFXGameListTest extends ApplicationTest {
 
 	@BeforeAll
 	public static void setupSpec() throws Exception {
-			System.setProperty("java.awt.headless", "true");
-			System.setProperty("testfx.robot", "glass");
-			System.setProperty("testfx.headless", "true");
-			System.setProperty("prism.order", "sw");
-			System.setProperty("prism.text", "t2k");
-			//System.setProperty("prism.verbose", "true");	
+		System.setProperty("java.awt.headless", "true");
+		System.setProperty("testfx.robot", "glass");
+		System.setProperty("testfx.headless", "true");
+		System.setProperty("prism.order", "sw");
+		System.setProperty("prism.text", "t2k");
+		// System.setProperty("prism.verbose", "true");
 	}
-	
+
 	/**
-	 * Create test data (unordered list of GameData entries) for gameListController. 
+	 * Create test data (unordered list of GameData entries) for gameListController.
 	 * Test data represents the game list that would be retrieved from SteamAPI.
 	 */
 	@BeforeEach
@@ -75,40 +81,41 @@ class JavaFXGameListTest extends ApplicationTest {
 		testGameList.add(new GameData(1, "Ann", 4));
 
 		gameListController.setGames(FXCollections.observableList(testGameList));
-		
-		//FX application thread
+
+		// FX application thread
 		Platform.runLater(() -> {
 			gameListController.loadGames();
 		});
 	}
 
-	
 	@Test
 	@DisplayName("Test that the sorting selection (name) sorts the UI game list")
 	public void testOrderByName() {
 
-		/*Copying test data list and arranging it based on the game names of the entries. This list
-		is used as a reference - expected result after sorting.*/
+		/*
+		 * Copying test data list and arranging it based on the game names of the
+		 * entries. This list is used as a reference - expected result after sorting.
+		 */
 		List<GameData> orderedByNameList = new ArrayList<GameData>(testGameList);
 		orderedByNameList.sort(Comparator.comparing(GameData::getName));
 
-		//FX application thread
+		// FX application thread
 		Platform.runLater(() -> {
 			@SuppressWarnings("unchecked")
 			ComboBox<String> combo = (ComboBox<String>) scene.lookup("#sortingChoice");
 			combo.getSelectionModel().select(1);
 			combo.getSelectionModel().select(0);
 		});
-		
+
 		try {
-			//Tests will be run after the events on FX application thread have finished
+			// Tests will be run after the events on FX application thread have finished
 			assertAfterJavaFxPlatformEventsAreDone(() -> {
 				@SuppressWarnings("unchecked")
 				ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
 				List<GameData> actual = gameList.getItems();
 				System.out.println(gameList);
 				System.out.println("actual size: " + actual.size());
-				
+
 				assertEquals(orderedByNameList, actual, "ordering by name failed - gameList in unexpected order");
 			});
 		} catch (InterruptedException e) {
@@ -117,34 +124,37 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
-	//@Disabled("not implemented")
+	// @Disabled("not implemented")
 	@Test
 	@DisplayName("Test that the sorting selection (playtime) sorts the UI game list")
 	public void testOrderByPlaytime() {
-		/*Copying test data list and arranging it based on the game names of the entries. This list
-		is used as a reference - expected result after sorting.*/
+		/*
+		 * Copying test data list and arranging it based on the game names of the
+		 * entries. This list is used as a reference - expected result after sorting.
+		 */
 		List<GameData> orderedByPlaytimeList = new ArrayList<GameData>(testGameList);
 		orderedByPlaytimeList.sort(Comparator.comparing(GameData::getPlaytime_forever).reversed());
 
-		//FX application thread
+		// FX application thread
 		Platform.runLater(() -> {
 			@SuppressWarnings("unchecked")
 			ComboBox<String> combo = (ComboBox<String>) scene.lookup("#sortingChoice");
 			combo.getSelectionModel().select(0);
 			combo.getSelectionModel().select(1);
-			//combo.getSelectionModel().select(2);
+			// combo.getSelectionModel().select(2);
 		});
-		
+
 		try {
-			//Tests will be run after the events on FX application thread have finished
+			// Tests will be run after the events on FX application thread have finished
 			assertAfterJavaFxPlatformEventsAreDone(() -> {
 				@SuppressWarnings("unchecked")
 				ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
 				List<GameData> actual = gameList.getItems();
 				System.out.println(gameList);
 				System.out.println("actual size: " + actual.size());
-				
-				assertEquals(orderedByPlaytimeList, actual, "ordering by playtime failed - gameList in unexpected order");
+
+				assertEquals(orderedByPlaytimeList, actual,
+						"ordering by playtime failed - gameList in unexpected order");
 			});
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -152,33 +162,34 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
-	//@Disabled("not implemented")
+	// @Disabled("not implemented")
 	@Test
 	public void testFilterByName() {
 
-		//FX application thread
+		// FX application thread
 		Platform.runLater(() -> {
 			TextField searchField = (TextField) scene.lookup("#searchField");
 			searchField.setText("GG");
 		});
-		
+
 		try {
-			//Tests will be run after the events on FX application thread have finished
+			// Tests will be run after the events on FX application thread have finished
 			assertAfterJavaFxPlatformEventsAreDone(() -> {
 				@SuppressWarnings("unchecked")
 				ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
-				
-				
+
 				List<GameData> actual = gameList.getItems();
 				System.out.println(gameList);
 				System.out.println("actual size: " + actual.size());
-				/*Copying test data list and arranging it based on the game names of the entries. This list
-				is used as a reference - expected result after sorting.*/
+				/*
+				 * Copying test data list and arranging it based on the game names of the
+				 * entries. This list is used as a reference - expected result after sorting.
+				 */
 				List<String> gameNames = new ArrayList<String>();
-				for(GameData gd : actual) {
+				for (GameData gd : actual) {
 					gameNames.add(gd.getName());
 				}
-				
+
 				assertThat(gameNames, containsInAnyOrder("AdaGG", "DaveGG"));
 			});
 		} catch (InterruptedException e) {
@@ -187,10 +198,36 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
+	@Test
+	public void testGameStatus() {
+		// FX application thread
+		Platform.runLater(() -> {
+			
+		});
+
+		try {
+			// Tests will be run after the events on FX application thread have finished
+			assertAfterJavaFxPlatformEventsAreDone(() -> {
+				@SuppressWarnings("unchecked")
+				ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
+
+				List<GameData> actual = gameList.getItems();
+				System.out.println(gameList);
+				System.out.println("actual size: " + actual.size());
+				
+				
+
+				//assertThat(true, actual.get(0).isIgnored());
+			});
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
-	 * Helper method for ensuring that the actual tests won't be run until Runnables on the JavaFX application
-	 * thread have finished
+	 * Helper method for ensuring that the actual tests won't be run until Runnables
+	 * on the JavaFX application thread have finished
 	 */
 	private void assertAfterJavaFxPlatformEventsAreDone(Runnable runnable) throws InterruptedException {
 		CountDownLatch countDownLatch = new CountDownLatch(1);
