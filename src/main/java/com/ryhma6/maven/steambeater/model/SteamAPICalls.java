@@ -61,6 +61,10 @@ public class SteamAPICalls {
 		return friendList;
 	}
 	
+	public static ObservableList<GameData> getFriendsGames() {
+		return friendsGames;
+	}
+	
 	public void setSavedSelections(List<GameListEntry> dbEntries) {
 		try {
 			List<GameListEntry> savedSelections = dbEntries;
