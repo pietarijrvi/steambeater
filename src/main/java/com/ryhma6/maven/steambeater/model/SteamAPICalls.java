@@ -331,7 +331,7 @@ public class SteamAPICalls {
 		}
 	}
 	
-	public void loadFriendsGames(String friendsID) {
+	public OwnedGames loadFriendsGames(String friendsID) {
 
 		friendsGames.clear();
 		fGamesMappedByGameID.clear();
@@ -358,6 +358,7 @@ public class SteamAPICalls {
 				
 				//JSON string to Java Object			
 				OwnedGames games = mapper.readValue(str, OwnedGames.class);
+				return games;/*
 				try {
 					friendsGamesTemp.addAll(games.getGames());
 					for(GameData g: friendsGamesTemp) {
@@ -366,11 +367,11 @@ public class SteamAPICalls {
 				}catch(Exception e) {
 					System.out.println("SteamAPI: loading gamelist failed");
 				}
-				System.out.println("Owned games: " + games.getGame_count());
+				System.out.println("Owned games: " + games.getGame_count());*/
 			}
 		} catch (IOException e1) {
 			//e1.printStackTrace();
-		}
+		}/*
 		new Thread(new Runnable() {
 		    @Override public void run() {
 		        Platform.runLater(new Runnable() {
@@ -379,6 +380,7 @@ public class SteamAPICalls {
 		            }
 		        });
 		    }
-		}).start();
+		}).start();*/
+		return null;
 	}
 }

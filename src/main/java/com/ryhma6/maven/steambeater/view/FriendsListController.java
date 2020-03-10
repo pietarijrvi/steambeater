@@ -97,7 +97,7 @@ public class FriendsListController implements Initializable {
 					button.setOnAction( new EventHandler<ActionEvent>() {
 			            @Override
 			            public void handle(ActionEvent event) {
-			                toggleComparisonView(name.getSteamid());
+			                toggleComparisonView(name.getSteamid(), name.getPlayerProfile().getPersonaname());
 			            }
 			        });
 
@@ -143,8 +143,8 @@ public class FriendsListController implements Initializable {
 		});
 	}
 	
-	public void toggleComparisonView(String id) {
-		scCont.loadStats(id);
+	public void toggleComparisonView(String id, String name) {
+		scCont.loadStats(id, name);
 		scCont.openComparison();
 	}
 	

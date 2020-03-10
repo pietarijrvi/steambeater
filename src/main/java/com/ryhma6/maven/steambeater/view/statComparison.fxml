@@ -27,8 +27,8 @@
        		<bottom>
 	       		<SplitPane dividerPositions="0.5032206119162641" layoutY="29.0" prefHeight="441.0" prefWidth="502.0">
 		        	<items>
-		          		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-		          		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="478.0" />
+		          		<AnchorPane fx:id="friendStats" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+		          		<AnchorPane fx:id="userStats" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="478.0" />
 		        	</items>
 		      	</SplitPane>
 	      	</bottom>
