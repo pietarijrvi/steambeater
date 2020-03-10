@@ -48,7 +48,7 @@ class JavaFXGameListTest extends ApplicationTest {
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("GameList.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameList.fxml"));
 		stage.setScene(scene = new Scene(loader.load(), 300, 300));
 		stage.show();
 		gameListController = loader.getController();
