@@ -41,7 +41,6 @@ public class FriendsListController implements Initializable {
 	private StatComparisonController scCont;
 	
 	private final Image IMAGE_TEST = new Image("test.png");
-	private Image[] listOfImages = {IMAGE_TEST};
 	
 	double smallWidth = 75.0;
 	double normalWidth = 250.0;
@@ -98,7 +97,7 @@ public class FriendsListController implements Initializable {
 					button.setOnAction( new EventHandler<ActionEvent>() {
 			            @Override
 			            public void handle(ActionEvent event) {
-			                toggleComparisonView();
+			                toggleComparisonView(name.getSteamid());
 			            }
 			        });
 
@@ -144,7 +143,8 @@ public class FriendsListController implements Initializable {
 		});
 	}
 	
-	public void toggleComparisonView() {
+	public void toggleComparisonView(String id) {
+		scCont.loadStats(id);
 		scCont.openComparison();
 	}
 	

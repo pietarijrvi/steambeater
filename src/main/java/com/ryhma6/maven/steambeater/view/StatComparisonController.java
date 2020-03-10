@@ -40,6 +40,10 @@ public class StatComparisonController implements Initializable {
 		statAnchor.setManaged(true);
 		statAnchor.setVisible(true);
 	}
+	
+	public void loadStats(String friendsID) {
+		
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
