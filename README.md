@@ -9,6 +9,7 @@
 <p>Koonnissa käytämme Mavenia. Testaamiseen käytämme JUnit ja TestFX. TestFX käytetään UI:n testaamiseen. Näiden lisäksi käytämme Jenkinsiä automaatiotestaukseen. Jenkins tarvitsee myös OpenJFX ja Monocle jotka on asetettu valmiiksi pom tiedostoon. Jotta testaukset toimisivat oikein, on sovelluksen käytettävä vanhempaa jdk versiota. Havaitsimme, että ainakin 8u181 on toimiva versio. 
 
 JDK:n voit ladata täältä: https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html
+
 Latauksen jälkeen JDK on asetettava projektiin (esim. Eclipsessä Project -> Properties -> Java Build Path -> Valitse nykyinen JDK ja paina oikealta edit.
 
 Voit myös samalla tarkistaa, että "Source" tabissa on tarvittavat resurssit (main, test, resources).
