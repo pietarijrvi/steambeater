@@ -216,7 +216,7 @@ public class GameListController implements Initializable {
 					setText(null);
 					setGraphic(null);
 				} else {
-					achievementName.setText(ach.getName());
+					achievementName.setText(ach.getDisplayName());
 					description.setText(ach.getDescription());
 					unlockTime.setText(Integer.toString(ach.getUnlocktime()));
 					hbox.setSpacing(35);
