@@ -78,6 +78,15 @@ public class GameListController implements Initializable {
 	}
 
 	public void loadGames() {
+		initAchievementCellFactory();
+		initGameListCellFactory();
+		initFilterListeners();
+		initListenerSortGameList();
+		hideStats();
+		setDefaultOptions();
+	}
+	
+	private void initGameListCellFactory() {
 		abstract class CustomCell extends ListCell<GameData> {
 			public Label gameName = new Label();
 			public Label timePlayed = new Label();
@@ -105,16 +114,14 @@ public class GameListController implements Initializable {
 						cellGame.setBeaten(!cellGame.isBeaten());
 						filterGameData();
 						System.out.println(cellGame.getName() + " beaten: " + cellGame.isBeaten());
-						setAsBeaten.setStyle("-fx-border-color: #34eb40; -fx-border-width: 2 2 2 2");
 					}
 				};
 				EventHandler<MouseEvent> eventUnbeatable = new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						cellGame.setUnbeatable(!cellGame.isBeaten());
+						cellGame.setUnbeatable(!cellGame.isUnbeatable());
 						filterGameData();
 						System.out.println(cellGame.getName() + " beatable: " + cellGame.isBeaten());
-						setUnbeatable.setStyle("-fx-border-color: red; -fx-border-width: 2 2 2 2");
 					}
 				};
 				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventIgnored);
@@ -137,9 +144,24 @@ public class GameListController implements Initializable {
 					ignoreImage.setFitHeight(40);
 					ignoreImage.setFitWidth(40);
 					ignoreButton.setGraphic(ignoreImage);
+					
+					String defaultCSSButtonStyle = "-fx-border-color: lightgray; -fx-border-width: 2 2 2 2";
 					if (game.isIgnored()) {
 						ignoreButton.setStyle("-fx-border-color: red; -fx-border-width: 2 2 2 2");
+					}else {
+						ignoreButton.setStyle(defaultCSSButtonStyle);
 					}
+					if (game.isUnbeatable()) {
+						setUnbeatable.setStyle("-fx-border-color: red; -fx-border-width: 2 2 2 2");
+					}else {
+						setUnbeatable.setStyle(defaultCSSButtonStyle);
+					}
+					if (game.isBeaten()) {
+						setAsBeaten.setStyle("-fx-border-color: #34eb40; -fx-border-width: 2 2 2 2");
+					}else {
+						setAsBeaten.setStyle(defaultCSSButtonStyle);
+					}
+					
 					Tooltip ignoreTip = new Tooltip();
 					Tooltip beatenTip = new Tooltip();
 					Tooltip unbeatableTip = new Tooltip();
@@ -188,11 +210,6 @@ public class GameListController implements Initializable {
 				}
 			}
 		});
-
-		initFilterListeners();
-		initListenerSortGameList();
-		hideStats();
-		setDefaultOptions();
 	}
 
 	private void hideStats() {
@@ -364,7 +381,6 @@ public class GameListController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		initAchievementCellFactory();
 		loadGames();
 	}
 }
