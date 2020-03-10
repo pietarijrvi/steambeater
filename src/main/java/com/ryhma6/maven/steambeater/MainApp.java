@@ -1,9 +1,6 @@
 package com.ryhma6.maven.steambeater;
-import java.io.IOException;
 
-import org.expressme.openid.Association;
-import org.expressme.openid.Endpoint;
-import org.expressme.openid.OpenIdManager;
+import java.io.IOException;
 
 import com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
@@ -17,6 +14,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,144 +25,167 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
-
 public class MainApp extends Application {
 
-    private Stage primaryStage;
-    private BorderPane rootLayout;
-    private Service steamAPIService;
-    
-    @FXML
-    private FlowPane sidebar;
+	private Stage primaryStage;
+	private BorderPane rootLayout;
+	private Service steamAPIService;
+	SteamAPICalls steamAPI = new SteamAPICalls();
+	GameListController gameListController;
 
-    @Override
-    public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Steambeater");
+	@FXML
+	private FlowPane sidebar;
 
-        initRootLayout();
-        showGameList();
-        showFriendsList();
-        
-        steamAPIService = new Service() {
-            @Override
-            protected Task createTask() {
-                return new Task() {
-                    @Override
-                    protected Void call() throws Exception {
-                    	SteamAPICalls steamAPI = new SteamAPICalls();
-                        steamAPI.loadSteamGames();
-                        steamAPI.loadSteamFriends();
-                        return null;
-                    }
-                };
-            }
-        };
-        
-        UserPreferences prefs = new UserPreferences();
-        if(prefs.getSteamID()!=null)
-        	loadSteamAPIData();
-    }
-    
-    public void loadSteamAPIData() {
-    	if (!steamAPIService.isRunning()) {
-    		steamAPIService.reset();
-    		steamAPIService.start();
-        }
-    }
-    
-    /**
-     * Initializes the root layout.
-     */
-    private void initRootLayout() {
-        try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
-            rootLayout = (BorderPane) loader.load();
-            // Give the controller access to the main app.
-            SteamOpenIDSignController controller = loader.getController();
-            controller.setMainApp(this);
-            ListView<String> list = new ListView<String>();
-            ObservableList<String> items =FXCollections.observableArrayList (
-                "Single", "Double", "Suite", "Family App");
-            list.setItems(items);
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    /**
-     * Adds gamelist view to the root layout
-     */
-    private void showGameList() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/GameList.fxml"));
-            AnchorPane gameList = (AnchorPane) loader.load();
-            // Set person overview into the center of root layout.
-            rootLayout.setCenter(gameList);
-         // Give the controller access to the main app.
-            GameListController controller = loader.getController();
-            controller.setMainApp(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
-    
-    private void showFriendsList() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/friendsList.fxml"));
-            AnchorPane friends = (AnchorPane) loader.load();
-            // Set person overview into the center of root layout.
-            FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
-            sidebar.getChildren().add(friends);
-            // Give the controller access to the main app.
-            FriendsListController controller = loader.getController();
-            controller.setMainApp(this);
-            loadStatComparison(controller);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void loadStatComparison(FriendsListController flCont) {
-    	try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/statComparison.fxml"));
-            AnchorPane statComparison = (AnchorPane) loader.load();
-            // Set person overview into the center of root layout.
-            rootLayout.setRight(statComparison);
-            // Give the controller access to the main app.
-            StatComparisonController controller = loader.getController();
-            controller.setMainApp(this);
-            flCont.setStatComparisonController(controller);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }    
-    
-    /**
-     * Returns the main stage.
-     * @return
-     */
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
+	@Override
+	public void start(Stage primaryStage) {
+		this.primaryStage = primaryStage;
+		this.primaryStage.setTitle("Steambeater");
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+		initRootLayout();
+		showGameList();
+		showFriendsList();
+
+		steamAPIService = new Service() {
+			@Override
+			protected Task createTask() {
+				return new Task() {
+					@Override
+					protected Void call() throws Exception {
+						steamAPI.loadSteamGames();
+						steamAPI.loadSteamFriends();
+						return null;
+					}
+				};
+			}
+		};
+
+		UserPreferences prefs = new UserPreferences();
+		if (prefs.getSteamID() != null)
+			loadSteamAPIData();
+	}
+
+	public void loadSteamAPIData() {
+		if (!steamAPIService.isRunning()) {
+			steamAPIService.reset();
+			steamAPIService.start();
+		}
+	}
+	
+	public void resetSteamAPIData() {
+		steamAPI.resetItems();
+	}
+
+	public void loadAchievementData(int appID) {
+		Task<Boolean> task = new Task<Boolean>() {
+			@Override
+			protected Boolean call() throws Exception {
+				steamAPI.loadGameSchema(appID);
+				return true;
+			}
+		};//update UI (achievement list) when the info has been retrieved from SteamAPI
+		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+		    @Override
+		    public void handle(WorkerStateEvent t) {
+		    	gameListController.refreshAchievementList();
+		    	System.out.println("Achiev load finish, starting refresh");
+		    }
+		});
+
+		// start the background task
+		Thread th = new Thread(task);
+		th.start();
+	}
+
+	/**
+	 * Initializes the root layout.
+	 */
+	private void initRootLayout() {
+		try {
+			// Load root layout from fxml file.
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
+			rootLayout = (BorderPane) loader.load();
+			// Give the controller access to the main app.
+			SteamOpenIDSignController controller = loader.getController();
+			controller.setMainApp(this);
+			ListView<String> list = new ListView<String>();
+			ObservableList<String> items = FXCollections.observableArrayList("Single", "Double", "Suite", "Family App");
+			list.setItems(items);
+			// Show the scene containing the root layout.
+			Scene scene = new Scene(rootLayout);
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Adds gamelist view to the root layout
+	 */
+	private void showGameList() {
+		try {
+			// Load person overview.
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/GameList.fxml"));
+			AnchorPane gameList = (AnchorPane) loader.load();
+			// Set person overview into the center of root layout.
+			rootLayout.setCenter(gameList);
+			// Give the controller access to the main app.
+			gameListController = loader.getController();
+			gameListController.setMainApp(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void showFriendsList() {
+		try {
+			// Load person overview.
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/friendsList.fxml"));
+			AnchorPane friends = (AnchorPane) loader.load();
+			// Set person overview into the center of root layout.
+			FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
+			sidebar.getChildren().add(friends);
+			// Give the controller access to the main app.
+			FriendsListController controller = loader.getController();
+			controller.setMainApp(this);
+			loadStatComparison(controller);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void loadStatComparison(FriendsListController flCont) {
+		try {
+			// Load person overview.
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/statComparison.fxml"));
+			AnchorPane statComparison = (AnchorPane) loader.load();
+			// Set person overview into the center of root layout.
+			rootLayout.setRight(statComparison);
+			// Give the controller access to the main app.
+			StatComparisonController controller = loader.getController();
+			controller.setMainApp(this);
+			flCont.setStatComparisonController(controller);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Returns the main stage.
+	 * 
+	 * @return
+	 */
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 
 }

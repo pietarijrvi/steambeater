@@ -237,7 +237,7 @@ public class SteamAPICalls {
 		return profileMap;
 	}
 	
-	public void getGameSchema(int appID) {
+	public void loadGameSchema(int appID) {
 		URL url;
 		HttpURLConnection con;
 		try {
@@ -259,8 +259,15 @@ public class SteamAPICalls {
 				sc.close();
 				
 				//JSON string to Java Object
+				System.out.println("schema url: " + url);
+				System.out.println("schema response: " + str);
 				
-				GameStatistics gameStats = mapper.readValue(str, GameStatistics.class);
+				mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false);
+				JsonNode rootNode = new ObjectMapper().readTree(new StringReader(str));
+				JsonNode innerNode = rootNode.path("game").path("availableGameStats");
+				ObjectReader objectReader = mapper.readerFor(new TypeReference<GameStatistics>() {});
+				GameStatistics gameStats = objectReader.readValue(innerNode);
+				
 				gamesMappedByGameID.get(appID).setGameStatistics(gameStats);
 				getAchievementCompletionInfo(appID);	
 			}
@@ -273,7 +280,7 @@ public class SteamAPICalls {
 		URL url;
 		HttpURLConnection con;
 		try {
-			String parameters = String.format("key=%s&appid=%s", apiKey, appID);
+			String parameters = String.format("key=%s&appid=%s&steamid=%s", apiKey, appID, getSteamID());
 			url = new URL(" http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?" + parameters);
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("GET");
@@ -291,7 +298,12 @@ public class SteamAPICalls {
 				sc.close();
 				
 				//JSON string to Java Object
-				GameStatistics achievementCompletionInfo = mapper.readValue(str, GameStatistics.class);
+				mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false);
+				
+				JsonNode rootNode = new ObjectMapper().readTree(new StringReader(str));
+				JsonNode innerNode = rootNode.path("playerstats");
+				ObjectReader objectReader = mapper.readerFor(new TypeReference<GameStatistics>() {});
+				GameStatistics achievementCompletionInfo = objectReader.readValue(innerNode);
 				
 				//Mapping achievement schema of the requested game, using name (not display name) as identifier
 				Map<String, Achievement> achievements = new HashMap<String, Achievement>();
@@ -305,7 +317,6 @@ public class SteamAPICalls {
 					achievementSchema.setAchieved(a.getAchieved());
 					achievementSchema.setUnlocktime(a.getUnlocktime());
 				}
-				
 			}
 
 		} catch (IOException e1) {
