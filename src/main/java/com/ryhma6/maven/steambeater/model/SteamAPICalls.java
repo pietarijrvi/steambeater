@@ -44,12 +44,6 @@ public class SteamAPICalls {
 	
 	public SteamAPICalls() {
 		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
-
-		/*
-		GameData g = new GameData();
-		g.setName("test");
-		playerGames.add(g);
-		*/
 	}
 	
 	private String getSteamID() {
@@ -62,6 +56,36 @@ public class SteamAPICalls {
 	
 	public static ObservableList<Friend> getFriendList() {
 		return friendList;
+	}
+	
+	public void setSavedSelections(List<GameListEntry> dbEntries) {
+		try {
+			List<GameListEntry> savedSelections = dbEntries;
+			for(GameListEntry g: savedSelections) {
+				int gameID = Integer.parseInt(g.getGameID());
+				GameData gameData = gamesMappedByGameID.get(gameID);
+				//System.out.println("from DB: " + gameData.getName() + "ignored: " + g.getIgnored());
+				gameData.setIgnored(g.getIgnored());
+				gameData.setBeaten(g.getBeaten());
+				gameData.setUnbeatable(g.getUnbeatable());
+			}
+		}catch(Exception e) {
+			System.out.println("Setting db selections failed - no selections or no game list from Steam");
+		}
+		
+		setGamesToUI();
+	}
+	
+	private void setGamesToUI() {
+		new Thread(new Runnable() {
+		    @Override public void run() {
+		        Platform.runLater(new Runnable() {
+		            @Override public void run() {
+		            	playerGames.addAll(new ArrayList<GameData>(gamesMappedByGameID.values()));
+		            }
+		        });
+		    }
+		}).start();
 	}
 	
 	public void resetItems() {
@@ -115,6 +139,9 @@ public class SteamAPICalls {
 		} catch (IOException e1) {
 			//e1.printStackTrace();
 		}
+		
+		/*
+		 * OLD, will be removed later: setting games to UI list - now loading the list after getting selections from db
 		new Thread(new Runnable() {
 		    @Override public void run() {
 		        Platform.runLater(new Runnable() {
@@ -124,6 +151,7 @@ public class SteamAPICalls {
 		        });
 		    }
 		}).start();
+		*/
 	}
 	public void loadSteamFriends() {
 		URL url;

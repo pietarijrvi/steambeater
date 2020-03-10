@@ -3,8 +3,10 @@ package com.ryhma6.maven.steambeater;
 import java.io.IOException;
 
 import com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController;
+import com.ryhma6.maven.steambeater.model.DatabaseController;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
+import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 import com.ryhma6.maven.steambeater.view.FriendsListController;
 import com.ryhma6.maven.steambeater.view.GameListController;
 import com.ryhma6.maven.steambeater.view.StatComparisonController;
@@ -30,8 +32,10 @@ public class MainApp extends Application {
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 	private Service steamAPIService;
-	SteamAPICalls steamAPI = new SteamAPICalls();
-	GameListController gameListController;
+	private SteamAPICalls steamAPI = new SteamAPICalls();
+	private GameListController gameListController;
+	private DatabaseController databaseController = new DatabaseController();
+	private UserPreferences prefs = new UserPreferences();
 
 	@FXML
 	private FlowPane sidebar;
@@ -55,6 +59,11 @@ public class MainApp extends Application {
 						steamAPI.loadSteamFriends();
 						return null;
 					}
+					@Override
+				    protected void succeeded() {
+				        super.succeeded(); 
+				        steamAPI.setSavedSelections(databaseController.getAllUserGames(prefs.getSteamID()));
+				    }
 				};
 			}
 		};
@@ -63,15 +72,22 @@ public class MainApp extends Application {
 		if (prefs.getSteamID() != null)
 			loadSteamAPIData();
 	}
+	
+	public void addGameToDatabase(GameData game) {
+		databaseController.addGame(game);
+	}
 
 	public void loadSteamAPIData() {
 		if (!steamAPIService.isRunning()) {
 			steamAPIService.reset();
 			steamAPIService.start();
+		}else {
+			System.out.println("Loading SteamData not finished");
 		}
 	}
 	
 	public void resetSteamAPIData() {
+		steamAPIService.cancel();
 		steamAPI.resetItems();
 	}
 
