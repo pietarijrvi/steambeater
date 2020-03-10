@@ -78,8 +78,8 @@ public class GameListController implements Initializable {
 	}
 
 	public void loadGames() {
-		initAchievementCellFactory();
 		initGameListCellFactory();
+		initAchievementCellFactory();
 		initFilterListeners();
 		initListenerSortGameList();
 		hideStats();

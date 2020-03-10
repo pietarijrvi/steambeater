@@ -48,7 +48,7 @@ class JavaFXGameListTest extends ApplicationTest {
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameList.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("GameList.fxml"));
 		stage.setScene(scene = new Scene(loader.load(), 300, 300));
 		stage.show();
 		gameListController = loader.getController();
@@ -88,6 +88,7 @@ class JavaFXGameListTest extends ApplicationTest {
 		});
 	}
 
+	//@Disabled
 	@Test
 	@DisplayName("Test that the sorting selection (name) sorts the UI game list")
 	public void testOrderByName() {
@@ -124,7 +125,7 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
-	// @Disabled("not implemented")
+	//@Disabled
 	@Test
 	@DisplayName("Test that the sorting selection (playtime) sorts the UI game list")
 	public void testOrderByPlaytime() {
@@ -162,7 +163,7 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
-	// @Disabled("not implemented")
+	//@Disabled
 	@Test
 	public void testFilterByName() {
 
@@ -198,11 +199,13 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
+	@Disabled
 	@Test
 	public void testGameStatus() {
 		// FX application thread
 		Platform.runLater(() -> {
-			
+			ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
+			System.out.println("first list item name: " + gameList.getItems().get(0).getName());
 		});
 
 		try {
