@@ -1,7 +1,9 @@
 package com.ryhma6.maven.steambeater.view;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -57,6 +59,9 @@ public class GameListController implements Initializable {
 
 	@FXML
 	private TextField searchField;
+	
+	@FXML
+	private Pane achievementPane;
 
 	@FXML
 	private CheckBox includeUnbeatable, includeIgnored, includeBeaten, includeUnbeaten;
@@ -182,6 +187,7 @@ public class GameListController implements Initializable {
 					unbeatableImage.setFitHeight(40);
 					unbeatableImage.setFitWidth(40);
 					setUnbeatable.setGraphic(unbeatableImage);
+					
 
 					int timePlayedInHours = game.getPlaytime_forever() / 60;
 					if (game.getPlaytime_forever() < 60) {
@@ -238,7 +244,7 @@ public class GameListController implements Initializable {
 				} else {
 					achievementName.setText(ach.getDisplayName());
 					description.setText(ach.getDescription());
-					unlockTime.setText(Integer.toString(ach.getUnlocktime()));
+					//unlockTime.setText(Integer.toString(ach.getUnlocktime()));
 					hbox.setSpacing(35);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
@@ -250,6 +256,16 @@ public class GameListController implements Initializable {
 					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView, achievementName, description, unlockTime);
 					setGraphic(hbox);
+					HBox.setHgrow(achievementPane, Priority.ALWAYS);
+					if(ach.getUnlocktime() == 0) {
+						unlockTime.setText("Achievement not unlocked");
+					}else{
+						String unlockTimeString = Integer.toString(ach.getUnlocktime());
+						long epoch = Long.parseLong(unlockTimeString);
+						Date expiry = new Date(epoch*1000);
+						SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+						unlockTime.setText("Achievement unlocked in: " + sdf.format(expiry));
+					}
 				}
 			}
 		});
@@ -269,6 +285,7 @@ public class GameListController implements Initializable {
 	public void setStatsVisibility() {
 		System.out.println("Button clicked!");
 		boolean visible = statsWindow.isManaged();
+		gameList.setVisible(true);
 		if (visible == true) {
 			hideStats();
 		} else {
@@ -285,6 +302,7 @@ public class GameListController implements Initializable {
 			
 			System.out.println("Ach list size: " + game.getGameStatistics().getAchievements().size());
 			showStats();
+			gameList.setVisible(false);
 		}
 	}
 

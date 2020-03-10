@@ -32,10 +32,13 @@ import javafx.collections.ObservableList;
 public class SteamAPICalls {
 	private List<GameData> playerGamesTemp = new ArrayList<GameData>();
 	private List<Friend> friendListTemp = new ArrayList<Friend>();
+	private List<GameData> friendsGamesTemp = new ArrayList<GameData>();
 	
 	private static ObservableList<GameData> playerGames = FXCollections.observableArrayList();
 	private static ObservableList<Friend> friendList = FXCollections.observableArrayList();
+	private static ObservableList<GameData> friendsGames = FXCollections.observableArrayList();
 	private Map<Integer,GameData> gamesMappedByGameID = new HashMap<Integer,GameData>();
+	private Map<Integer,GameData> fGamesMappedByGameID = new HashMap<Integer,GameData>();
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	private String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
@@ -350,5 +353,58 @@ public class SteamAPICalls {
 		} catch (IOException e1) {
 			//e1.printStackTrace();
 		}
+	}
+	
+	public OwnedGames loadFriendsGames(String friendsID) {
+
+		friendsGames.clear();
+		fGamesMappedByGameID.clear();
+		URL url;
+		HttpURLConnection con;
+		
+		try {
+			url = new URL("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + apiKey + "&steamid=" + friendsID + "&include_appinfo=1&include_played_free_games=1&format=json");
+			con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Content-Type", "application/json");
+			int responsecode = con.getResponseCode(); 
+
+			if(responsecode == 200)
+			{
+				String str="";
+				Scanner sc = new Scanner(url.openStream());
+				while(sc.hasNext())
+				{
+					str+=sc.nextLine();
+				}
+				sc.close();
+				System.out.println(str);
+				
+				//JSON string to Java Object			
+				OwnedGames games = mapper.readValue(str, OwnedGames.class);
+				return games;/*
+				try {
+					friendsGamesTemp.addAll(games.getGames());
+					for(GameData g: friendsGamesTemp) {
+						fGamesMappedByGameID.put(g.getAppid(), g);
+					}
+				}catch(Exception e) {
+					System.out.println("SteamAPI: loading gamelist failed");
+				}
+				System.out.println("Owned games: " + games.getGame_count());*/
+			}
+		} catch (IOException e1) {
+			//e1.printStackTrace();
+		}/*
+		new Thread(new Runnable() {
+		    @Override public void run() {
+		        Platform.runLater(new Runnable() {
+		            @Override public void run() {
+		            	friendsGames.addAll(friendsGamesTemp);
+		            }
+		        });
+		    }
+		}).start();*/
+		return null;
 	}
 }
