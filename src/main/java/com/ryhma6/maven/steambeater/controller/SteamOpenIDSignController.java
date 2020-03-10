@@ -46,7 +46,7 @@ public class SteamOpenIDSignController {
 		Endpoint endpoint = manager.lookupEndpoint("https://steamcommunity.com/openid");
 		Association association = manager.lookupAssociation(endpoint);
 		String url = manager.getAuthenticationUrl(endpoint, association);
-		System.out.println("Copy the authentication URL in browser:\n" + url);
+		System.out.println("Authentication URL:\n" + url);
 
 		WebView webView = new WebView();
 
@@ -111,6 +111,12 @@ public class SteamOpenIDSignController {
 	private void loadWithTestValues() {
 		prefs.setSteamID("76561197960505737");
 		mainApp.loadSteamAPIData();
+	}
+	
+	@FXML
+	private void logout() {
+		prefs.setSteamID("null");
+		mainApp.resetSteamAPIData();
 	}
 
 	public void setMainApp(MainApp mainApp) {

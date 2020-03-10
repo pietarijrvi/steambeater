@@ -45,7 +45,7 @@ public class Achievement {
 	 * @param displayName Display name from SteamAPI
 	 * @return Achievement name
 	 */
-	@Getter @Setter private int displayName;
+	@Getter @Setter private String displayName;
 	/**
 	 * Achievement description text.
 	 * @param description Description from SteamAPI
@@ -64,4 +64,5 @@ public class Achievement {
 	 * @return Achievement grayscale icon link
 	 */
 	@Getter @Setter private String icongray;
+	@Getter @Setter private int hidden;
 }

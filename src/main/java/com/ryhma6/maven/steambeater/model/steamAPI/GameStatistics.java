@@ -1,5 +1,6 @@
 package com.ryhma6.maven.steambeater.model.steamAPI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -27,11 +28,12 @@ public class GameStatistics {
 	 * @param achievements Achievement list parsed from SteamAPI.
 	 * @return Achievements list
 	 */
-	@Getter @Setter private List<Achievement> achievements;
+	@Getter @Setter private List<Achievement> achievements = new ArrayList<Achievement>();
 	/**
 	 * Game statistic (non-achiemenent) info of the player/game (may be null if not retrieved from separate API call).
 	 * @param stats Game statistics of the player (steamID).
 	 * @return List of game statistics (non-achievement data, different stats for each game).
 	 */
 	@Getter @Setter private List<Stat> stats;
+	@Getter @Setter private String success;
 }

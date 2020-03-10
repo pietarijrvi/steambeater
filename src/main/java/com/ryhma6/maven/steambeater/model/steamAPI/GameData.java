@@ -14,7 +14,7 @@ public class GameData {
 	@Getter @Setter private int playtime_mac_forever;
 	@Getter @Setter private int playtime_linux_forever;
 	@Getter @Setter private int playtime_2weeks;
-	@Getter @Setter private GameStatistics gameStatistics;
+	@Getter @Setter private GameStatistics gameStatistics = new GameStatistics();
 	
 	@Getter @Setter private boolean unbeatable = false;
 	@Getter @Setter private boolean ignored = false;
