@@ -3,8 +3,6 @@ package com.ryhma6.maven.steambeater.model;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +28,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class SteamAPICalls {
-	private List<GameData> playerGamesTemp = new ArrayList<GameData>();
 	private List<Friend> friendListTemp = new ArrayList<Friend>();
 	private List<GameData> friendsGamesTemp = new ArrayList<GameData>();
 	
@@ -109,6 +106,7 @@ public class SteamAPICalls {
 	}
 	
 	public void loadSteamGames() {
+		List<GameData> playerGamesTemp = new ArrayList<GameData>();
 		resetItems();
 		gamesMappedByGameID.clear();
 		URL url;

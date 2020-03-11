@@ -21,40 +21,67 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * The class SteamOpenIDSignController controls the Steam OpenID sign process
+ * and is used by the FXML that contains the sign buttons. User signs using
+ * Steam OpenID form in embedded browser (this app won't handle the username or
+ * password). After successful login the SteamID is retrieved from a cookie.
+ */
 public class SteamOpenIDSignController {
 
+	/**
+	 * Reference to main app, set after loading the FXML that uses this controller.
+	 */
 	private MainApp mainApp;
+	/**
+	 * Stage that contains embedded browser (popup).
+	 */
 	private Stage newWindow;
+	/**
+	 * Cookiemanager used for storing steamcommunity cookies. Reseted for each
+	 * login.
+	 */
 	private CookieManager cookieManager;
-	private UserPreferences prefs = new UserPreferences();
 
+	/**
+	 * Login button action (FXML). Opens new window containing embedded browser,
+	 * opens Steam OpenID login page. SteamID retrieved from cookies after
+	 * successful login.
+	 * 
+	 * @param event Click event
+	 */
 	@FXML
-	private void handleBrowserButtonAction(ActionEvent event) {
+	private void handleLoginButtonAction(ActionEvent event) {
 		cookieManager = new CookieManager();
 		cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
 		CookieHandler.setDefault(cookieManager);
-		
+
 		OpenIdManager manager = new OpenIdManager();
+		/*
+		 * return address and realm not actually used here (no redirection after
+		 * successful login), required parameters for Steam OpenID
+		 */
 		manager.setReturnTo("http://localhost:8080");
 		manager.setRealm("http://localhost:8080");
 		Endpoint endpoint = manager.lookupEndpoint("https://steamcommunity.com/openid");
 		Association association = manager.lookupAssociation(endpoint);
 		String url = manager.getAuthenticationUrl(endpoint, association);
-		System.out.println("Authentication URL:\n" + url);
 
 		WebView webView = new WebView();
-
 		webView.getEngine().load(url);
 
+		/*
+		 * Check cookies on every state change (web navigation/redirects) and try to //
+		 * find the cookie containing steamID. Keeps listening until the cookie is
+		 * found.
+		 */
 		webView.getEngine().getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
 			if (Worker.State.SUCCEEDED.equals(newValue)) {
-				System.out.println(webView.getEngine().getLocation());
 				getSteamIDFromCookie();
 			}
 		});
@@ -67,7 +94,7 @@ public class SteamOpenIDSignController {
 		newWindow.setTitle("Steam OpenID login");
 		newWindow.setScene(secondScene);
 
-		// Specifies the modality for new window.
+		// Specifies the modality for new window - login requires modal window
 		newWindow.initModality(Modality.WINDOW_MODAL);
 
 		// Specifies the owner Window (parent) for new window
@@ -82,6 +109,12 @@ public class SteamOpenIDSignController {
 		newWindow.show();
 	}
 
+	/**
+	 * Search steamcommunity cookies and look for steamLoginSecure is found
+	 * (contains steamID). Close browser window and continue to game data loading
+	 * when steamLoginSecure cookie is found. steamLoginSecure cookie is retrieved
+	 * after successful signing.
+	 */
 	private void getSteamIDFromCookie() {
 		try {
 			// get content from URLConnection, cookies are set by web site
@@ -93,33 +126,47 @@ public class SteamOpenIDSignController {
 			CookieStore cookieJar = cookieManager.getCookieStore();
 			List<HttpCookie> cookies = cookieJar.getCookies();
 			for (HttpCookie cookie : cookies) {
-				System.out.println("CookieHandler retrieved cookie: " + cookie);
 				if (cookie.getName().equals("steamLoginSecure")) {
 					System.out.println("SteamIDCookieValue:" + cookie.getValue());
-					prefs.setSteamID(cookie.getValue().substring(0,17));
+					// save retrieved SteamID to preferences
+					UserPreferences.setSteamID(cookie.getValue().substring(0, 17));
 					newWindow.close();
 					mainApp.loadSteamAPIData();
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Unable to get cookie using CookieHandler");
+			System.out.println("Unable to get cookie.");
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Used by test sign button. Used for testing, saves predefined steamID to
+	 * preferences and uses it to start loading Steam API data.
+	 */
 	@FXML
 	private void loadWithTestValues() {
 		UserPreferences.setSteamID("76561197960505737");
 		mainApp.loadSteamAPIData();
 	}
-	
+
+	/**
+	 * Used by logout button. Clears saved steamID from preferences and starts
+	 * clearing data from UI.
+	 */
 	@FXML
 	private void logout() {
-		prefs.setSteamID("null");
+		UserPreferences.setSteamID("null");
 		mainApp.resetSteamAPIData();
 	}
 
+	/**
+	 * Sets main app reference, has to be set immediately after loading the FXML
+	 * that uses this controller.
+	 * 
+	 * @param mainApp
+	 */
 	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;	
+		this.mainApp = mainApp;
 	}
 }
