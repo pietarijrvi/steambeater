@@ -37,6 +37,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
+/**
+ * Controller for the gamelist fxml
+ * Loads achievements and games and takes care of sorting and filtering
+ */
 public class GameListController implements Initializable {
 
 	/**
