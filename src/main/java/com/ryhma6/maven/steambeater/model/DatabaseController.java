@@ -13,7 +13,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.criterion.Restrictions;
 
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
@@ -25,31 +24,35 @@ public class DatabaseController {
 		sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 	}
 	
-	public Boolean addGame(GameData game) {
-		try {
-			Session session = sf.openSession();
+	public Boolean addGame(GameData game, String userID) {
+
+		/*
+		GameListEntry g = getUserGame(Integer.toString(game.getAppid()), userID);
+		if(g==null) {
+			g=new GameListEntry();
+			System.out.println();
+		}*/
+		try (Session session = sf.openSession()){
+			GameListEntry g = new GameListEntry();
+			g.setUserID(userID);
+			g.setGameID(String.valueOf(game.getAppid()));
+			g.setBeaten(game.isBeaten());
+			g.setUnbeatable(game.isUnbeatable());
+			g.setIgnored(game.isIgnored());
+			g.setEntryID();
 			session.beginTransaction();
-			String gameID = String.valueOf(game.getAppid());
-			String userID = UserPreferences.getSteamID();
-			Boolean beaten = game.isBeaten();
-			Boolean unbeatable = game.isUnbeatable();
-			Boolean ignored = game.isIgnored();
-			//String gameID, String userID, Boolean beaten, Boolean unbeatable, Boolean ignored
-	
-			GameListEntry gle = new GameListEntry(gameID, userID, beaten, unbeatable, ignored);
-	
-			session.saveOrUpdate(gle);
+			session.saveOrUpdate(g);
 			session.getTransaction().commit();
 			return true;
 		} catch(Exception e) {
-			System.out.println(e);
+			//System.out.println(e);
+			e.printStackTrace();
 			return false;
 		}
 	}
 	
 	public GameListEntry getUserGame(String gameID, String userID) {
-		try {
-			Session session = sf.openSession();
+		try (Session session = sf.openSession()){
 			session.beginTransaction();
 			
 			GameListEntry gle = (GameListEntry) session.get(GameListEntry.class, gameID + userID);
@@ -57,15 +60,15 @@ public class DatabaseController {
 			
 			return gle;
 		} catch(Exception e) {
-			System.out.println(e);
+			//System.out.println(e);
+			e.printStackTrace();
 			return null;
 		}
 		
 	}
 	
 	public List<GameListEntry> getAllUserGames(String userID) {
-		try {
-			Session session = sf.openSession();
+		try (Session session = sf.openSession()){
 			session.beginTransaction();
 			
 			CriteriaBuilder builder = session.getCriteriaBuilder();

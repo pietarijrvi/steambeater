@@ -109,7 +109,7 @@ public class SteamOpenIDSignController {
 	
 	@FXML
 	private void loadWithTestValues() {
-		prefs.setSteamID("76561197960505737");
+		UserPreferences.setSteamID("76561197960505737");
 		mainApp.loadSteamAPIData();
 	}
 	

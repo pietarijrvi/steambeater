@@ -74,7 +74,8 @@ public class MainApp extends Application {
 	}
 	
 	public void addGameToDatabase(GameData game) {
-		databaseController.addGame(game);
+		databaseController.addGame(game, UserPreferences.getSteamID());
+		System.out.println("UserID used for db: " + UserPreferences.getSteamID());
 	}
 
 	public void loadSteamAPIData() {

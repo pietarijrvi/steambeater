@@ -41,7 +41,7 @@ public class SteamAPICalls {
 	private Map<Integer,GameData> fGamesMappedByGameID = new HashMap<Integer,GameData>();
 	
 	private ObjectMapper mapper = new ObjectMapper();
-	private String apiKey = "706A9896DF2A6C97072D53C86FCE29A3";
+	private String apiKey = "38FB06680EA5CA6B526B31CBD4E43593";
 	//private String steamID = "76561197960505737";
 	private UserPreferences prefs = new UserPreferences(); 
 	
@@ -61,10 +61,7 @@ public class SteamAPICalls {
 		return friendList;
 	}
 	
-	public static ObservableList<GameData> getFriendsGames() {
-		return friendsGames;
-	}
-	
+<<<<<<< HEAD
 	public void setSavedSelections(List<GameListEntry> dbEntries) {
 		try {
 			List<GameListEntry> savedSelections = dbEntries;
@@ -93,6 +90,10 @@ public class SteamAPICalls {
 		        });
 		    }
 		}).start();
+=======
+	public static ObservableList<GameData> getFriendsGames() {
+		return friendsGames;
+>>>>>>> 229898a225928e9657fac0fb9753cca7b235df9c
 	}
 	
 	public void resetItems() {

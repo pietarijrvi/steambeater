@@ -25,6 +25,10 @@ public class GameListEntry {
 	@Column(name="ignored")
 	private Boolean ignored;
 	
+	public GameListEntry() {
+		super();
+	}
+	
 	public GameListEntry(String gameID, String userID, Boolean beaten, Boolean unbeatable, Boolean ignored) {
 		super();
 		this.userID = userID;
@@ -32,6 +36,10 @@ public class GameListEntry {
 		this.beaten = beaten;
 		this.unbeatable = unbeatable;
 		this.ignored = ignored;
+		this.entryID = gameID + userID;
+	}
+	
+	public void setEntryID() {
 		this.entryID = gameID + userID;
 	}
 	
@@ -57,10 +65,6 @@ public class GameListEntry {
 
 	public void setIgnored(Boolean ignored) {
 		this.ignored = ignored;
-	}
-
-	public GameListEntry() {
-		super();
 	}
 	
 	public String getGameID() {
