@@ -3,7 +3,6 @@ package com.ryhma6.maven.steambeater.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.steamAPI.Friend;
 
@@ -22,22 +21,34 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
+/**
+ * Controls the friends list side bar, works with StatComparisonController which needs to be set using the setStatComparisonController
+ * @author KimW
+ *
+ */
 public class FriendsListController implements Initializable {
 	
+	/**
+	 * The deepest AnchorPane in the fxml
+	 */
 	@FXML
 	private AnchorPane deepAnchor; 
 	
+	/**
+	 * The expanded version of the friends list
+	 */
 	@FXML
 	private ListView<Friend> friendsList;
 	
+	/**
+	 * The minimized version of the friends list
+	 */
 	@FXML
 	private ListView<Friend> friendsListSmall;
 
-	private MainApp mainApp;
 	private StatComparisonController scCont;
 	
 	private final Image IMAGE_TEST = new Image("test.png");
@@ -47,6 +58,9 @@ public class FriendsListController implements Initializable {
 	BorderPane borderPane = new BorderPane();
 	Button resizeButton = new Button("<-|");
 	
+	/**
+	 * loads the friends into the friends list, minimized one is separate from the expanded one
+	 */
 	private void loadFriends() {
 		//ObservableList<String> names = FXCollections.observableArrayList("Friendo", "A what now", "twat", "NAme");
 		ObservableList<Friend> names = SteamAPICalls.getFriendList();
@@ -143,11 +157,19 @@ public class FriendsListController implements Initializable {
 		});
 	}
 	
+	/**
+	 * Opens the Comparison view and updates it with the stats of the given ID
+	 * @param id
+	 * @param name
+	 */
 	public void toggleComparisonView(String id, String name) {
 		scCont.loadStats(id, name);
 		scCont.openComparison();
 	}
 	
+	/**
+	 * toggles the friends list side bar between the minimized and expanded versions 
+	 */
 	public void toggleSize() {
 		boolean visible = friendsList.isManaged();
 		if (visible == true) {
@@ -172,14 +194,17 @@ public class FriendsListController implements Initializable {
 		}
 	}
 	
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
-	}
-	
+	/**
+	 * Sets the StatComparisonController so that the friends list's compare buttons work
+	 * @param scCont
+	 */
 	public void setStatComparisonController(StatComparisonController scCont) {
 		this.scCont = scCont;
 	}
 
+	/**
+	 * Initializes the side bar by creating the toggle button and giving it its function, then calls the method to load the users friends in
+	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
@@ -187,6 +212,7 @@ public class FriendsListController implements Initializable {
 		borderPane.setPrefWidth(normalWidth);
 		borderPane.setPadding(new Insets(5, 5, 5, 5));
 		
+		//button for toggling the friends list between the minimized and expanded versions
 		resizeButton.setOnAction( new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

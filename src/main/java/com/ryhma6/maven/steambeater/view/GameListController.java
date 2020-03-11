@@ -37,51 +37,131 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
+/**
+ * Controller for the gamelist fxml
+ * Loads achievements and games and takes care of sorting and filtering
+ */
 public class GameListController implements Initializable {
 
+	/**
+	 * ListView for gamelist that has all your games
+	 * @param gameList listview for the the list that holds your Steam games
+	 * @return gameList listview for the the list that holds your Steam games
+	 */
 	@FXML
 	private ListView<GameData> gameList;
 	
+	/**
+	 * List that has all your achievements
+	 * @param achievementList list of your achievements
+	 * @return achievementList of your achievements
+	 */
 	@FXML
 	private ListView<Achievement> achievementList;
 
+	/**
+	 * Hides statsWindow with achievements
+	 * @param hideStatsButton button that hides statsWindow element with your achievements
+	 */
 	@FXML
 	private Button hideStatsButton;
 
+	/**
+	 * Holds your achievements
+	 * @param statsWindow panel that opens when you click a game on a list, shows your achievements
+	 */
 	@FXML
 	private AnchorPane statsWindow;
 
+	/**
+	 * Label in statsWindow that holds the game´s name
+	 * @param statLabel label that holds the clicked game´s name
+	 */
 	@FXML
 	private Label statLabel;
 
+	/**
+	 * ComboBox for sorting the gameList by name or playtime
+	 * @param sortingChoice ComboBox for sorting the gameList by name or playtime
+	 */
 	@FXML
 	private ComboBox sortingChoice;
 
+	/**
+	 * TextField for filtering the gameList by name
+	 * @param searchField TextField for filtering the gameList by name
+	 */
 	@FXML
 	private TextField searchField;
 	
+	/**
+	 * Pane in achievementList
+	 * @param achievementPane Pane in achievementList
+	 */
 	@FXML
 	private Pane achievementPane;
 
+	/**
+	 * CheckBoxes for gameList filtering options
+	 * @param includeUnbeatable CheckBox that includes unbeatable games in list
+	 * @param includeIgnored CheckBox that includes ignored games in list
+	 * @param includeBeaten CheckBox that includes beaten games in list
+	 * @param includeUnbeaten CheckBox that includes unbeaten games in list
+	 */
 	@FXML
 	private CheckBox includeUnbeatable, includeIgnored, includeBeaten, includeUnbeaten;
 
+	/**
+	 * MainApp that runs the application
+	 * @param mainApp MainApp that runs the application
+	 */
 	private MainApp mainApp;
+	
+	/**
+	 * Default image for testing gameList
+	 * @param IMAGE_TEST Image for testing gameList
+	 */
 	private final Image IMAGE_TEST = new Image("/test.png");
 
+	/**
+	 * ObservableList for user´s games got from the Steam API
+	 * @param games list for users games
+	 */
 	private ObservableList<GameData> games = SteamAPICalls.getOwnedGames();
 
+	/**
+	 * FilteredList for the filtered gamelist
+	 * @param filteredData FilteredList for the filtered gamelist
+	 */
 	private FilteredList<GameData> filteredData;
+	
+	/**
+	 * SortedList for the sorted and filtered gamelist
+	 * @param sortedFilteredData SortedList for the sorted and filtered gamelist
+	 */
 	private SortedList<GameData> sortedFilteredData;
 
+	/**
+	 * Gets the user´s games 
+	 * @return ObservableList games with user´s games
+	 */
 	public ObservableList<GameData> getGames() {
 		return games;
 	}
 
+	/**
+	 * Sets the user´s games
+	 * @param games ObservableList with user´s games
+	 */
 	public void setGames(ObservableList<GameData> games) {
 		this.games = games;
 	}
 
+	/**
+	 * Initializes gamelist with games, achievements, filtering and sorting
+	 * Hides statsWindow by default
+	 * Sets default options
+	 */
 	public void loadGames() {
 		initGameListCellFactory();
 		initAchievementCellFactory();
@@ -91,6 +171,9 @@ public class GameListController implements Initializable {
 		setDefaultOptions();
 	}
 	
+	/**
+	 * Sets games to gamelist
+	 */
 	private void initGameListCellFactory() {
 		abstract class CustomCell extends ListCell<GameData> {
 			public Label gameName = new Label();
@@ -103,6 +186,9 @@ public class GameListController implements Initializable {
 			public GameData cellGame;
 			public Pane pane = new Pane();
 
+			/**
+			 * EventsHandlers for statusbuttons
+			 */
 			public CustomCell() {
 				super();
 				EventHandler<MouseEvent> eventIgnored = new EventHandler<MouseEvent>() {
@@ -137,7 +223,8 @@ public class GameListController implements Initializable {
 				setUnbeatable.addEventFilter(MouseEvent.MOUSE_CLICKED, eventUnbeatable);
 			}
 		}
-
+		
+		//Setting items in each gamelist cell
 		gameList.setCellFactory(param -> new CustomCell() {
 
 			@Override
@@ -170,6 +257,7 @@ public class GameListController implements Initializable {
 						setAsBeaten.setStyle(defaultCSSButtonStyle);
 					}
 					
+					//tooltips for statusbuttons
 					Tooltip ignoreTip = new Tooltip();
 					Tooltip beatenTip = new Tooltip();
 					Tooltip unbeatableTip = new Tooltip();
@@ -179,6 +267,8 @@ public class GameListController implements Initializable {
 					ignoreButton.setTooltip(ignoreTip);
 					setAsBeaten.setTooltip(beatenTip);
 					setUnbeatable.setTooltip(unbeatableTip);
+					
+					//images for statusbuttons
 					ImageView beatenImage = new ImageView("/trophy.png");
 					beatenImage.setFitHeight(40);
 					beatenImage.setFitWidth(40);
@@ -221,11 +311,17 @@ public class GameListController implements Initializable {
 		});
 	}
 
+	/**
+	 * Sets statsWindow hidden
+	 */
 	private void hideStats() {
 		statsWindow.setManaged(false);
 		statsWindow.setVisible(false);
 	}
 
+	/**
+	 * Initializes achievementList with achievements
+	 */
 	private void initAchievementCellFactory() {
 		achievementList.setCellFactory(param -> new ListCell<Achievement>() {
 
@@ -235,6 +331,11 @@ public class GameListController implements Initializable {
 			public HBox hbox = new HBox();
 			public ImageView imageView = new ImageView();
 
+			/**
+			 * Sets achievementList cell items
+			 * @param ach achievements
+			 * @param empty
+			 */
 			@Override
 			public void updateItem(Achievement ach, boolean empty) {
 				super.updateItem(ach, empty);
@@ -244,7 +345,6 @@ public class GameListController implements Initializable {
 				} else {
 					achievementName.setText(ach.getDisplayName());
 					description.setText(ach.getDescription());
-					//unlockTime.setText(Integer.toString(ach.getUnlocktime()));
 					hbox.setSpacing(35);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
@@ -271,17 +371,26 @@ public class GameListController implements Initializable {
 		});
 	}
 	
+	/**
+	 * Refreshes the achievementlist
+	 */
 	public void refreshAchievementList() {
 		GameData game = gameList.getSelectionModel().getSelectedItem();
 		achievementList.setItems(FXCollections.observableArrayList(game.getGameStatistics().getAchievements()));
 	}
 	
+	/**
+	 * Sets statsWindow visible
+	 */
 	private void showStats() {
 		gameList.maxWidth(250);
 		statsWindow.setManaged(true);
 		statsWindow.setVisible(true);
 	}
 
+	/**
+	 * Sets if the statsWindow is visible
+	 */
 	public void setStatsVisibility() {
 		System.out.println("Button clicked!");
 		boolean visible = statsWindow.isManaged();
@@ -293,6 +402,10 @@ public class GameListController implements Initializable {
 		}
 	}
 
+	/**
+	 * Loads achievement data when a game is clicked
+	 * @param arg0 MouseEvent for click
+	 */
 	@FXML
 	private void handleMouseClick(MouseEvent arg0) {
 		GameData game = gameList.getSelectionModel().getSelectedItem();
@@ -334,6 +447,10 @@ public class GameListController implements Initializable {
 		return filter;
 	}
 
+	/**
+	 * Predicate for including unbeatable games
+	 * @return predicate for including unbeatable games
+	 */
 	private Predicate<GameData> includeUnbeatableFilter() {
 		Predicate<GameData> filter = game -> true;
 		if (!includeUnbeatable.isSelected())
@@ -341,6 +458,10 @@ public class GameListController implements Initializable {
 		return filter;
 	}
 
+	/**
+	 * Predicate for including ignored games
+	 * @return predicate for including ignored games
+	 */
 	private Predicate<GameData> includeIgnoredFilter() {
 		Predicate<GameData> filter = game -> true;
 		if (!includeIgnored.isSelected())
@@ -348,6 +469,10 @@ public class GameListController implements Initializable {
 		return filter;
 	}
 
+	/**
+	 * Predicate for including beaten games
+	 * @return predicate for including beaten games
+	 */
 	private Predicate<GameData> includeBeatenFilter() {
 		Predicate<GameData> filter = game -> true;
 		if (!includeBeaten.isSelected())
@@ -355,6 +480,10 @@ public class GameListController implements Initializable {
 		return filter;
 	}
 
+	/**
+	 * Predicate for including unbeaten games
+	 * @return predicate for including unbeaten games
+	 */
 	private Predicate<GameData> includeUnbeatenFilter() {
 		Predicate<GameData> filter = game -> true;
 		if (!includeUnbeaten.isSelected())
@@ -362,11 +491,17 @@ public class GameListController implements Initializable {
 		return filter;
 	}
 
+	/**
+	 * Filters gamelist using predicates
+	 */
 	private void filterGameData() {
 		filteredData.setPredicate(searchFilter().and(includeUnbeatableFilter()
 				.and(includeIgnoredFilter().and(includeBeatenFilter().and(includeUnbeatenFilter())))));
 	}
 
+	/**
+	 * Adds listeners to gamelist´s filter options
+	 */
 	private void initFilterListeners() {
 		filteredData = new FilteredList<>(games, p -> true);
 
@@ -391,15 +526,26 @@ public class GameListController implements Initializable {
 		});
 	}
 
+	/**
+	 * Checks includeUnbeaten filter and selects sorting by name by default when the program is started
+	 */
 	private void setDefaultOptions() {
 		includeUnbeaten.setSelected(true);
 		sortingChoice.getSelectionModel().select(0);
 	}
-
+	
+	/**
+	 * Is called by the main application to give a reference back to itself
+	 * @param mainApp
+	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
 
+	/**
+	 * Initializes the controller class. This method is automatically called
+	 * after the fxml life has been loaded
+	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		loadGames();

@@ -7,7 +7,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -16,14 +15,36 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
+/**
+ * Used for communication between the database and the program
+ * @author KimW
+ *
+ */
 public class DatabaseController {
+	
+	/**
+	 * Used for creating sessions for database queries
+	 */
 	private SessionFactory sf;
+	
+	/**
+	 * Used to build the session factory
+	 */
 	private StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
 	
+	/**
+	 * Builds the session factory for the class
+	 */
 	public DatabaseController() {
 		sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 	}
 	
+	/**
+	 * Adds a game to the database under the players userID
+	 * @param game
+	 * @param userID
+	 * @return true if the game is successfully added, false if adding the game failed
+	 */
 	public Boolean addGame(GameData game, String userID) {
 
 		/*
@@ -51,6 +72,13 @@ public class DatabaseController {
 		}
 	}
 	
+	
+	/**
+	 * Fetches a specific game based on the userID and gameID 
+	 * @param gameID
+	 * @param userID
+	 * @return a single GameListEntry object
+	 */
 	public GameListEntry getUserGame(String gameID, String userID) {
 		try (Session session = sf.openSession()){
 			session.beginTransaction();
@@ -67,6 +95,12 @@ public class DatabaseController {
 		
 	}
 	
+	
+	/**
+	 * Fetches all the games the user has in the database
+	 * @param userID
+	 * @return list of users games
+	 */
 	public List<GameListEntry> getAllUserGames(String userID) {
 		try (Session session = sf.openSession()){
 			session.beginTransaction();

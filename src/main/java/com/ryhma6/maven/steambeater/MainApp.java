@@ -165,9 +165,7 @@ public class MainApp extends Application {
 			// Set person overview into the center of root layout.
 			FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
 			sidebar.getChildren().add(friends);
-			// Give the controller access to the main app.
 			FriendsListController controller = loader.getController();
-			controller.setMainApp(this);
 			loadStatComparison(controller);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -182,9 +180,7 @@ public class MainApp extends Application {
 			AnchorPane statComparison = (AnchorPane) loader.load();
 			// Set person overview into the center of root layout.
 			rootLayout.setRight(statComparison);
-			// Give the controller access to the main app.
 			StatComparisonController controller = loader.getController();
-			controller.setMainApp(this);
 			flCont.setStatComparisonController(controller);
 
 		} catch (IOException e) {
