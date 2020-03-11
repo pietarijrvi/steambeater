@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 
 import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
+import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.Achievement;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
@@ -168,7 +169,7 @@ public class GameListController implements Initializable {
 		initFilterListeners();
 		initListenerSortGameList();
 		hideStats();
-		setDefaultOptions();
+		setSavedOrDefaultOptions();
 	}
 	
 	/**
@@ -425,11 +426,12 @@ public class GameListController implements Initializable {
 	private void initListenerSortGameList() {
 		sortingChoice.getSelectionModel().clearSelection();
 		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
-			System.out.println("sorting games");
 			// sorting in alphabetical order
 			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
+				UserPreferences.setGamelistSort(0);
 				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName));
 			} else if (sortingChoice.getSelectionModel().getSelectedIndex() == 1) {
+				UserPreferences.setGamelistSort(1);
 				sortedFilteredData = filteredData
 						.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed());
 			}
@@ -511,27 +513,35 @@ public class GameListController implements Initializable {
 
 		includeUnbeatable.selectedProperty().addListener(obs -> {
 			filterGameData();
+			UserPreferences.setFilterIncludeUnbeatable(includeUnbeatable.selectedProperty().getValue());
 		});
 
 		includeIgnored.selectedProperty().addListener(obs -> {
 			filterGameData();
+			UserPreferences.setFilterIncludeIgnored(includeIgnored.selectedProperty().getValue());
 		});
 
 		includeBeaten.selectedProperty().addListener(obs -> {
 			filterGameData();
+			UserPreferences.setFilterIncludeBeaten(includeBeaten.selectedProperty().getValue());
 		});
 
 		includeUnbeaten.selectedProperty().addListener(obs -> {
 			filterGameData();
+			UserPreferences.setFilterIncludeUnbeaten(includeUnbeaten.selectedProperty().getValue());
 		});
 	}
 
 	/**
 	 * Checks includeUnbeaten filter and selects sorting by name by default when the program is started
 	 */
-	private void setDefaultOptions() {
-		includeUnbeaten.setSelected(true);
-		sortingChoice.getSelectionModel().select(0);
+	private void setSavedOrDefaultOptions() {
+		includeUnbeaten.setSelected(UserPreferences.getFilterIncludeUnbeaten());
+		includeBeaten.setSelected(UserPreferences.getFilterIncludeBeaten());
+		includeIgnored.setSelected(UserPreferences.getFilterIncludeIgnored());
+		includeUnbeatable.setSelected(UserPreferences.getFilterIncludeUnbeatable());
+		
+		sortingChoice.getSelectionModel().select(UserPreferences.getGamelistSort());
 	}
 	
 	/**
