@@ -90,7 +90,7 @@ public class FriendsListController implements Initializable {
 						profileImage = new Image(name.getPlayerProfile().getAvatarmedium(), true); //true: load in background
 					}catch (Exception e) {
 						profileImage = IMAGE_TEST;
-						//e.printStackTrace();
+						e.printStackTrace();
 					}
 					imageView.setImage(profileImage); 
 					
@@ -100,8 +100,7 @@ public class FriendsListController implements Initializable {
 		            try {
 					label.setText(name.getPlayerProfile().getPersonaname());
 		            }catch(Exception e) {
-		            	System.out.println("ERR - PlayerProfile: " + name.getPlayerProfile());
-		            	System.out.println("ERR - personaname: " + name.getPlayerProfile().getPersonaname());
+		            	e.printStackTrace();
 		            }
 					
 					label.setPrefWidth(82);
@@ -142,7 +141,7 @@ public class FriendsListController implements Initializable {
 						profileImage = new Image(name.getPlayerProfile().getAvatarmedium(), true); //true: load in background
 					}catch (Exception e) {
 						profileImage = IMAGE_TEST;
-						//e.printStackTrace();
+						e.printStackTrace();
 					}
 					imageView.setImage(profileImage); 
 					
@@ -180,8 +179,7 @@ public class FriendsListController implements Initializable {
 			borderPane.setPrefWidth(smallWidth);
 			deepAnchor.setPrefWidth(smallWidth);
 			
-			resizeButton.setText("|->");
-			
+			resizeButton.setText("|->");			
 		} else {
 			friendsListSmall.setManaged(false);
 			friendsListSmall.setVisible(false);

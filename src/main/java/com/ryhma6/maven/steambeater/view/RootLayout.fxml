@@ -12,7 +12,7 @@
       
       <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="195.0" spacing="5.0">
       <children>
-      		<Button onAction="#handleBrowserButtonAction" text="Sign In" />
+      		<Button onAction="#handleLoginButtonAction" text="Sign In" />
       		<Button onAction="#loadWithTestValues" text="SignTest" />
       		<Button onAction="#logout" text="Log out" />
       </children>

@@ -9,7 +9,6 @@ import java.util.concurrent.CountDownLatch;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -17,19 +16,13 @@ import org.testfx.framework.junit5.ApplicationTest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-import static org.testfx.matcher.control.LabeledMatchers.hasText;
-
-
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -88,7 +81,7 @@ class JavaFXGameListTest extends ApplicationTest {
 		});
 	}
 
-	//@Disabled
+	// @Disabled
 	@Test
 	@DisplayName("Test that the sorting selection (name) sorts the UI game list")
 	public void testOrderByName() {
@@ -120,12 +113,11 @@ class JavaFXGameListTest extends ApplicationTest {
 				assertEquals(orderedByNameList, actual, "ordering by name failed - gameList in unexpected order");
 			});
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	//@Disabled
+	// @Disabled
 	@Test
 	@DisplayName("Test that the sorting selection (playtime) sorts the UI game list")
 	public void testOrderByPlaytime() {
@@ -142,7 +134,6 @@ class JavaFXGameListTest extends ApplicationTest {
 			ComboBox<String> combo = (ComboBox<String>) scene.lookup("#sortingChoice");
 			combo.getSelectionModel().select(0);
 			combo.getSelectionModel().select(1);
-			// combo.getSelectionModel().select(2);
 		});
 
 		try {
@@ -158,12 +149,11 @@ class JavaFXGameListTest extends ApplicationTest {
 						"ordering by playtime failed - gameList in unexpected order");
 			});
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	//@Disabled
+	// @Disabled
 	@Test
 	public void testFilterByName() {
 
@@ -194,36 +184,6 @@ class JavaFXGameListTest extends ApplicationTest {
 				assertThat(gameNames, containsInAnyOrder("AdaGG", "DaveGG"));
 			});
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@Disabled
-	@Test
-	public void testGameStatus() {
-		// FX application thread
-		Platform.runLater(() -> {
-			ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
-			System.out.println("first list item name: " + gameList.getItems().get(0).getName());
-		});
-
-		try {
-			// Tests will be run after the events on FX application thread have finished
-			assertAfterJavaFxPlatformEventsAreDone(() -> {
-				@SuppressWarnings("unchecked")
-				ListView<GameData> gameList = (ListView<GameData>) scene.lookup("#gameList");
-
-				List<GameData> actual = gameList.getItems();
-				System.out.println(gameList);
-				System.out.println("actual size: " + actual.size());
-				
-				
-
-				//assertThat(true, actual.get(0).isIgnored());
-			});
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
