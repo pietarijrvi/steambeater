@@ -108,8 +108,8 @@ public class GameListController implements Initializable {
 				EventHandler<MouseEvent> eventIgnored = new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						mainApp.addGameToDatabase(cellGame);
 						cellGame.setIgnored(!cellGame.isIgnored());
+						mainApp.addGameToDatabase(cellGame);
 						System.out.println(cellGame.getName() + " ignored: " + cellGame.isIgnored());
 						filterGameData();
 					}
@@ -117,8 +117,8 @@ public class GameListController implements Initializable {
 				EventHandler<MouseEvent> eventBeaten = new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						mainApp.addGameToDatabase(cellGame);
 						cellGame.setBeaten(!cellGame.isBeaten());
+						mainApp.addGameToDatabase(cellGame);
 						System.out.println(cellGame.getName() + " beaten: " + cellGame.isBeaten());
 						filterGameData();
 					}
@@ -126,8 +126,8 @@ public class GameListController implements Initializable {
 				EventHandler<MouseEvent> eventUnbeatable = new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						mainApp.addGameToDatabase(cellGame);
 						cellGame.setUnbeatable(!cellGame.isUnbeatable());
+						mainApp.addGameToDatabase(cellGame);
 						System.out.println(cellGame.getName() + " unbeatable: " + cellGame.isUnbeatable());
 						filterGameData();
 					}
