@@ -50,7 +50,7 @@ public class GameListEntry {
 	private Boolean ignored;
 
 	/**
-	 * Creates an empty GameListEntry object
+	 * Creates an empty GameListEntry object, entry ID has to be set separately after setting the gameID and the userID
 	 */
 	public GameListEntry() {
 		super();

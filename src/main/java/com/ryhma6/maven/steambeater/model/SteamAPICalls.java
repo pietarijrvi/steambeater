@@ -37,8 +37,6 @@ import javafx.collections.ObservableList;
  *
  */
 public class SteamAPICalls {
-	private List<Friend> friendListTemp = new ArrayList<Friend>();
-	private List<GameData> friendsGamesTemp = new ArrayList<GameData>();
 
 	/**
 	 * UI game list is formed from the data in this list.
@@ -223,6 +221,7 @@ public class SteamAPICalls {
 	 * object.
 	 */
 	public void loadSteamFriends() {
+		List<Friend> friendListTemp = new ArrayList<Friend>();
 		URL url;
 		HttpURLConnection con;
 		List<Friend> friendIdList = new ArrayList<Friend>();
@@ -434,6 +433,7 @@ public class SteamAPICalls {
 
 	// TODO: METHOD IN PROGRESS
 	public OwnedGames loadFriendsGames(String friendsID) {
+		//List<GameData> friendsGamesTemp = new ArrayList<GameData>(); //Used for a WIP method
 
 		friendsGames.clear();
 		fGamesMappedByGameID.clear();
