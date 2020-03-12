@@ -17,24 +17,25 @@ import javafx.scene.layout.BorderPane;
 
 /**
  * Controls the stat comparison panel, used by the FriendsListController
+ * 
  * @author KimW
  *
  */
 public class StatComparisonController implements Initializable {
 	private SteamAPICalls api;
-	
+
 	/**
 	 * Deepest pane of the panel
 	 */
 	@FXML
-	private AnchorPane statAnchor; 
-	
+	private AnchorPane statAnchor;
+
 	/**
 	 * Button that closes the panel
 	 */
 	@FXML
 	private Button closeBtn;
-	
+
 	/**
 	 * Bar used to store the close button and used to lower the panel
 	 */
@@ -46,28 +47,28 @@ public class StatComparisonController implements Initializable {
 	 */
 	@FXML
 	private AnchorPane friendStats;
-	
+
 	/**
 	 * Pane where the user's stats are put into
 	 */
 	@FXML
 	private AnchorPane userStats;
-	
+
 	/**
 	 * Used to count the users games
 	 */
 	private int count;
-	
+
 	/**
 	 * Used to show the friend's stats
 	 */
 	private Label friendLabel;
-	
+
 	/**
 	 * Used to show the user's stats
 	 */
 	private Label userLabel;
-	
+
 	/***
 	 * Closes comparison stat window
 	 */
@@ -75,7 +76,7 @@ public class StatComparisonController implements Initializable {
 		statAnchor.setManaged(false);
 		statAnchor.setVisible(false);
 	}
-	
+
 	/***
 	 * Opens comparison stat window
 	 */
@@ -83,9 +84,11 @@ public class StatComparisonController implements Initializable {
 		statAnchor.setManaged(true);
 		statAnchor.setVisible(true);
 	}
-	
+
 	/**
-	 * Loads the user's stats and the stats of the friend of which ID and name was given
+	 * Loads the user's stats and the stats of the friend of which ID and name was
+	 * given
+	 * 
 	 * @param friendsID
 	 * @param name
 	 */
@@ -99,25 +102,26 @@ public class StatComparisonController implements Initializable {
 	}
 
 	/**
-	 * Initializes the panel by loading in elements and makes sure the panel is closed by default
+	 * Initializes the panel by loading in elements and makes sure the panel is
+	 * closed by default
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		api = new SteamAPICalls();
 		friendLabel = new Label();
 		friendStats.getChildren().add(friendLabel);
 		userLabel = new Label();
 		userStats.getChildren().add(userLabel);
-		
-		//Give functionality to the close button
-		closeBtn.setOnAction( new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                closeComparison();
-            }
-        });
-		
+
+		// Give functionality to the close button
+		closeBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				closeComparison();
+			}
+		});
+
 		closeComparison();
 	}
 }

@@ -35,7 +35,6 @@ public class MainApp extends Application {
 	private SteamAPICalls steamAPI = new SteamAPICalls();
 	private GameListController gameListController;
 	private DatabaseController databaseController = new DatabaseController();
-	private UserPreferences prefs = new UserPreferences();
 
 	@FXML
 	private FlowPane sidebar;
@@ -59,20 +58,20 @@ public class MainApp extends Application {
 						steamAPI.loadSteamFriends();
 						return null;
 					}
+
 					@Override
-				    protected void succeeded() {
-				        super.succeeded(); 
-				        steamAPI.setSavedSelections(databaseController.getAllUserGames(prefs.getSteamID()));
-				    }
+					protected void succeeded() {
+						super.succeeded();
+						steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
+					}
 				};
 			}
 		};
 
-		UserPreferences prefs = new UserPreferences();
-		if (prefs.getSteamID() != null)
+		if (UserPreferences.getSteamID() != null)
 			loadSteamAPIData();
 	}
-	
+
 	public void addGameToDatabase(GameData game) {
 		databaseController.addGame(game, UserPreferences.getSteamID());
 		System.out.println("UserID used for db: " + UserPreferences.getSteamID());
@@ -82,11 +81,11 @@ public class MainApp extends Application {
 		if (!steamAPIService.isRunning()) {
 			steamAPIService.reset();
 			steamAPIService.start();
-		}else {
+		} else {
 			System.out.println("Loading SteamData not finished");
 		}
 	}
-	
+
 	public void resetSteamAPIData() {
 		steamAPIService.cancel();
 		steamAPI.resetItems();
@@ -99,13 +98,13 @@ public class MainApp extends Application {
 				steamAPI.loadGameSchema(appID);
 				return true;
 			}
-		};//update UI (achievement list) when the info has been retrieved from SteamAPI
+		};// update UI (achievement list) when the info has been retrieved from SteamAPI
 		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-		    @Override
-		    public void handle(WorkerStateEvent t) {
-		    	gameListController.refreshAchievementList();
-		    	System.out.println("Achiev load finish, starting refresh");
-		    }
+			@Override
+			public void handle(WorkerStateEvent t) {
+				gameListController.refreshAchievementList();
+				System.out.println("Achiev load finish, starting refresh");
+			}
 		});
 
 		// start the background task
