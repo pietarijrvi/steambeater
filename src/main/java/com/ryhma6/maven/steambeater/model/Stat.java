@@ -2,40 +2,29 @@ package com.ryhma6.maven.steambeater.model;
 
 import javax.persistence.*;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name="stat")
 public class Stat {
 	
+	@Setter @Getter
 	@Id
 	@Column(name="tunnus")
 	private String tunnus;
 	
+	@Setter @Getter
 	@Column(name="nimi")
 	private String nimi;
 	
-	public Stat(String tunnus, String nimi) {
+	public Stat(String id, String name) {
 		super();
-		this.tunnus = tunnus;
-		this.nimi = nimi;
+		this.tunnus = id;
+		this.nimi = name;
 	}
 	
 	public Stat() {
 		super();
-	}
-	
-	public String getTunnus() {
-		return tunnus;
-	}
-
-	public void setTunnus(String tunnus) {
-		this.tunnus = tunnus;
-	}
-
-	public void setNimi(String nimi) {
-		this.nimi = nimi;
-	}
-
-	public String getNimi() {
-		return nimi;
 	}
 }
