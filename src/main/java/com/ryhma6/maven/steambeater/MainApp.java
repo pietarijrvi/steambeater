@@ -31,7 +31,7 @@ public class MainApp extends Application {
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
-	private Service steamAPIService;
+	private Service<Integer> steamAPIService;
 	private SteamAPICalls steamAPI = new SteamAPICalls();
 	private GameListController gameListController;
 	private DatabaseController databaseController = new DatabaseController();
@@ -48,12 +48,12 @@ public class MainApp extends Application {
 		showGameList();
 		showFriendsList();
 
-		steamAPIService = new Service() {
+		steamAPIService = new Service<Integer>() {
 			@Override
-			protected Task createTask() {
-				return new Task() {
+			protected Task<Integer> createTask() {
+				return new Task<Integer>() {
 					@Override
-					protected Void call() throws Exception {
+					protected Integer call() throws Exception {
 						steamAPI.loadSteamGames();
 						steamAPI.loadSteamFriends();
 						return null;
