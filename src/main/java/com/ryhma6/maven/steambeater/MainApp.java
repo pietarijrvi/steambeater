@@ -27,18 +27,51 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
+/**
+ * The main class of the program
+ *
+ */
 public class MainApp extends Application {
 
+	/**
+	 * The window
+	 */
 	private Stage primaryStage;
+	
+	/**
+	 * The root layout of the window
+	 */
 	private BorderPane rootLayout;
+	
+	/**
+	 * The steam API service
+	 */
 	private Service<Integer> steamAPIService;
+	
+	/**
+	 * Used to call the steam API
+	 */
 	private SteamAPICalls steamAPI = new SteamAPICalls();
+	
+	/**
+	 * Controls the game list
+	 */
 	private GameListController gameListController;
+	
+	/**
+	 * Used to access to the database
+	 */
 	private DatabaseController databaseController = new DatabaseController();
 
+	/**
+	 * The left sidebar of the window
+	 */
 	@FXML
 	private FlowPane sidebar;
 
+	/**
+	 * Starts the app and loads everything in
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
@@ -72,11 +105,18 @@ public class MainApp extends Application {
 			loadSteamAPIData();
 	}
 
+	/**
+	 * Adds the given game into the database
+	 * @param game
+	 */
 	public void addGameToDatabase(GameData game) {
 		databaseController.addGame(game, UserPreferences.getSteamID());
 		System.out.println("UserID used for db: " + UserPreferences.getSteamID());
 	}
 
+	/**
+	 * Starts up the steam API
+	 */
 	public void loadSteamAPIData() {
 		if (!steamAPIService.isRunning()) {
 			steamAPIService.reset();
@@ -86,11 +126,18 @@ public class MainApp extends Application {
 		}
 	}
 
+	/**
+	 * Resets the steam API's data
+	 */
 	public void resetSteamAPIData() {
 		steamAPIService.cancel();
 		steamAPI.resetItems();
 	}
 
+	/**
+	 * Loads the achievement data of the given game 
+	 * @param appID The ID of the game 
+	 */
 	public void loadAchievementData(int appID) {
 		Task<Boolean> task = new Task<Boolean>() {
 			@Override
@@ -155,6 +202,9 @@ public class MainApp extends Application {
 		}
 	}
 
+	/**
+	 * Loads the friends list controller and inserts the friendsList.fxml into the root layout
+	 */
 	private void showFriendsList() {
 		try {
 			// Load person overview.
@@ -171,6 +221,11 @@ public class MainApp extends Application {
 		}
 	}
 
+	/**
+	 * Loads the stat comparison controller and inserts statComparison.fxml into the root layout
+	 * Gives the stat comparison controller to the the friends list controller 
+	 * @param flCont friends list controller that works with the stat comparison panel
+	 */
 	private void loadStatComparison(FriendsListController flCont) {
 		try {
 			// Load person overview.
