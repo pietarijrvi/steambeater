@@ -35,10 +35,17 @@ public class GameData {
 		return imgUrl;
 	}
 	
+	/**
+	 * 
+	 * @param img_icon_url
+	 */
 	public void setImg_icon_url(String img_icon_url) {
 		this.img_icon_url = img_icon_url;
 	}
 	
+	/**
+	 * @return game's logo's URL
+	 */
 	public String getImg_logo_url() {
 		String imgUrl = null;
 		if(img_logo_url!=null)
@@ -46,6 +53,10 @@ public class GameData {
 		return imgUrl;	
 	}
 	
+	/**
+	 * Sets the game's logo's URL
+	 * @param img_logo_url
+	 */
 	public void setImg_logo_url(String img_logo_url) {
 		this.img_logo_url = img_logo_url;
 	}
