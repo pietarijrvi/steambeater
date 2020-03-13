@@ -1,5 +1,6 @@
 package com.ryhma6.maven.steambeater.model;
 
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
@@ -130,5 +131,16 @@ public class UserPreferences {
 	 */
 	public static int getGamelistSort() {
 		return prefs.getInt(GAMELIST_SORT_KEY, 0);
+	}
+	
+	/**
+	 * Clear all preferences.
+	 */
+	public static void clearPreferences() {
+		try {
+			prefs.clear();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
 	}
 }
