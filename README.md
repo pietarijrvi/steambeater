@@ -6,7 +6,7 @@
 <p>Sovellus on luotu JavaFX käyttäen ja perusideana on käyttäjän Steam-videopelialustan pelien listaus, jossa käyttäjä voi asettaa pelejä läpäistyksi. Tämän lisäksi sovelluksessa voi myös tarkastella pelien statistiikkaa ja vertailla niitä Steam-kavereiden kanssa.</p>
 
 <h4>Koonti ja testaaminen</h4>
-<p>Koonnissa käytämme Mavenia. Testaamiseen käytämme JUnit ja TestFX. TestFX käytetään UI:n testaamiseen. Näiden lisäksi käytämme Jenkinsiä automaatiotestaukseen. Jenkins tarvitsee myös OpenJFX ja Monocle jotka on asetettu valmiiksi pom tiedostoon. Jotta testaukset toimisivat oikein, on sovelluksen käytettävä vanhempaa jdk versiota. Havaitsimme, että ainakin 8u181 on toimiva versio. 
+<p>Koonnissa käytämme Mavenia. Testaamiseen käytämme JUnit ja TestFX (UI). Näiden lisäksi käytämme Jenkinsiä automaatiotestaukseen. Jenkins tarvitsee myös OpenJFX ja Monocle jotka on asetettu valmiiksi pom tiedostoon. Jotta testaukset toimisivat oikein, on sovelluksen käytettävä vanhempaa jdk versiota. Havaitsimme, että ainakin 8u181 on toimiva versio. 
 
 JDK:n voit ladata täältä: https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html
 
