@@ -149,6 +149,15 @@ public class SteamOpenIDSignController {
 		UserPreferences.setSteamID("76561197960505737");
 		mainApp.loadSteamAPIData();
 	}
+	
+	/**
+	 * Loads Steam API data and refreshes UI
+	 */
+	@FXML
+	private void refreshData() {
+		if(UserPreferences.getSteamID()!=null)
+			mainApp.loadSteamAPIData();
+	}
 
 	/**
 	 * Used by logout button. Clears saved steamID from preferences and starts
