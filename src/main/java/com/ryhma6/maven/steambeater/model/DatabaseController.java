@@ -17,8 +17,6 @@ import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
 /**
  * Used for communication between the database and the program
- * 
- * @author KimW
  *
  */
 public class DatabaseController {
@@ -52,13 +50,48 @@ public class DatabaseController {
 		try (Session session = sf.openSession()) {
 			GameListEntry g = new GameListEntry();
 			g.setUserID(userID);
-			g.setGameID(String.valueOf(game.getAppid()));
+			g.setGameID(game.getAppid());
+			g.setLogoImageUrl(game.getImg_logo_url());
+			g.setName(game.getName());
+			g.setPlaytimeForever(game.getPlaytime_forever());
 			g.setBeaten(game.isBeaten());
 			g.setUnbeatable(game.isUnbeatable());
 			g.setIgnored(game.isIgnored());
 			g.setEntryID();
 			session.beginTransaction();
 			session.saveOrUpdate(g);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Boolean addAllGames(List<GameData> games, String userID) {
+		//TODO: massatallennuksessa ei tallenneta merkintätietoja
+		try (Session session = sf.openSession()) {
+			session.beginTransaction();
+			int i = 0;
+			for(GameData game : games) {
+				GameListEntry g = new GameListEntry();
+				g.setUserID(userID);
+				g.setGameID(game.getAppid());
+				g.setLogoImageUrl(game.getImg_logo_url());
+				g.setName(game.getName());
+				g.setPlaytimeForever(game.getPlaytime_forever());
+				g.setBeaten(game.isBeaten());
+				g.setUnbeatable(game.isUnbeatable());
+				g.setIgnored(game.isIgnored());
+				g.setEntryID();
+				session.saveOrUpdate(g);
+				i++;
+				
+				if (i % 50 == 0) {
+			        session.flush();
+			        session.clear();
+			    }
+			}
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
@@ -86,7 +119,6 @@ public class DatabaseController {
 			e.printStackTrace();
 			return null;
 		}
-
 	}
 
 	/**
@@ -108,10 +140,31 @@ public class DatabaseController {
 
 			session.getTransaction().commit();
 
+			System.out.println("Entries from db: " + entries.size());
+			System.out.println("1st img url:" + entries.get(0).getLogoImageUrl());
+			System.out.println("1st name:" + entries.get(0).getName());
+			System.out.println("1st id:" + entries.get(0).getGameID());
 			return entries;
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
 		}
+	}
+	public Long getUserGameCount(String userID) {
+		Long result = null;
+		try (Session session = sf.openSession()){
+			session.beginTransaction();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<Long> query = builder.createQuery(Long.class);
+			Root<GameListEntry> root = query.from(GameListEntry.class);
+			query.select(builder.count(root.get("userID")));
+			result = (Long) session.createQuery(query).getSingleResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			result = null;
+		}
+
+		System.out.println("Usergame count (db): " + result);
+		return result;
 	}
 }
