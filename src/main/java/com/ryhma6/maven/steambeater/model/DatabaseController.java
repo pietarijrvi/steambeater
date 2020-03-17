@@ -67,13 +67,12 @@ public class DatabaseController {
 			return false;
 		}
 	}
-	
+
 	public Boolean addAllGames(List<GameData> games, String userID) {
-		//TODO: massatallennuksessa ei tallenneta merkintätietoja
 		try (Session session = sf.openSession()) {
 			session.beginTransaction();
 			int i = 0;
-			for(GameData game : games) {
+			for (GameData game : games) {
 				GameListEntry g = new GameListEntry();
 				g.setUserID(userID);
 				g.setGameID(game.getAppid());
@@ -86,11 +85,11 @@ public class DatabaseController {
 				g.setEntryID();
 				session.saveOrUpdate(g);
 				i++;
-				
+
 				if (i % 50 == 0) {
-			        session.flush();
-			        session.clear();
-			    }
+					session.flush();
+					session.clear();
+				}
 			}
 			session.getTransaction().commit();
 			return true;
@@ -150,9 +149,10 @@ public class DatabaseController {
 			return null;
 		}
 	}
+
 	public Long getUserGameCount(String userID) {
 		Long result = null;
-		try (Session session = sf.openSession()){
+		try (Session session = sf.openSession()) {
 			session.beginTransaction();
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Long> query = builder.createQuery(Long.class);
