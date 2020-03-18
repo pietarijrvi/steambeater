@@ -68,6 +68,12 @@ public class DatabaseController {
 		}
 	}
 
+	/**
+	 * Adds a list of games to the database, used once for new users that don't have any data in database yet-
+	 * @param games List of game data (from Steam).
+	 * @param userID Steam userID
+	 * @return success returns true, fail returns false
+	 */
 	public Boolean addAllGames(List<GameData> games, String userID) {
 		try (Session session = sf.openSession()) {
 			session.beginTransaction();
@@ -102,8 +108,8 @@ public class DatabaseController {
 	/**
 	 * Fetches a specific game based on the userID and gameID
 	 * 
-	 * @param gameID
-	 * @param userID
+	 * @param gameID Steam gameID
+	 * @param userID User's Steam userID
 	 * @return a single GameListEntry object
 	 */
 	public GameListEntry getUserGame(String gameID, String userID) {
@@ -123,7 +129,7 @@ public class DatabaseController {
 	/**
 	 * Fetches all the games the user has in the database
 	 * 
-	 * @param userID
+	 * @param userID Steam userID
 	 * @return list of users games
 	 */
 	public List<GameListEntry> getAllUserGames(String userID) {
@@ -135,21 +141,23 @@ public class DatabaseController {
 			Root<GameListEntry> gameList = criteria.from(GameListEntry.class);
 			Predicate predicate = builder.equal(gameList.get("userID"), userID);
 			criteria.where(predicate);
-			List<GameListEntry> entries = session.createQuery(criteria).getResultList();
+			List<GameListEntry> results = session.createQuery(criteria).getResultList();
 
 			session.getTransaction().commit();
 
-			System.out.println("Entries from db: " + entries.size());
-			System.out.println("1st img url:" + entries.get(0).getLogoImageUrl());
-			System.out.println("1st name:" + entries.get(0).getName());
-			System.out.println("1st id:" + entries.get(0).getGameID());
-			return entries;
+			System.out.println("GameListEntry-objects from db: " + results.size());
+			return results;
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
 		}
 	}
 
+	/**
+	 * Returns the amount of database rows related to a specific userID.
+	 * @param userID Steam userID
+	 * @return count
+	 */
 	public Long getUserGameCount(String userID) {
 		Long result = null;
 		try (Session session = sf.openSession()) {
@@ -164,7 +172,7 @@ public class DatabaseController {
 			result = null;
 		}
 
-		System.out.println("Usergame count (db): " + result);
+		System.out.println("User's game count (db): " + result);
 		return result;
 	}
 }

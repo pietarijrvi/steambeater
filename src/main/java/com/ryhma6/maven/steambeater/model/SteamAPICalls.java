@@ -236,7 +236,7 @@ public class SteamAPICalls {
 					System.out.println("SteamAPI: loading gamelist failed");
 				}
 				returnValue = true;
-				System.out.println("Owned games: " + games.getGame_count());
+				System.out.println("Owned games (SteamAPI): " + games.getGame_count());
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -272,7 +272,7 @@ public class SteamAPICalls {
 				// JSON string to Java Object
 				FriendList response = mapper.readValue(str, FriendList.class);
 				friendIdList.addAll(response.getFriends());
-				System.out.println("Friends: " + friendList.size());
+				System.out.println("Friends (SteamAPI): " + friendIdList.size());
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -394,10 +394,13 @@ public class SteamAPICalls {
 				JsonNode innerNode = rootNode.path("game").path("availableGameStats");
 				ObjectReader objectReader = mapper.readerFor(new TypeReference<GameStatistics>() {
 				});
-				GameStatistics gameStats = objectReader.readValue(innerNode);
-
-				gamesMappedByGameID.get(appID).setGameStatistics(gameStats);
-				getAchievementCompletionInfo(appID);
+				try {
+					GameStatistics gameStats = objectReader.readValue(innerNode);
+					gamesMappedByGameID.get(appID).setGameStatistics(gameStats);
+					getAchievementCompletionInfo(appID);
+				}catch(Exception e) {
+					System.out.println("This game has no achievements");
+				}
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -491,7 +494,7 @@ public class SteamAPICalls {
 								 * friendsGamesTemp) { fGamesMappedByGameID.put(g.getAppid(), g); }
 								 * }catch(Exception e) {
 								 * System.out.println("SteamAPI: loading gamelist failed"); }
-								 * System.out.println("Owned games: " + games.getGame_count());
+								 * System.out.println("Owned games (SteamAPI): " + games.getGame_count());
 								 */
 			}
 		} catch (IOException e1) {
