@@ -312,7 +312,7 @@ public class GameListController implements Initializable {
 					hbox.setSpacing(35);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
-						imageView.setImage(new Image(game.getImg_logo_url(), true)); // true: load in background
+						imageView.setImage(new Image(game.getImgLogoFullUrl(), true)); // true: load in background
 					} catch (Exception e) {
 						System.out.println("Loading game img failed (null or invalid url)");
 						imageView.setImage(IMAGE_TEST);

@@ -156,6 +156,10 @@ public class GameData {
 	 * @return The game's logo's URL
 	 */
 	public String getImg_logo_url() {
+		return img_logo_url;
+	}
+	
+	public String getImgLogoFullUrl() {
 		String imgUrl = null;
 		if(img_logo_url!=null)
 			imgUrl = String.format("http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg", appid, img_logo_url);

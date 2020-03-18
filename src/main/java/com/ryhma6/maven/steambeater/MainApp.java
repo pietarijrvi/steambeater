@@ -87,7 +87,19 @@ public class MainApp extends Application {
 				return new Task<Integer>() {
 					@Override
 					protected Integer call() throws Exception {
-						steamAPI.loadSteamGames();
+						//load game list from Steam API
+						if(steamAPI.loadSteamGames()) {
+							//add game list to database after successful load (new user)
+							if(databaseController.getUserGameCount(UserPreferences.getSteamID())<1) {
+								databaseController.addAllGames(steamAPI.getLoadedGames(), UserPreferences.getSteamID());
+							} else {
+								//load selection data (beaten, unbeatable, ignored) from database
+								steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
+							}
+						}else {
+							//if loading game data from Steam API failed, load (possibly outdated) game list from database
+							steamAPI.loadGamesFromDatabase(databaseController.getAllUserGames(UserPreferences.getSteamID()));
+						}
 						steamAPI.loadSteamFriends();
 						return null;
 					}
@@ -95,7 +107,7 @@ public class MainApp extends Application {
 					@Override
 					protected void succeeded() {
 						super.succeeded();
-						steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
+						//steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
 					}
 				};
 			}

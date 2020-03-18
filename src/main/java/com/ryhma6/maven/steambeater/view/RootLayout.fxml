@@ -18,6 +18,7 @@
       <children>
       		<Button onAction="#handleLoginButtonAction" text="Sign In" />
       		<Button onAction="#loadWithTestValues" text="SignTest" />
+      		<Button onAction="#refreshData" text="Refresh" />
       		<Button onAction="#logout" text="Log out" />
       </children>
          <BorderPane.margin>
