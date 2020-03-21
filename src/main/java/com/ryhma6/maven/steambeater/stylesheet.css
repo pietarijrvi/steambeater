@@ -1,0 +1,9 @@
+.root{
+    -fx-font-family: "Helvetica";
+    -fx-base: #616166;
+    -fx-background: #3A3A3D;
+}
+
+.button:hover {
+    -fx-background-color: #6289A1;
+}

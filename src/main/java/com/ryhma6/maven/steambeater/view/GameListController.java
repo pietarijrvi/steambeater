@@ -36,6 +36,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 /**
  * Controller for the gamelist fxml Loads achievements and games and takes care
@@ -346,6 +347,8 @@ public class GameListController implements Initializable {
 			public Label unlockTime = new Label();
 			public HBox hbox = new HBox();
 			public ImageView imageView = new ImageView();
+			public VBox vbox = new VBox();
+			public Pane pane = new Pane();
 
 			/**
 			 * Sets achievementList cell items
@@ -371,9 +374,13 @@ public class GameListController implements Initializable {
 						imageView.setImage(IMAGE_TEST);
 					}
 					hbox.getChildren().clear();
-					hbox.getChildren().addAll(imageView, achievementName, description, unlockTime);
+					vbox.getChildren().clear();
+					vbox.getChildren().addAll(achievementName, description);
+					hbox.getChildren().addAll(imageView, vbox, pane, unlockTime);
 					setGraphic(hbox);
 					HBox.setHgrow(achievementPane, Priority.ALWAYS);
+					HBox.setHgrow(pane, Priority.ALWAYS);
+					
 					if (ach.getUnlocktime() == 0) {
 						unlockTime.setText("Achievement not unlocked");
 					} else {

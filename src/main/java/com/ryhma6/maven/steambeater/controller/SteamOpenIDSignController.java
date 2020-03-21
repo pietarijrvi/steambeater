@@ -1,5 +1,6 @@
 package com.ryhma6.maven.steambeater.controller;
 
+import java.io.File;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -8,6 +9,7 @@ import java.net.HttpCookie;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.expressme.openid.Association;
 import org.expressme.openid.Endpoint;
@@ -19,8 +21,13 @@ import com.ryhma6.maven.steambeater.model.UserPreferences;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
@@ -32,7 +39,7 @@ import javafx.stage.Stage;
  * Steam OpenID form in embedded browser (this app won't handle the username or
  * password). After successful login the SteamID is retrieved from a cookie.
  */
-public class SteamOpenIDSignController {
+public class SteamOpenIDSignController implements Initializable{
 
 	/**
 	 * Reference to main app, set after loading the FXML that uses this controller.
@@ -47,6 +54,12 @@ public class SteamOpenIDSignController {
 	 * login.
 	 */
 	private CookieManager cookieManager;
+	
+	/**
+	 * Button to login into Steam
+	 */
+	@FXML
+	private Button loginButton;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -177,5 +190,15 @@ public class SteamOpenIDSignController {
 	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	}
+
+	/**
+	 * Runs when application is started, sets steam's login image to the login button
+	 */
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		ImageView loginImage = new ImageView("/steamicon.png");
+        loginButton.setGraphic(loginImage);
+        loginButton.setPadding(Insets.EMPTY);
 	}
 }

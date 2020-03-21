@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1600.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
    <top>
       <MenuBar prefHeight="72.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -16,10 +16,10 @@
       
       <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="195.0" spacing="5.0">
       <children>
-      		<Button onAction="#handleLoginButtonAction" text="Sign In" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction" />
       		<Button onAction="#loadWithTestValues" text="SignTest" />
       		<Button onAction="#refreshData" text="Refresh" />
-      		<Button onAction="#logout" text="Log out" />
+      		<Button onAction="#logout" stylesheets="@../stylesheet.css" text="Log out" />
       </children>
          <BorderPane.margin>
             <Insets bottom="15.0" top="15.0" />
