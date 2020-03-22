@@ -58,6 +58,11 @@
 								<Insets top="15.0" />
 							</HBox.margin>
 						</ComboBox>
+                  <Label fx:id="actionLabel">
+                     <HBox.margin>
+                        <Insets left="200.0" top="20.0" />
+                     </HBox.margin>
+                  </Label>
 					</children>
 				</HBox>
             <AnchorPane prefWidth="1200.0">

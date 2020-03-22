@@ -13,6 +13,8 @@ import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.Achievement;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.SequentialTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -37,6 +39,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  * Controller for the gamelist fxml Loads achievements and games and takes care
@@ -122,6 +125,12 @@ public class GameListController implements Initializable {
 	 */
 	@FXML
 	private CheckBox includeUnbeatable, includeIgnored, includeBeaten, includeUnbeaten;
+	
+	/**
+	 * Displays game's updated status when the user clicks a status button
+	 */
+	@FXML
+	private Label actionLabel;
 
 	/**
 	 * MainApp that runs the application
@@ -215,6 +224,8 @@ public class GameListController implements Initializable {
 						cellGame.setIgnored(!cellGame.isIgnored());
 						mainApp.addGameToDatabase(cellGame);
 						System.out.println(cellGame.getName() + " ignored: " + cellGame.isIgnored());
+						actionLabel.setText(cellGame.getName() + " ignored: " + cellGame.isIgnored());
+						activateFade();
 						filterGameData();
 					}
 				};
@@ -224,6 +235,8 @@ public class GameListController implements Initializable {
 						cellGame.setBeaten(!cellGame.isBeaten());
 						mainApp.addGameToDatabase(cellGame);
 						System.out.println(cellGame.getName() + " beaten: " + cellGame.isBeaten());
+						actionLabel.setText(cellGame.getName() + " beaten: " + cellGame.isBeaten());
+						activateFade();
 						filterGameData();
 					}
 				};
@@ -233,6 +246,8 @@ public class GameListController implements Initializable {
 						cellGame.setUnbeatable(!cellGame.isUnbeatable());
 						mainApp.addGameToDatabase(cellGame);
 						System.out.println(cellGame.getName() + " unbeatable: " + cellGame.isUnbeatable());
+						actionLabel.setText(cellGame.getName() + " unbeatable: " + cellGame.isUnbeatable());
+						activateFade();
 						filterGameData();
 					}
 				};
@@ -580,6 +595,29 @@ public class GameListController implements Initializable {
 	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	}
+	
+	/**
+	 * Fades in and out actionLabel with the game's updated status
+	 */
+	private void activateFade() {
+		// SequentialTransition for multiple transitions in a row
+		SequentialTransition t = new SequentialTransition();
+		
+		// Fades in the label, added to SequentialTransition
+		FadeTransition fadeIn = new FadeTransition(Duration.seconds(2), actionLabel);
+	    fadeIn.setFromValue(0.0);
+	    fadeIn.setToValue(1.0);
+	    t.getChildren().add(fadeIn);
+	    
+	    // Fades out the label, added to SequentialTransition
+		FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.5), actionLabel);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        t.getChildren().add(fadeOut);
+        
+        // Plays the SequentialTransition with both transitions
+        t.play();
 	}
 
 	/**
