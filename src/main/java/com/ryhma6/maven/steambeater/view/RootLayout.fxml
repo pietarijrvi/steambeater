@@ -6,23 +6,66 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1600.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
    <top>
-      <MenuBar prefHeight="72.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+      <MenuBar fx:id="taskbarMenu" prefHeight="72.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets top="10.0" />
-         </BorderPane.margin></MenuBar>
+         </BorderPane.margin>
+      </MenuBar>
       
-      <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="195.0" spacing="5.0">
+            <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="1560.0" spacing="5.0">
       <children>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction" />
-      		<Button onAction="#loadWithTestValues" text="SignTest" />
-      		<Button onAction="#refreshData" text="Refresh" />
-      		<Button onAction="#logout" stylesheets="@../stylesheet.css" text="Log out" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin>
+            </Button>
+      		<Button onAction="#loadWithTestValues" text="SignTest">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin>
+            </Button>
+      		<Button onAction="#refreshData" text="Refresh">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin>
+            </Button>
+      		<Button onAction="#logout" stylesheets="@../stylesheet.css" text="Log out">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin>
+            </Button>
+            <HBox fx:id="taskbarHbox" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="52.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Circle fx:id="btnClose" fill="RED" onMouseClicked="#handleMouseEvent" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.5">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Circle>
+                  <Circle fx:id="btnFull" fill="#06ae06" onMouseClicked="#handleMouseEvent" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.5">
+                     <HBox.margin>
+                        <Insets left="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Circle>
+                  <Circle fx:id="btnMinimize" fill="#e8e800" onMouseClicked="#handleMouseEvent" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.5">
+                     <HBox.margin>
+                        <Insets left="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Circle>
+                  <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
       </children>
          <BorderPane.margin>
-            <Insets bottom="15.0" top="15.0" />
+            <Insets bottom="30.0" top="15.0" />
          </BorderPane.margin>
       </HBox>
    </top>

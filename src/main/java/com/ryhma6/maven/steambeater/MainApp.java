@@ -21,11 +21,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * The main class of the program
@@ -37,27 +40,27 @@ public class MainApp extends Application {
 	 * The window
 	 */
 	private Stage primaryStage;
-	
+
 	/**
 	 * The root layout of the window
 	 */
 	private BorderPane rootLayout;
-	
+
 	/**
 	 * The steam API service
 	 */
 	private Service<Integer> steamAPIService;
-	
+
 	/**
 	 * Used to call the steam API
 	 */
 	private SteamAPICalls steamAPI = new SteamAPICalls();
-	
+
 	/**
 	 * Controls the game list
 	 */
 	private GameListController gameListController;
-	
+
 	/**
 	 * Used to access to the database
 	 */
@@ -68,6 +71,9 @@ public class MainApp extends Application {
 	 */
 	@FXML
 	private FlowPane sidebar;
+	
+	private double xOffset = 0; 
+	private double yOffset = 0;
 
 	/**
 	 * Starts the app and loads everything in
@@ -77,9 +83,29 @@ public class MainApp extends Application {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("Steambeater");
 
+		primaryStage.initStyle(StageStyle.UNDECORATED);
+
 		initRootLayout();
 		showGameList();
 		showFriendsList();
+		
+		// grab your root here
+		rootLayout.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				xOffset = event.getSceneX();
+				yOffset = event.getSceneY();
+			}
+		});
+
+		// move around here
+		rootLayout.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				primaryStage.setX(event.getScreenX() - xOffset);
+				primaryStage.setY(event.getScreenY() - yOffset);
+			}
+		});
 
 		steamAPIService = new Service<Integer>() {
 			@Override
@@ -87,18 +113,21 @@ public class MainApp extends Application {
 				return new Task<Integer>() {
 					@Override
 					protected Integer call() throws Exception {
-						//load game list from Steam API
-						if(steamAPI.loadSteamGames()) {
-							//add game list to database after successful load (new user)
-							if(databaseController.getUserGameCount(UserPreferences.getSteamID())<1) {
+						// load game list from Steam API
+						if (steamAPI.loadSteamGames()) {
+							// add game list to database after successful load (new user)
+							if (databaseController.getUserGameCount(UserPreferences.getSteamID()) < 1) {
 								databaseController.addAllGames(steamAPI.getLoadedGames(), UserPreferences.getSteamID());
 							} else {
-								//load selection data (beaten, unbeatable, ignored) from database
-								steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
+								// load selection data (beaten, unbeatable, ignored) from database
+								steamAPI.setSavedSelections(
+										databaseController.getAllUserGames(UserPreferences.getSteamID()));
 							}
-						}else {
-							//if loading game data from Steam API failed, load (possibly outdated) game list from database
-							steamAPI.loadGamesFromDatabase(databaseController.getAllUserGames(UserPreferences.getSteamID()));
+						} else {
+							// if loading game data from Steam API failed, load (possibly outdated) game
+							// list from database
+							steamAPI.loadGamesFromDatabase(
+									databaseController.getAllUserGames(UserPreferences.getSteamID()));
 						}
 						steamAPI.loadSteamFriends();
 						return null;
@@ -107,7 +136,7 @@ public class MainApp extends Application {
 					@Override
 					protected void succeeded() {
 						super.succeeded();
-						//steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
+						// steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
 					}
 				};
 			}
@@ -119,6 +148,7 @@ public class MainApp extends Application {
 
 	/**
 	 * Adds the given game into the database
+	 * 
 	 * @param game
 	 */
 	public void addGameToDatabase(GameData game) {
@@ -147,8 +177,9 @@ public class MainApp extends Application {
 	}
 
 	/**
-	 * Loads the achievement data of the given game 
-	 * @param appID The ID of the game 
+	 * Loads the achievement data of the given game
+	 * 
+	 * @param appID The ID of the game
 	 */
 	public void loadAchievementData(int appID) {
 		Task<Boolean> task = new Task<Boolean>() {
@@ -215,7 +246,8 @@ public class MainApp extends Application {
 	}
 
 	/**
-	 * Loads the friends list controller and inserts the friendsList.fxml into the root layout
+	 * Loads the friends list controller and inserts the friendsList.fxml into the
+	 * root layout
 	 */
 	private void showFriendsList() {
 		try {
@@ -234,9 +266,12 @@ public class MainApp extends Application {
 	}
 
 	/**
-	 * Loads the stat comparison controller and inserts statComparison.fxml into the root layout
-	 * Gives the stat comparison controller to the the friends list controller 
-	 * @param flCont friends list controller that works with the stat comparison panel
+	 * Loads the stat comparison controller and inserts statComparison.fxml into the
+	 * root layout Gives the stat comparison controller to the the friends list
+	 * controller
+	 * 
+	 * @param flCont friends list controller that works with the stat comparison
+	 *               panel
 	 */
 	private void loadStatComparison(FriendsListController flCont) {
 		try {

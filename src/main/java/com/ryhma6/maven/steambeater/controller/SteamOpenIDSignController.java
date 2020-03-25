@@ -1,6 +1,5 @@
 package com.ryhma6.maven.steambeater.controller;
 
-import java.io.File;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -21,14 +20,17 @@ import com.ryhma6.maven.steambeater.model.UserPreferences;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -60,6 +62,15 @@ public class SteamOpenIDSignController implements Initializable{
 	 */
 	@FXML
 	private Button loginButton;
+	
+	@FXML
+	private Circle btnClose;
+
+	@FXML
+	private Circle btnMinimize;
+	
+	@FXML
+	private Circle btnFull;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -190,6 +201,23 @@ public class SteamOpenIDSignController implements Initializable{
 	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	}
+	
+	@FXML
+	private void handleMouseEvent(MouseEvent event) {
+		if(event.getSource() == btnClose) {
+			System.exit(0);
+		} else if (event.getSource() == btnMinimize) {
+			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
+			primaryStage.setIconified(true);
+		} else if(event.getSource() == btnFull) {
+			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
+			if(primaryStage.isMaximized()) {
+				primaryStage.setMaximized(false);
+			}else {
+				primaryStage.setMaximized(true);
+			}
+		}
 	}
 
 	/**
