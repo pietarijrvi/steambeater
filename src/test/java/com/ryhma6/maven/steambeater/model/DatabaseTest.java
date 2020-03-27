@@ -2,19 +2,20 @@ package com.ryhma6.maven.steambeater.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 
 class DatabaseTest {
 
 	private DatabaseController dbController;
-	private String userID = "1";
+	private String userID1 = "1";
+	private String userID2 = "2";
 	private static GameData game1;
 	private static GameData game2;
 	
@@ -45,36 +46,49 @@ class DatabaseTest {
 	}
 	
 	@Test
-	void addOnegetOneGameFromDBTest() {
-		Long count = dbController.getUserGameCount(userID);
+	void duplicateEntry() {
+		Long count = dbController.getUserGameCount(userID1);
 		assertEquals(0, count);
-		dbController.addGame(game1, userID);
-		GameListEntry game = dbController.getUserGame("1", userID);
-		count = dbController.getUserGameCount(userID);
+		dbController.addGame(game1, userID1);
+		dbController.addGame(game1, userID1);
+		count = dbController.getUserGameCount(userID1);
+		assertEquals(1, count);
+	}
+	
+	@Test
+	void addOneGetOneGameFromDB() {
+		Long count = dbController.getUserGameCount(userID1);
+		assertEquals(0, count);
+		dbController.addGame(game1, userID1);
+		GameListEntry game = dbController.getUserGame("1", userID1);
+		count = dbController.getUserGameCount(userID1);
 		assertEquals(1, count);
 		assertEquals(game1.getName(), game.getName());
 	}
 	
 	@Test
-	void testB(){
-		//dbController.addAllGames(games, userID)
-		//dbController.getUserGame(gameID, userID)
-		//dbController.getAllUserGames(userID)
+	void addMultipleGetMultipleGamesFromDB() {
+		Long count = dbController.getUserGameCount(userID1);
+		assertEquals(0, count);
+		List<GameData> gamedata =  Arrays.asList(game1,  game2);
+		dbController.addAllGames(gamedata, userID1);
+		List<GameListEntry> games = dbController.getAllUserGames(userID1);
+		count = dbController.getUserGameCount(userID1);
+		assertEquals(2, count);
+		assertEquals(2, games.size());
 	}
 	
 	@Test
-	void test2() {
-		Long count = dbController.getUserGameCount(userID);
+	void playerOwnGamesFromDB(){
+		Long count = dbController.getUserGameCount(userID1);
 		assertEquals(0, count);
+		dbController.addGame(game1, userID1);
+		dbController.addGame(game1, userID2);
+		dbController.addGame(game2, userID2);
 		
-		//GameListEntry game = new GameListEntry();
-		GameData game = new GameData();
-		
-		dbController.addGame(game, userID);
-		count = dbController.getUserGameCount(userID);
+		List<GameListEntry> games = dbController.getAllUserGames(userID1);
+		count = dbController.getUserGameCount(userID1);
 		assertEquals(1, count);
-		List<GameListEntry> games = dbController.getAllUserGames(userID);
-		assertEquals(game.getName(), games.get(0).getName());
+		assertEquals(1, games.size());
 	}
-
 }
