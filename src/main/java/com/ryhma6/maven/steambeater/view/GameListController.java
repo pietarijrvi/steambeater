@@ -415,6 +415,7 @@ public class GameListController implements Initializable {
 	 */
 	public void refreshAchievementList() {
 		GameData game = gameList.getSelectionModel().getSelectedItem();
+		System.out.println("Ach list size: " + game.getGameStatistics().getAchievements().size());
 		achievementList.setItems(FXCollections.observableArrayList(game.getGameStatistics().getAchievements()));
 	}
 
@@ -453,7 +454,6 @@ public class GameListController implements Initializable {
 			statLabel.setText(game.getName());
 			mainApp.loadAchievementData(game.getAppid());
 
-			System.out.println("Ach list size: " + game.getGameStatistics().getAchievements().size());
 			showStats();
 			gameList.setVisible(false);
 		}

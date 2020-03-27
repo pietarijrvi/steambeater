@@ -394,6 +394,7 @@ public class SteamAPICalls {
 				JsonNode innerNode = rootNode.path("game").path("availableGameStats");
 				ObjectReader objectReader = mapper.readerFor(new TypeReference<GameStatistics>() {
 				});
+				mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 				try {
 					GameStatistics gameStats = objectReader.readValue(innerNode);
 					gamesMappedByGameID.get(appID).setGameStatistics(gameStats);
@@ -441,7 +442,7 @@ public class SteamAPICalls {
 				ObjectReader objectReader = mapper.readerFor(new TypeReference<GameStatistics>() {
 				});
 				GameStatistics achievementCompletionInfo = objectReader.readValue(innerNode);
-
+				mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
 				// Mapping achievement schema of the requested game, using name (not display
 				// name) as identifier
 				Map<String, Achievement> achievements = new HashMap<String, Achievement>();
