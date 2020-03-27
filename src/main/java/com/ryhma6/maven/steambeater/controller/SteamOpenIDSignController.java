@@ -1,5 +1,6 @@
 package com.ryhma6.maven.steambeater.controller;
 
+import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -17,6 +18,7 @@ import org.expressme.openid.OpenIdManager;
 import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 
+import animatefx.animation.ZoomOut;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +31,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.web.WebView;
@@ -204,7 +207,7 @@ public class SteamOpenIDSignController implements Initializable{
 	}
 	
 	@FXML
-	private void handleMouseEvent(MouseEvent event) {
+	private void handleMouseEvent(MouseEvent event) throws IOException {
 		if(event.getSource() == btnClose) {
 			System.exit(0);
 		} else if (event.getSource() == btnMinimize) {
