@@ -213,7 +213,7 @@ public class FriendsListController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+		
 		borderPane.setRight(resizeButton);
 		borderPane.setPrefWidth(normalWidth);
 		borderPane.setPadding(new Insets(5, 5, 5, 5));

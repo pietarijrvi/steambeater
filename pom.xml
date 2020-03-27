@@ -131,6 +131,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>io.github.typhon0</groupId>
+			<artifactId>AnimateFX</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
 		    <groupId>org.hsqldb</groupId>
 		    <artifactId>hsqldb</artifactId>
 		    <version>2.5.0</version>
