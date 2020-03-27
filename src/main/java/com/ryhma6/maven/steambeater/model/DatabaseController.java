@@ -165,7 +165,8 @@ public class DatabaseController {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Long> query = builder.createQuery(Long.class);
 			Root<GameListEntry> root = query.from(GameListEntry.class);
-			query.select(builder.count(root.get("userID")));
+			Predicate predicate = builder.equal(root.get("userID"), userID);
+			query.select(builder.count(root.get("userID"))).where(predicate);
 			result = (Long) session.createQuery(query).getSingleResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
