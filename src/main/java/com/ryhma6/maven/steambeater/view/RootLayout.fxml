@@ -3,12 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Circle?>
-
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1600.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
    <top>
@@ -18,45 +18,48 @@
          </BorderPane.margin>
       </MenuBar>
       
-            <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="1560.0" spacing="5.0">
+                  <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="1560.0" spacing="5.0">
       <children>
             <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction">
                <HBox.margin>
-                  <Insets top="10.0" />
+                  <Insets right="80.0" top="10.0" />
                </HBox.margin>
             </Button>
-      		<Button onAction="#loadWithTestValues" text="SignTest">
+      		<Button fx:id="refreshButton" maxHeight="27.0" onAction="#refreshData">
+               <HBox.margin>
+                  <Insets right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+      		<Button fx:id="signTestButton" maxHeight="27.0" onAction="#loadWithTestValues" text="test sign">
+               <HBox.margin>
+                  <Insets right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+      		<Button fx:id="logoutButton" maxHeight="30.0" onAction="#logout" stylesheets="@../stylesheet.css" text="logout">
                <HBox.margin>
                   <Insets top="10.0" />
                </HBox.margin>
             </Button>
-      		<Button onAction="#refreshData" text="Refresh">
-               <HBox.margin>
-                  <Insets top="10.0" />
-               </HBox.margin>
-            </Button>
-      		<Button onAction="#logout" stylesheets="@../stylesheet.css" text="Log out">
-               <HBox.margin>
-                  <Insets top="10.0" />
-               </HBox.margin>
-            </Button>
-            <HBox fx:id="taskbarHbox" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="52.0" HBox.hgrow="ALWAYS">
+            <HBox fx:id="taskbarHbox" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="52.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Circle fx:id="btnClose" fill="RED" onMouseClicked="#handleMouseEvent" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.5">
+                  <ImageView fx:id="btnClose" fitHeight="27.0" fitWidth="50.0" onMouseClicked="#handleMouseEvent" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@close_window_64px.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="btnFull" fitHeight="27.0" fitWidth="50.0" onMouseClicked="#handleMouseEvent" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@maximize_button_64px.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="btnMinimize" fitHeight="27.0" fitWidth="40.0" onMouseClicked="#handleMouseEvent" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@minimize_window_64px.png" />
+                     </image>
                      <HBox.margin>
-                        <Insets top="5.0" />
+                        <Insets />
                      </HBox.margin>
-                  </Circle>
-                  <Circle fx:id="btnFull" fill="#06ae06" onMouseClicked="#handleMouseEvent" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.5">
-                     <HBox.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Circle>
-                  <Circle fx:id="btnMinimize" fill="#e8e800" onMouseClicked="#handleMouseEvent" radius="10.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="1.5">
-                     <HBox.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Circle>
+                  </ImageView>
                   <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                </children>
                <opaqueInsets>

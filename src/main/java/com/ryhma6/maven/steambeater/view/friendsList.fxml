@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.view.FriendsListController">
+<AnchorPane fx:id="friendsAnchor" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.view.FriendsListController">
    <children>
       <HBox prefHeight="62.0" prefWidth="250.0">
          <children>
@@ -20,7 +20,7 @@
                <HBox.margin>
                   <Insets top="5.0" />
                </HBox.margin></ImageView>
-            <Label text="Friends">
+            <Label fx:id="friendsLabel" text="Friends">
                <padding>
                   <Insets left="10.0" top="15.0" />
                </padding>

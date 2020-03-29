@@ -1,11 +1,13 @@
 package com.ryhma6.maven.steambeater.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.CookieStore;
 import java.net.HttpCookie;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -29,9 +31,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.web.WebView;
@@ -67,13 +72,25 @@ public class SteamOpenIDSignController implements Initializable{
 	private Button loginButton;
 	
 	@FXML
-	private Circle btnClose;
+	private ImageView btnClose;
 
 	@FXML
-	private Circle btnMinimize;
+	private ImageView btnMinimize;
 	
 	@FXML
-	private Circle btnFull;
+	private ImageView btnFull;
+	
+	@FXML
+	private HBox taskBarHbox;
+	
+	@FXML
+	private Button logoutButton;
+	
+	@FXML
+	private Button signTestButton;
+	
+	@FXML
+	private Button refreshButton;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -207,7 +224,7 @@ public class SteamOpenIDSignController implements Initializable{
 	}
 	
 	@FXML
-	private void handleMouseEvent(MouseEvent event) throws IOException {
+	private void handleMouseEvent(MouseEvent event) throws IOException, URISyntaxException {
 		if(event.getSource() == btnClose) {
 			System.exit(0);
 		} else if (event.getSource() == btnMinimize) {
@@ -217,8 +234,12 @@ public class SteamOpenIDSignController implements Initializable{
 			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
 			if(primaryStage.isMaximized()) {
 				primaryStage.setMaximized(false);
+				Image image = new Image("/maximize_button_64px.png");
+				btnFull.setImage(image);
 			}else {
 				primaryStage.setMaximized(true);
+				Image image = new Image("/restore_down_64px.png");
+				btnFull.setImage(image);
 			}
 		}
 	}
@@ -231,5 +252,30 @@ public class SteamOpenIDSignController implements Initializable{
 		ImageView loginImage = new ImageView("/steamicon.png");
         loginButton.setGraphic(loginImage);
         loginButton.setPadding(Insets.EMPTY);
+        
+        ImageView loginTestImage = new ImageView("/enter.png");
+        signTestButton.setGraphic(loginTestImage);
+        Tooltip loginTip = new Tooltip();
+        loginTip.setText("Test gamelist");
+        signTestButton.setTooltip(loginTip);
+        loginTestImage.setFitHeight(35);
+        loginTestImage.setFitWidth(35);
+        
+        ImageView exitImage = new ImageView("/exit.png");
+        logoutButton.setGraphic(exitImage);
+        Tooltip exitTip = new Tooltip();
+        exitTip.setText("logout");
+        logoutButton.setTooltip(exitTip);
+        exitImage.setFitHeight(35);
+        exitImage.setFitWidth(35);
+        
+        ImageView refreshImage = new ImageView("/refresh.png");
+        Tooltip refreshTip = new Tooltip();
+        refreshTip.setText("Refresh");
+        refreshButton.setTooltip(refreshTip);
+        refreshButton.setGraphic(refreshImage);
+        refreshImage.setFitHeight(35);
+        refreshImage.setFitWidth(35);
+        
 	}
 }

@@ -1,9 +1,13 @@
 .root{
     -fx-font-family: "Helvetica";
-    -fx-base: #616166;
-    -fx-background: #3A3A3D;
+	-fx-base: rgb(60,60,60);
+	-fx-background-color: linear-gradient(to top right, rgba(60,60,60,1) 0%, rgba(73,73,73,1) 10%, rgba(102,102,102,1) 36%, rgba(102,102,102,1) 64%, rgba(73,73,73,1) 90%, rgba(60,60,60,1) 100%);
 }
 
 .button:hover {
     -fx-background-color: #6289A1;
+}
+
+#friendsListSmall .list-cell{
+	-fx-padding: 5px 1px 5px 4px;
 }

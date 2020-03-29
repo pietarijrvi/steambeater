@@ -39,6 +39,12 @@ public class FriendsListController implements Initializable {
 	@FXML
 	private AnchorPane deepAnchor;
 
+	@FXML
+	private AnchorPane friendsAnchor;
+	
+	@FXML
+	private Label friendsLabel;
+	
 	/**
 	 * The expanded version of the friends list
 	 */
@@ -55,10 +61,10 @@ public class FriendsListController implements Initializable {
 
 	private final Image IMAGE_TEST = new Image("test.png");
 
-	double smallWidth = 75.0;
+	double smallWidth = 85.0;
 	double normalWidth = 250.0;
 	BorderPane borderPane = new BorderPane();
-	Button resizeButton = new Button("<-|");
+	Button resizeButton = new Button();
 
 	/**
 	 * loads the friends into the friends list, minimized one is separate from the
@@ -181,19 +187,33 @@ public class FriendsListController implements Initializable {
 			friendsList.setVisible(false);
 			friendsListSmall.setManaged(true);
 			friendsListSmall.setVisible(true);
+			friendsListSmall.setPadding(new Insets(0));
 			borderPane.setPrefWidth(smallWidth);
-			deepAnchor.setPrefWidth(smallWidth);
+			friendsAnchor.setPrefWidth(85);
+			deepAnchor.setPrefWidth(75);
+			friendsLabel.setManaged(false);
+			friendsLabel.setVisible(false);
 
-			resizeButton.setText("|->");
+			ImageView back = new ImageView("/forward_64px.png");
+			back.setFitHeight(25);
+			back.setFitWidth(20);
+			resizeButton.setGraphic(back);
 		} else {
 			friendsListSmall.setManaged(false);
 			friendsListSmall.setVisible(false);
 			friendsList.setManaged(true);
 			friendsList.setVisible(true);
 			borderPane.setPrefWidth(normalWidth);
-			deepAnchor.setPrefWidth(normalWidth);
+			friendsAnchor.setPrefWidth(265);
+			deepAnchor.setPrefWidth(250);
+			friendsLabel.setManaged(true);
+			friendsLabel.setVisible(true);
 
-			resizeButton.setText("<-|");
+		
+			ImageView back = new ImageView("/back_64px.png");
+			back.setFitHeight(25);
+			back.setFitWidth(20);
+			resizeButton.setGraphic(back);
 		}
 	}
 
@@ -217,6 +237,10 @@ public class FriendsListController implements Initializable {
 		borderPane.setRight(resizeButton);
 		borderPane.setPrefWidth(normalWidth);
 		borderPane.setPadding(new Insets(5, 5, 5, 5));
+		ImageView back = new ImageView("/back_64px.png");
+		resizeButton.setGraphic(back);
+		back.setFitHeight(25);
+		back.setFitWidth(20);
 
 		// button for toggling the friends list between the minimized and expanded
 		// versions
