@@ -71,24 +71,45 @@ public class SteamOpenIDSignController implements Initializable{
 	@FXML
 	private Button loginButton;
 	
+	/**
+	 * Button to close the app
+	 */
 	@FXML
 	private ImageView btnClose;
 
+	/**
+	 * Button to minimize the app
+	 */
 	@FXML
 	private ImageView btnMinimize;
 	
+	/**
+	 * Button to fullscreen the app
+	 */
 	@FXML
 	private ImageView btnFull;
 	
+	/**
+	 * HBox inside taskbar. This is where the window resize buttons are.
+	 */
 	@FXML
 	private HBox taskBarHbox;
 	
+	/**
+	 * Button for logging out of Steam
+	 */
 	@FXML
 	private Button logoutButton;
 	
+	/**
+	 * Button for testing Steam login
+	 */
 	@FXML
 	private Button signTestButton;
 	
+	/**
+	 * Button for refreshing the Steam API data
+	 */
 	@FXML
 	private Button refreshButton;
 
@@ -223,6 +244,12 @@ public class SteamOpenIDSignController implements Initializable{
 		this.mainApp = mainApp;
 	}
 	
+	/**
+	 * Handles topbars mouseclick event: close app, fullscreen, minimize.
+	 * @param event
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	@FXML
 	private void handleMouseEvent(MouseEvent event) throws IOException, URISyntaxException {
 		if(event.getSource() == btnClose) {
