@@ -72,7 +72,7 @@ public class DatabaseController {
 	 * 
 	 * @param gameID
 	 * @param userID
-	 * @return a single GameListEntry object
+	 * @return a single GameListEntry object, returns null if something goes wrong or no game is found
 	 */
 	public GameListEntry getUserGame(String gameID, String userID) {
 		try (Session session = sf.openSession()) {
@@ -93,7 +93,7 @@ public class DatabaseController {
 	 * Fetches all the games the user has in the database
 	 * 
 	 * @param userID
-	 * @return list of users games
+	 * @return  List<GameListEntry> list of users games
 	 */
 	public List<GameListEntry> getAllUserGames(String userID) {
 		try (Session session = sf.openSession()) {
