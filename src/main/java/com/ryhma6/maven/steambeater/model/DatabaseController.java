@@ -29,12 +29,21 @@ public class DatabaseController {
 	/**
 	 * Used to build the session factory
 	 */
-	private StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+	private StandardServiceRegistry registry;
 
 	/**
 	 * Builds the session factory for the class
 	 */
 	public DatabaseController() {
+		registry = new StandardServiceRegistryBuilder().configure().build();
+		sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+	}
+	
+	/**
+	 * Builds the session factory for the class - non-default configuration location
+	 */
+	public DatabaseController(String dbConfigurationLocation) {
+		this.registry = new StandardServiceRegistryBuilder().configure(dbConfigurationLocation).build();;
 		sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 	}
 
