@@ -72,7 +72,14 @@ public class MainApp extends Application {
 	@FXML
 	private FlowPane sidebar;
 	
+	/**
+	 * Used in moving the undecorated app window
+	 */
 	private double xOffset = 0; 
+	
+	/**
+	 * Used in moving the undecorated app window
+	 */
 	private double yOffset = 0;
 
 	/**
