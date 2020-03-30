@@ -1,24 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1600.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
    <top>
-      <MenuBar prefHeight="72.0" prefWidth="1280.0" BorderPane.alignment="CENTER" />
+      <MenuBar fx:id="taskbarMenu" prefHeight="72.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
+      </MenuBar>
       
-      <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="195.0" spacing="5.0">
+                  <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="1560.0" spacing="5.0">
       <children>
-      		<Button onAction="#handleLoginButtonAction" text="Sign In" />
-      		<Button onAction="#loadWithTestValues" text="SignTest" />
-      		<Button onAction="#logout" text="Log out" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction">
+               <HBox.margin>
+                  <Insets right="80.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+      		<Button fx:id="refreshButton" maxHeight="27.0" onAction="#refreshData">
+               <HBox.margin>
+                  <Insets right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+      		<Button fx:id="signTestButton" maxHeight="27.0" onAction="#loadWithTestValues" text="test sign">
+               <HBox.margin>
+                  <Insets right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+      		<Button fx:id="logoutButton" maxHeight="30.0" onAction="#logout" stylesheets="@../stylesheet.css" text="logout">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin>
+            </Button>
+            <HBox fx:id="taskbarHbox" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="52.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <ImageView fx:id="btnClose" fitHeight="27.0" fitWidth="50.0" onMouseClicked="#handleMouseEvent" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@close_window_64px.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="btnFull" fitHeight="27.0" fitWidth="50.0" onMouseClicked="#handleMouseEvent" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@maximize_button_64px.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="btnMinimize" fitHeight="27.0" fitWidth="40.0" onMouseClicked="#handleMouseEvent" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@minimize_window_64px.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ImageView>
+                  <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
       </children>
+         <BorderPane.margin>
+            <Insets bottom="30.0" top="15.0" />
+         </BorderPane.margin>
       </HBox>
    </top>
    <left>
       <FlowPane fx:id="sidebar" prefHeight="200.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
    </left>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" />
+   </padding>
 </BorderPane>

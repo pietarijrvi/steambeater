@@ -1,13 +1,17 @@
 package com.ryhma6.maven.steambeater.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.CookieStore;
 import java.net.HttpCookie;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.expressme.openid.Association;
 import org.expressme.openid.Endpoint;
@@ -16,12 +20,25 @@ import org.expressme.openid.OpenIdManager;
 import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 
+import animatefx.animation.ZoomOut;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,7 +49,7 @@ import javafx.stage.Stage;
  * Steam OpenID form in embedded browser (this app won't handle the username or
  * password). After successful login the SteamID is retrieved from a cookie.
  */
-public class SteamOpenIDSignController {
+public class SteamOpenIDSignController implements Initializable{
 
 	/**
 	 * Reference to main app, set after loading the FXML that uses this controller.
@@ -47,6 +64,33 @@ public class SteamOpenIDSignController {
 	 * login.
 	 */
 	private CookieManager cookieManager;
+	
+	/**
+	 * Button to login into Steam
+	 */
+	@FXML
+	private Button loginButton;
+	
+	@FXML
+	private ImageView btnClose;
+
+	@FXML
+	private ImageView btnMinimize;
+	
+	@FXML
+	private ImageView btnFull;
+	
+	@FXML
+	private HBox taskBarHbox;
+	
+	@FXML
+	private Button logoutButton;
+	
+	@FXML
+	private Button signTestButton;
+	
+	@FXML
+	private Button refreshButton;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -149,6 +193,15 @@ public class SteamOpenIDSignController {
 		UserPreferences.setSteamID("76561197960505737");
 		mainApp.loadSteamAPIData();
 	}
+	
+	/**
+	 * Loads Steam API data and refreshes UI
+	 */
+	@FXML
+	private void refreshData() {
+		if(UserPreferences.getSteamID()!=null)
+			mainApp.loadSteamAPIData();
+	}
 
 	/**
 	 * Used by logout button. Clears saved steamID from preferences and starts
@@ -168,5 +221,61 @@ public class SteamOpenIDSignController {
 	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	}
+	
+	@FXML
+	private void handleMouseEvent(MouseEvent event) throws IOException, URISyntaxException {
+		if(event.getSource() == btnClose) {
+			System.exit(0);
+		} else if (event.getSource() == btnMinimize) {
+			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
+			primaryStage.setIconified(true);
+		} else if(event.getSource() == btnFull) {
+			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
+			if(primaryStage.isMaximized()) {
+				primaryStage.setMaximized(false);
+				Image image = new Image("/maximize_button_64px.png");
+				btnFull.setImage(image);
+			}else {
+				primaryStage.setMaximized(true);
+				Image image = new Image("/restore_down_64px.png");
+				btnFull.setImage(image);
+			}
+		}
+	}
+
+	/**
+	 * Runs when application is started, sets steam's login image to the login button
+	 */
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		ImageView loginImage = new ImageView("/steamicon.png");
+        loginButton.setGraphic(loginImage);
+        loginButton.setPadding(Insets.EMPTY);
+        
+        ImageView loginTestImage = new ImageView("/enter.png");
+        signTestButton.setGraphic(loginTestImage);
+        Tooltip loginTip = new Tooltip();
+        loginTip.setText("Test gamelist");
+        signTestButton.setTooltip(loginTip);
+        loginTestImage.setFitHeight(35);
+        loginTestImage.setFitWidth(35);
+        
+        ImageView exitImage = new ImageView("/exit.png");
+        logoutButton.setGraphic(exitImage);
+        Tooltip exitTip = new Tooltip();
+        exitTip.setText("logout");
+        logoutButton.setTooltip(exitTip);
+        exitImage.setFitHeight(35);
+        exitImage.setFitWidth(35);
+        
+        ImageView refreshImage = new ImageView("/refresh.png");
+        Tooltip refreshTip = new Tooltip();
+        refreshTip.setText("Refresh");
+        refreshButton.setTooltip(refreshTip);
+        refreshButton.setGraphic(refreshImage);
+        refreshImage.setFitHeight(35);
+        refreshImage.setFitWidth(35);
+        
 	}
 }
