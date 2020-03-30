@@ -14,7 +14,7 @@ class PreferencesTest {
 	 * Clears preferences before each test.
 	 */
 	@BeforeEach
-	void test() {
+	void clearPreferenences() {
 		UserPreferences.clearPreferences();
 	}
 	

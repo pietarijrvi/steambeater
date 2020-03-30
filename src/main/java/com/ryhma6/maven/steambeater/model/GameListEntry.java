@@ -23,7 +23,7 @@ public class GameListEntry {
 	 * ID of the game
 	 */
 	@Column(name = "gameID")
-	private String gameID;
+	private int gameID;
 
 	/**
 	 * Game owners ID
@@ -48,6 +48,24 @@ public class GameListEntry {
 	 */
 	@Column(name = "ignored")
 	private Boolean ignored;
+	
+	/**
+	 * Game logo image url
+	 */
+	@Column(name = "logoImageUrl")
+	private String logoImageUrl;
+	
+	/**
+	 * Name of the game
+	 */
+	@Column(name = "name")
+	private String name;
+	
+	/**
+	 * Player's total played time of the game
+	 */
+	@Column(name = "playtimeForever")
+	private int playtimeForever;
 
 	/**
 	 * Creates an empty GameListEntry object, entry ID has to be set separately after setting the gameID and the userID
@@ -65,13 +83,15 @@ public class GameListEntry {
 	 * @param unbeatable
 	 * @param ignored
 	 */
-	public GameListEntry(String gameID, String userID, Boolean beaten, Boolean unbeatable, Boolean ignored) {
+	public GameListEntry(int gameID, String userID, Boolean beaten, Boolean unbeatable, Boolean ignored, String logoImageUrl, String name) {
 		super();
 		this.userID = userID;
 		this.gameID = gameID;
 		this.beaten = beaten;
 		this.unbeatable = unbeatable;
 		this.ignored = ignored;
+		this.logoImageUrl = logoImageUrl;
+		this.name = name;
 		this.entryID = gameID + userID;
 	}
 
@@ -134,7 +154,7 @@ public class GameListEntry {
 	/**
 	 * @return game's ID
 	 */
-	public String getGameID() {
+	public int getGameID() {
 		return gameID;
 	}
 
@@ -143,7 +163,7 @@ public class GameListEntry {
 	 * 
 	 * @param gameID
 	 */
-	public void setGameID(String gameID) {
+	public void setGameID(int gameID) {
 		this.gameID = gameID;
 	}
 
@@ -161,5 +181,53 @@ public class GameListEntry {
 	 */
 	public void setUserID(String userID) {
 		this.userID = userID;
+	}
+
+	/**
+	 * Returns web url of the game image
+	 * @return url
+	 */
+	public String getLogoImageUrl() {
+		return logoImageUrl;
+	}
+
+	/**
+	 * Sets the web url of the game image
+	 * @param logoImageUrl web url of the image
+	 */
+	public void setLogoImageUrl(String logoImageUrl) {
+		this.logoImageUrl = logoImageUrl;
+	}
+	
+	/**
+	 * @return name of the game
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Sets the name of the game
+	 * 
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * @return playtime total playtime
+	 */
+	public int getPlaytimeForever() {
+		return playtimeForever;
+	}
+
+	/**
+	 * Sets the total played time of the game
+	 * 
+	 * @param name
+	 */
+	public void setPlaytimeForever(int playtimeForever) {
+		this.playtimeForever = playtimeForever;
 	}
 }

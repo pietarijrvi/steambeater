@@ -81,7 +81,6 @@ class JavaFXGameListTest extends ApplicationTest {
 		});
 	}
 
-	// @Disabled
 	@Test
 	@DisplayName("Test that the sorting selection (name) sorts the UI game list")
 	public void testOrderByName() {
@@ -117,7 +116,6 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
-	// @Disabled
 	@Test
 	@DisplayName("Test that the sorting selection (playtime) sorts the UI game list")
 	public void testOrderByPlaytime() {
@@ -153,7 +151,6 @@ class JavaFXGameListTest extends ApplicationTest {
 		}
 	}
 
-	// @Disabled
 	@Test
 	public void testFilterByName() {
 
