@@ -9,6 +9,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -63,6 +65,26 @@
                         <Insets left="200.0" top="20.0" />
                      </HBox.margin>
                   </Label>
+                  <Pane prefHeight="67.0" prefWidth="121.0" />
+                  <ImageView fx:id="languageIcon" fitHeight="100.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@UK.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ComboBox fx:id="languageChoice" prefWidth="150.0" promptText="Language">
+                  <items>
+						<FXCollections fx:factory="observableArrayList">
+							<String fx:value="English" />
+							<String fx:value="Finnish" />
+						</FXCollections>
+				  </items>
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" top="20.0" />
+                     </HBox.margin>
+                  </ComboBox>
 					</children>
 				</HBox>
             <AnchorPane maxHeight="1.7976931348623157E308" prefWidth="1200.0" VBox.vgrow="ALWAYS">

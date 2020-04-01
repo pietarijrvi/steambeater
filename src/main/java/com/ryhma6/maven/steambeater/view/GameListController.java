@@ -1,5 +1,7 @@
 package com.ryhma6.maven.steambeater.view;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -39,6 +41,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -125,7 +128,7 @@ public class GameListController implements Initializable {
 	 */
 	@FXML
 	private CheckBox includeUnbeatable, includeIgnored, includeBeaten, includeUnbeaten;
-	
+
 	/**
 	 * Displays game's updated status when the user clicks a status button
 	 */
@@ -185,6 +188,12 @@ public class GameListController implements Initializable {
 		this.games = games;
 	}
 
+	@FXML
+	private ImageView languageIcon;
+
+	@FXML
+	private ComboBox languageChoice;
+
 	/**
 	 * Initializes gamelist with games, achievements, filtering and sorting Hides
 	 * statsWindow by default Sets default options
@@ -192,6 +201,7 @@ public class GameListController implements Initializable {
 	public void loadGames() {
 		initGameListCellFactory();
 		initAchievementCellFactory();
+		initLanguageChoice();
 		initFilterListeners();
 		initListenerSortGameList();
 		hideStats();
@@ -395,7 +405,7 @@ public class GameListController implements Initializable {
 					setGraphic(hbox);
 					HBox.setHgrow(achievementPane, Priority.ALWAYS);
 					HBox.setHgrow(pane, Priority.ALWAYS);
-					
+
 					if (ach.getUnlocktime() == 0) {
 						unlockTime.setText("Achievement not unlocked");
 					} else {
@@ -596,28 +606,44 @@ public class GameListController implements Initializable {
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
-	
+
 	/**
 	 * Fades in and out actionLabel with the game's updated status
 	 */
 	private void activateFade() {
 		// SequentialTransition for multiple transitions in a row
 		SequentialTransition t = new SequentialTransition();
-		
+
 		// Fades in the label, added to SequentialTransition
 		FadeTransition fadeIn = new FadeTransition(Duration.seconds(2), actionLabel);
-	    fadeIn.setFromValue(0.0);
-	    fadeIn.setToValue(1.0);
-	    t.getChildren().add(fadeIn);
-	    
-	    // Fades out the label, added to SequentialTransition
+		fadeIn.setFromValue(0.0);
+		fadeIn.setToValue(1.0);
+		t.getChildren().add(fadeIn);
+
+		// Fades out the label, added to SequentialTransition
 		FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.5), actionLabel);
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        t.getChildren().add(fadeOut);
-        
-        // Plays the SequentialTransition with both transitions
-        t.play();
+		fadeOut.setFromValue(1.0);
+		fadeOut.setToValue(0.0);
+		t.getChildren().add(fadeOut);
+
+		// Plays the SequentialTransition with both transitions
+		t.play();
+	}
+
+	
+	private void initLanguageChoice() {
+		languageChoice.getSelectionModel().clearSelection();	
+		
+		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
+			// sorting in alphabetical order
+			if (languageChoice.getSelectionModel().getSelectedIndex() == 0) {
+				Image image = new Image("/UK.png");
+				languageIcon.setImage(image);
+			} else if (languageChoice.getSelectionModel().getSelectedIndex() == 1) {
+				Image image = new Image("/finland.png");
+				languageIcon.setImage(image);
+			}
+		});
 	}
 
 	/**
