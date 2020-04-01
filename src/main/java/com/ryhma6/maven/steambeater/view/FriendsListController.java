@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -126,6 +127,9 @@ public class FriendsListController implements Initializable {
 					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView, label, pane, button);
 					setGraphic(hbox);
+					label.setStyle("-fx-padding: 0 0 0 5");
+					hbox.setAlignment(Pos.CENTER_LEFT);
+
 				}
 			}
 		});
