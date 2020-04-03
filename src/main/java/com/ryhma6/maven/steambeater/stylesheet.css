@@ -11,3 +11,7 @@
 #friendsListSmall .list-cell{
 	-fx-padding: 5px 1px 5px 4px;
 }
+
+#loadStateLabel{
+	-fx-font-size: 1.5em;
+}

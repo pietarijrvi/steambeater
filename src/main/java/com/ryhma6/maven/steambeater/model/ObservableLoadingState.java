@@ -1,9 +1,5 @@
 package com.ryhma6.maven.steambeater.model;
 
-import java.util.ArrayList;
-
-import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
-
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
