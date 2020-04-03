@@ -73,12 +73,12 @@ public class MainApp extends Application {
 	 */
 	@FXML
 	private FlowPane sidebar;
-	
+
 	/**
 	 * Used in moving the undecorated app window
 	 */
-	private double xOffset = 0; 
-	
+	private double xOffset = 0;
+
 	/**
 	 * Used in moving the undecorated app window
 	 */
@@ -97,7 +97,7 @@ public class MainApp extends Application {
 		initRootLayout();
 		showGameList();
 		showFriendsList();
-		
+
 		// grab your root here
 		rootLayout.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -122,8 +122,6 @@ public class MainApp extends Application {
 				return new Task<Integer>() {
 					@Override
 					protected Integer call() throws Exception {
-						//TODO: disable logout, login button
-						
 						// load game list from Steam API
 						ObservableLoadingState.getInstance().setLoadingState(LoadingState.API_GAMES);
 						if (steamAPI.loadSteamGames()) {
@@ -150,17 +148,18 @@ public class MainApp extends Application {
 					protected void succeeded() {
 						super.succeeded();
 						ObservableLoadingState.getInstance().setLoadingState(LoadingState.COMPLETED);
-						//TODO: enable logout, login button
 						// steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
 					}
 				};
 			}
 		};
 
+		// if logged in (steamID exists and saved to preferences), automatically load
+		// user data (SteamAPI and database)
 		if (!UserPreferences.getSteamID().equals("null")) {
 			loadSteamAPIData();
 			System.out.println("Steam login id: " + UserPreferences.getSteamID());
-		}else
+		} else
 			ObservableLoadingState.getInstance().setLoadingState(LoadingState.PRELOAD);
 	}
 
