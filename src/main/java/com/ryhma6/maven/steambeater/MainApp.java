@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController;
 import com.ryhma6.maven.steambeater.model.DatabaseController;
+import com.ryhma6.maven.steambeater.model.LoadingState;
+import com.ryhma6.maven.steambeater.model.ObservableLoadingState;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
@@ -120,7 +122,10 @@ public class MainApp extends Application {
 				return new Task<Integer>() {
 					@Override
 					protected Integer call() throws Exception {
+						//TODO: disable logout, login button
+						
 						// load game list from Steam API
+						ObservableLoadingState.getInstance().setLoadingState(LoadingState.API_GAMES);
 						if (steamAPI.loadSteamGames()) {
 							// add game list to database after successful load (new user)
 							if (databaseController.getUserGameCount(UserPreferences.getSteamID()) < 1) {
@@ -136,6 +141,7 @@ public class MainApp extends Application {
 							steamAPI.loadGamesFromDatabase(
 									databaseController.getAllUserGames(UserPreferences.getSteamID()));
 						}
+						ObservableLoadingState.getInstance().setLoadingState(LoadingState.API_FRIENDS);
 						steamAPI.loadSteamFriends();
 						return null;
 					}
@@ -143,14 +149,19 @@ public class MainApp extends Application {
 					@Override
 					protected void succeeded() {
 						super.succeeded();
+						ObservableLoadingState.getInstance().setLoadingState(LoadingState.COMPLETED);
+						//TODO: enable logout, login button
 						// steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
 					}
 				};
 			}
 		};
 
-		if (UserPreferences.getSteamID() != null)
+		if (!UserPreferences.getSteamID().equals("null")) {
 			loadSteamAPIData();
+			System.out.println("Steam login id: " + UserPreferences.getSteamID());
+		}else
+			ObservableLoadingState.getInstance().setLoadingState(LoadingState.PRELOAD);
 	}
 
 	/**
@@ -181,6 +192,7 @@ public class MainApp extends Application {
 	public void resetSteamAPIData() {
 		steamAPIService.cancel();
 		steamAPI.resetItems();
+		ObservableLoadingState.getInstance().setLoadingState(LoadingState.PRELOAD);
 	}
 
 	/**
