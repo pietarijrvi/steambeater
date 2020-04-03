@@ -66,7 +66,7 @@ public class MainApp extends Application {
 	/**
 	 * Used to access to the database
 	 */
-	private DatabaseController databaseController = new DatabaseController();
+	private DatabaseController databaseController = DatabaseController.getInstance();
 
 	/**
 	 * The left sidebar of the window

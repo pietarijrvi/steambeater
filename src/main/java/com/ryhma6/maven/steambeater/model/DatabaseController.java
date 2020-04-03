@@ -21,6 +21,8 @@ import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
  */
 public class DatabaseController {
 
+	private static final DatabaseController INSTANCE = new DatabaseController();
+	
 	/**
 	 * Used for creating sessions for database queries
 	 */
@@ -34,9 +36,13 @@ public class DatabaseController {
 	/**
 	 * Builds the session factory for the class
 	 */
-	public DatabaseController() {
+	private DatabaseController() {
 		registry = new StandardServiceRegistryBuilder().configure().build();
 		sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+	}
+	
+	public static DatabaseController getInstance() {
+		return INSTANCE;
 	}
 	
 	/**

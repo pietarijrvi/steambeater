@@ -74,7 +74,7 @@ public class StatComparisonController implements Initializable {
 	/**
 	 * Used to access the database
 	 */
-	private DatabaseController db = new DatabaseController();
+	private DatabaseController db = DatabaseController.getInstance();
 	
 	////////////////////////// SUM VARIABLES
 	/// CURRENT USER
