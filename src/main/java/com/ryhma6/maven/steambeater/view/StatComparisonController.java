@@ -15,10 +15,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 
 /**
  * Controls the stat comparison panel, used by the FriendsListController
@@ -132,6 +134,23 @@ public class StatComparisonController implements Initializable {
 	 */
 	private int dbCount;
 	
+	@FXML
+	private Label youOwnedGames;
+	@FXML
+	private Label friendOwnedGames;
+	@FXML
+	private Label youPlaytime;
+	@FXML
+	private Label friendPlaytime;
+	@FXML
+	private Label youPlaytimeWeeks;
+	@FXML
+	private Label friendPlaytimeWeeks;
+	@FXML
+	private Label friendCompleted;
+	@FXML
+	private Label youCompleted;
+	
 	////////////////////////// END
 
 	/***
@@ -164,7 +183,8 @@ public class StatComparisonController implements Initializable {
 		List<GameListEntry> fdbGames = db.getAllUserGames(friendsID);
 		
 		if (fGames.size() == 0) {
-			friendLabel.setText(name + "'s profile is private.\nStats could not be retrieved.");
+			friendOwnedGames.setText(name + "'s profile is private.");
+			friendPlaytime.setText("Stats could not be retrieved.");
 			
 		} else {
 			fGames.forEach((n) -> sumUpStats(n, friendsID));
@@ -176,10 +196,15 @@ public class StatComparisonController implements Initializable {
 			//Avoid division by 0
 			if (fBeatable == 0) fBeatable = 1;
 			
-			friendLabel.setText(name + " owns " + fCount + " games"
-					+ "\nOverall playtime: " + fPlaytime/60 + " hours"
-					+ "\nPlaytime in the last 2 weeks: "+ f2wPlaytime/60 + " hours"
-					+ "\nLibrary completion: " + (100*fBeaten)/(100*fBeatable)*100 + "%");
+//			friendLabel.setText(name + " owns " +  fCount + " games"
+//					+ "\nOverall playtime: " + fPlaytime/60 + " hours"
+//					+ "\nPlaytime in the last 2 weeks: "+ f2wPlaytime/60 + " hours"
+//					+ "\nLibrary completion: " + (100*fBeaten)/(100*fBeatable)*100 + "%");
+			
+			friendOwnedGames.setText(name+" owns " +  fCount + " games");
+			friendPlaytime.setText("Overall playtime: " + fPlaytime/60 + " hours");
+			friendPlaytimeWeeks.setText("Playtime in the last 2 weeks: "+ f2wPlaytime/60 + " hours");
+			friendCompleted.setText("Library completion: " + (100*fBeaten)/(100*fBeatable)*100 + "%");
 		}
 		
 		ObservableList<GameData> oGames = SteamAPICalls.getOwnedGames();
@@ -197,10 +222,17 @@ public class StatComparisonController implements Initializable {
 		String libComp = String.format("%.1f", ((double)oBeaten/oBeatable)*100);
 		System.out.println(libComp);
 		
-		userLabel.setText("You own " + oCount + " games"
-				+ "\nOverall playtime: " + oPlaytime/60 + " hours"
-				+ "\nPlaytime in the last 2 weeks: "+ o2wPlaytime/60 + " hours"
-				+ "\nLibrary completion: " + libComp + "%");
+//		userLabel.setText("You own " + oCount + " games"
+//				+ "\nOverall playtime: " + oPlaytime/60 + " hours"
+//				+ "\nPlaytime in the last 2 weeks: "+ o2wPlaytime/60 + " hours"
+//				+ "\nLibrary completion: " + libComp + "%");
+		
+		youOwnedGames.setText("You own " +  oCount + " games");
+		youPlaytime.setText("Overall playtime: " + oPlaytime/60 + " hours");
+		youPlaytimeWeeks.setText("Playtime in the last 2 weeks: "+ o2wPlaytime/60 + " hours");
+		youCompleted.setText("Library completion: " + libComp + "%");
+		
+		
 	}
 	
 	/**
