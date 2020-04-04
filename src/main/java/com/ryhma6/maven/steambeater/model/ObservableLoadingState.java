@@ -23,9 +23,19 @@ public class ObservableLoadingState {
 	 * Contains the current loading state
 	 */
 	private ObjectProperty<LoadingState> loadingState = new SimpleObjectProperty<>();
+	
+	private long lastCompletionMillis; 
+	
+	/**
+	 * Returns the time stamp of the last loading completion (system time in milliseconds).
+	 * @return time stamp
+	 */
+	public long getLastCompletionMillis() {
+		return lastCompletionMillis;
+	}
 
 	/**
-	 * Set the current loading state. Can be set from non-UI thread.
+	 * Set the current loading state. Can be set from any thread, events (notifying observers) are posted to event queue.
 	 * @param currentState
 	 */
 	public void setLoadingState(LoadingState currentState) {
@@ -35,6 +45,9 @@ public class ObservableLoadingState {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
+						if(currentState==LoadingState.COMPLETED) {
+							lastCompletionMillis = System.currentTimeMillis();
+						}
 						loadingState.setValue(currentState);
 					}
 				});

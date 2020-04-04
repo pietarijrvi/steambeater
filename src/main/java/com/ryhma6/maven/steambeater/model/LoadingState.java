@@ -33,7 +33,7 @@ public enum LoadingState {
 			break;
 		case COMPLETED:
 			// Steam data updated: + timestamp
-			description = "Completed";
+			description = "Steam data loading completed";
 			break;
 		}
 		return description;

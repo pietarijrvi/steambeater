@@ -19,6 +19,7 @@ import org.expressme.openid.OpenIdManager;
 import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.LoadingState;
 import com.ryhma6.maven.steambeater.model.ObservableLoadingState;
+import com.ryhma6.maven.steambeater.model.TimeConverter;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 
 import javafx.beans.property.ObjectProperty;
@@ -310,21 +311,32 @@ public class SteamOpenIDSignController implements Initializable {
 		refreshImage.setFitHeight(35);
 		refreshImage.setFitWidth(35);
 
-		ObjectProperty<LoadingState> o = ObservableLoadingState.getInstance().getLoadingStateProperty();
-		loadStateLabel.setText(LoadingState.getDescription(o.getValue()));
+		ObservableLoadingState stateObject = ObservableLoadingState.getInstance();
+		ObjectProperty<LoadingState> stateProperty = stateObject.getLoadingStateProperty();
+		loadStateLabel.setText(LoadingState.getDescription(stateProperty.getValue()));
 		logoutButton.setDisable(true);
 		refreshButton.setDisable(true);
 
 		/*
 		 * Add listener to load state and show load state description on UI. Disable
-		 * logout- and refresh-buttons when data loading still in progress.
+		 * sign, logout- and refresh-buttons when data loading is still in progress.
 		 */
-		o.addListener(obs -> {
-			loadStateLabel.setText(LoadingState.getDescription(o.getValue()));
-			if (o.getValue() == LoadingState.COMPLETED) {
+		stateProperty.addListener(obs -> {
+			loadStateLabel.setText(LoadingState.getDescription(stateProperty.getValue()));
+			if(stateProperty.getValue() == LoadingState.PRELOAD) {
+				loginButton.setDisable(false);
+				signTestButton.setDisable(false);
+				logoutButton.setDisable(true);
+				refreshButton.setDisable(true);
+			}else if (stateProperty.getValue() == LoadingState.COMPLETED) {
+				loginButton.setDisable(false);
+				signTestButton.setDisable(false);
 				logoutButton.setDisable(false);
 				refreshButton.setDisable(false);
+				loadStateLabel.setText(loadStateLabel.getText() + ": " + TimeConverter.epochMillisToLocalTimestamp(stateObject.getLastCompletionMillis()));
 			} else {
+				loginButton.setDisable(true);
+				signTestButton.setDisable(true);
 				logoutButton.setDisable(true);
 				refreshButton.setDisable(true);
 			}
