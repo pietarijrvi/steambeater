@@ -1,6 +1,5 @@
 package com.ryhma6.maven.steambeater.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -18,30 +17,29 @@ import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
 import com.ryhma6.maven.steambeater.MainApp;
+import com.ryhma6.maven.steambeater.model.LoadingState;
+import com.ryhma6.maven.steambeater.model.ObservableLoadingState;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 
-import animatefx.animation.ZoomOut;
+import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -52,7 +50,7 @@ import javafx.stage.Stage;
  * Steam OpenID form in embedded browser (this app won't handle the username or
  * password). After successful login the SteamID is retrieved from a cookie.
  */
-public class SteamOpenIDSignController implements Initializable{
+public class SteamOpenIDSignController implements Initializable {
 
 	/**
 	 * Reference to main app, set after loading the FXML that uses this controller.
@@ -67,13 +65,13 @@ public class SteamOpenIDSignController implements Initializable{
 	 * login.
 	 */
 	private CookieManager cookieManager;
-	
+
 	/**
 	 * Button to login into Steam
 	 */
 	@FXML
 	private Button loginButton;
-	
+
 	/**
 	 * Button to close the app
 	 */
@@ -85,36 +83,42 @@ public class SteamOpenIDSignController implements Initializable{
 	 */
 	@FXML
 	private ImageView btnMinimize;
-	
+
 	/**
 	 * Button to fullscreen the app
 	 */
 	@FXML
 	private ImageView btnFull;
-	
+
 	/**
 	 * HBox inside taskbar. This is where the window resize buttons are.
 	 */
 	@FXML
 	private HBox taskBarHbox;
-	
+
 	/**
 	 * Button for logging out of Steam
 	 */
 	@FXML
 	private Button logoutButton;
-	
+
 	/**
 	 * Button for testing Steam login
 	 */
 	@FXML
 	private Button signTestButton;
-	
+
 	/**
 	 * Button for refreshing the Steam API data
 	 */
 	@FXML
 	private Button refreshButton;
+
+	/**
+	 * Displays info about the current data loading state
+	 */
+	@FXML
+	private Label loadStateLabel;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -217,13 +221,13 @@ public class SteamOpenIDSignController implements Initializable{
 		UserPreferences.setSteamID("76561197960505737");
 		mainApp.loadSteamAPIData();
 	}
-	
+
 	/**
 	 * Loads Steam API data and refreshes UI
 	 */
 	@FXML
 	private void refreshData() {
-		if(UserPreferences.getSteamID()!=null)
+		if (UserPreferences.getSteamID() != null)
 			mainApp.loadSteamAPIData();
 	}
 
@@ -251,9 +255,10 @@ public class SteamOpenIDSignController implements Initializable{
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
-	
+
 	/**
 	 * Handles topbars mouseclick event: close app, fullscreen, minimize.
+	 * 
 	 * @param event
 	 * @throws IOException
 	 * @throws URISyntaxException
@@ -269,13 +274,13 @@ public class SteamOpenIDSignController implements Initializable{
 		} else if (event.getSource() == btnMinimize) {
 			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
 			primaryStage.setIconified(true);
-		} else if(event.getSource() == btnFull) {
+		} else if (event.getSource() == btnFull) {
 			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
-			if(primaryStage.isMaximized()) {
+			if (primaryStage.isMaximized()) {
 				primaryStage.setMaximized(false);
 				Image image = new Image("/maximize_button_64px.png");
 				btnFull.setImage(image);
-			}else {
+			} else {
 				primaryStage.setMaximized(true);
 				Image image = new Image("/restore_down_64px.png");
 				btnFull.setImage(image);
@@ -284,37 +289,58 @@ public class SteamOpenIDSignController implements Initializable{
 	}
 
 	/**
-	 * Runs when application is started, sets steam's login image to the login button
+	 * Runs when application is started, sets steam's login image to the login
+	 * button
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		ImageView loginImage = new ImageView("/steamicon.png");
-        loginButton.setGraphic(loginImage);
-        loginButton.setPadding(Insets.EMPTY);
-        
-        ImageView loginTestImage = new ImageView("/enter.png");
-        signTestButton.setGraphic(loginTestImage);
-        Tooltip loginTip = new Tooltip();
-        loginTip.setText("Test gamelist");
-        signTestButton.setTooltip(loginTip);
-        loginTestImage.setFitHeight(35);
-        loginTestImage.setFitWidth(35);
-        
-        ImageView exitImage = new ImageView("/exit.png");
-        logoutButton.setGraphic(exitImage);
-        Tooltip exitTip = new Tooltip();
-        exitTip.setText("logout");
-        logoutButton.setTooltip(exitTip);
-        exitImage.setFitHeight(35);
-        exitImage.setFitWidth(35);
-        
-        ImageView refreshImage = new ImageView("/refresh.png");
-        Tooltip refreshTip = new Tooltip();
-        refreshTip.setText("Refresh");
-        refreshButton.setTooltip(refreshTip);
-        refreshButton.setGraphic(refreshImage);
-        refreshImage.setFitHeight(35);
-        refreshImage.setFitWidth(35);
-        
+		loginButton.setGraphic(loginImage);
+		loginButton.setPadding(Insets.EMPTY);
+
+		ImageView loginTestImage = new ImageView("/enter.png");
+		signTestButton.setGraphic(loginTestImage);
+		Tooltip loginTip = new Tooltip();
+		loginTip.setText("Test gamelist");
+		signTestButton.setTooltip(loginTip);
+		loginTestImage.setFitHeight(35);
+		loginTestImage.setFitWidth(35);
+
+		ImageView exitImage = new ImageView("/exit.png");
+		logoutButton.setGraphic(exitImage);
+		Tooltip exitTip = new Tooltip();
+		exitTip.setText("logout");
+		logoutButton.setTooltip(exitTip);
+		exitImage.setFitHeight(35);
+		exitImage.setFitWidth(35);
+
+		ImageView refreshImage = new ImageView("/refresh.png");
+		Tooltip refreshTip = new Tooltip();
+		refreshTip.setText("Refresh");
+		refreshButton.setTooltip(refreshTip);
+		refreshButton.setGraphic(refreshImage);
+		refreshImage.setFitHeight(35);
+		refreshImage.setFitWidth(35);
+
+		ObjectProperty<LoadingState> o = ObservableLoadingState.getInstance().getLoadingStateProperty();
+		loadStateLabel.setText(LoadingState.getDescription(o.getValue()));
+		logoutButton.setDisable(true);
+		refreshButton.setDisable(true);
+
+		/*
+		 * Add listener to load state and show load state description on UI. Disable
+		 * logout- and refresh-buttons when data loading still in progress.
+		 */
+		o.addListener(obs -> {
+			loadStateLabel.setText(LoadingState.getDescription(o.getValue()));
+			if (o.getValue() == LoadingState.COMPLETED) {
+				logoutButton.setDisable(false);
+				refreshButton.setDisable(false);
+			} else {
+				logoutButton.setDisable(true);
+				refreshButton.setDisable(true);
+			}
+
+		});
 	}
 }
