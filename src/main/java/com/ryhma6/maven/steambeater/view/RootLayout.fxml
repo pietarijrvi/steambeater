@@ -43,7 +43,7 @@
             </Button>
             <Label fx:id="loadStateLabel" text = "">
             	<HBox.margin>
-                  <Insets left="25.0" top="10.0" />
+                  <Insets left="20.0" top="10.0" />
                </HBox.margin>
             </Label>
             <HBox fx:id="taskbarHbox" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="52.0" spacing="10.0" HBox.hgrow="ALWAYS">
