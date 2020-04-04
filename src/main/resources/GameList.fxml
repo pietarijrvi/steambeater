@@ -65,7 +65,7 @@
 						</ComboBox>
                   <Label fx:id="actionLabel">
                      <HBox.margin>
-                        <Insets left="200.0" top="20.0" />
+                        <Insets left="20.0" top="20.0" />
                      </HBox.margin>
                   </Label>
                   <Pane maxWidth="1.7976931348623157E308" prefHeight="67.0" prefWidth="121.0" HBox.hgrow="ALWAYS" />

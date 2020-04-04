@@ -66,6 +66,7 @@ public class FriendsListController implements Initializable {
 	double normalWidth = 250.0;
 	BorderPane borderPane = new BorderPane();
 	Button resizeButton = new Button();
+	
 
 	/**
 	 * loads the friends into the friends list, minimized one is separate from the
@@ -237,7 +238,6 @@ public class FriendsListController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
 		borderPane.setRight(resizeButton);
 		borderPane.setPrefWidth(normalWidth);
 		borderPane.setPadding(new Insets(5, 5, 5, 5));
@@ -245,6 +245,7 @@ public class FriendsListController implements Initializable {
 		resizeButton.setGraphic(back);
 		back.setFitHeight(25);
 		back.setFitWidth(20);
+		resizeButton.setPadding(new Insets(5));
 
 		// button for toggling the friends list between the minimized and expanded
 		// versions
