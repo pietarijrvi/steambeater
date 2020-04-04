@@ -232,10 +232,10 @@ public class SteamAPICalls {
 					for (GameData g : playerGamesTemp) {
 						gamesMappedByGameID.put(g.getAppid(), g);
 					}
+					returnValue = true;
 				} catch (Exception e) {
 					System.out.println("SteamAPI: loading gamelist failed");
 				}
-				returnValue = true;
 				System.out.println("Owned games (SteamAPI): " + games.getGame_count());
 			}
 		} catch (IOException e1) {

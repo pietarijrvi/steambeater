@@ -100,9 +100,9 @@ public class DatabaseController {
 				g.setLogoImageUrl(game.getImg_logo_url());
 				g.setName(game.getName());
 				g.setPlaytimeForever(game.getPlaytime_forever());
-				g.setBeaten(game.isBeaten());
-				g.setUnbeatable(game.isUnbeatable());
-				g.setIgnored(game.isIgnored());
+				g.setBeaten(false);
+				g.setUnbeatable(false);
+				g.setIgnored(false);
 				g.setEntryID();
 				session.saveOrUpdate(g);
 				i++;
