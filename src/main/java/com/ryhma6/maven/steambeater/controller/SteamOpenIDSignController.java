@@ -267,11 +267,7 @@ public class SteamOpenIDSignController implements Initializable {
 	@FXML
 	private void handleMouseEvent(MouseEvent event) throws IOException, URISyntaxException {
 		if(event.getSource() == btnClose) {
-			Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure you want to close the application?", ButtonType.YES, ButtonType.CANCEL);
-			alert.showAndWait();
-			if (alert.getResult() == ButtonType.YES) {
 				System.exit(0);
-			}
 		} else if (event.getSource() == btnMinimize) {
 			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
 			primaryStage.setIconified(true);
