@@ -41,6 +41,6 @@
       </AnchorPane>
    </children>
    <padding>
-      <Insets right="20.0" />
+      <Insets right="15.0" />
    </padding>
 </AnchorPane>

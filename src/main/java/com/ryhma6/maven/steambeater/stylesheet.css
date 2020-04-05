@@ -1,7 +1,7 @@
 .root{
     -fx-font-family: "Helvetica";
-	-fx-base: rgb(60,60,60);
-	-fx-background-color: linear-gradient(to top right, rgba(60,60,60,1) 0%, rgba(73,73,73,1) 10%, rgba(102,102,102,1) 36%, rgba(102,102,102,1) 64%, rgba(73,73,73,1) 90%, rgba(60,60,60,1) 100%);
+	-fx-base: rgb(60.0,60.0,60.0);
+	-fx-background-color: linear-gradient(to top right, rgba(60.0,60.0,60.0,1.0) 0.0%, rgba(73.0,73.0,73.0,1.0) 10.0%, rgba(102.0,102.0,102.0,1.0) 36.0%, rgba(102.0,102.0,102.0,1.0) 64.0%, rgba(73.0,73.0,73.0,1.0) 90.0%, rgba(60.0,60.0,60.0,1.0) 100.0%);
 }
 
 .button:hover {
@@ -9,9 +9,31 @@
 }
 
 #friendsListSmall .list-cell{
-	-fx-padding: 5px 1px 5px 4px;
+	-fx-padding: 5.0px 1.0px 5.0px 4.0px;
 }
 
 #loadStateLabel{
 	-fx-font-size: 1.3em;
 }
+
+#taskbarHbox .button{
+    -fx-border-color: transparent;
+    -fx-border-width: 0.0;
+    -fx-background-radius: 0.0;
+    -fx-background-color: transparent;
+    -fx-font-size: 1.0em; /* 12 */
+    -fx-text-fill: #828282;
+}
+
+#btnClose.button:hover{
+  -fx-background-color: #E81123;
+}
+
+#btnFull.button:hover{
+  -fx-background-color: #6289A1;
+}
+
+#btnMinimize.button:hover{
+  -fx-background-color: #6289A1;
+}
+

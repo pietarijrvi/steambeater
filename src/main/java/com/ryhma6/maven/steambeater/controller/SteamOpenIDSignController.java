@@ -77,19 +77,19 @@ public class SteamOpenIDSignController implements Initializable {
 	 * Button to close the app
 	 */
 	@FXML
-	private ImageView btnClose;
+	private Button btnClose;
 
 	/**
 	 * Button to minimize the app
 	 */
 	@FXML
-	private ImageView btnMinimize;
+	private Button btnMinimize;
 
 	/**
 	 * Button to fullscreen the app
 	 */
 	@FXML
-	private ImageView btnFull;
+	private Button btnFull;
 
 	/**
 	 * HBox inside taskbar. This is where the window resize buttons are.
@@ -275,12 +275,16 @@ public class SteamOpenIDSignController implements Initializable {
 			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
 			if (primaryStage.isMaximized()) {
 				primaryStage.setMaximized(false);
-				Image image = new Image("/maximize_button_64px.png");
-				btnFull.setImage(image);
+				ImageView image = new ImageView("/maximize_button_64px.png");
+				btnFull.setGraphic(image);
+				image.setFitHeight(25);
+				image.setFitWidth(25);
 			} else {
 				primaryStage.setMaximized(true);
-				Image image = new Image("/restore_down_64px.png");
-				btnFull.setImage(image);
+				ImageView image = new ImageView("/restore_down_64px.png");
+				btnFull.setGraphic(image);
+				image.setFitHeight(25);
+				image.setFitWidth(25);
 			}
 		}
 	}
@@ -291,6 +295,21 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		ImageView fullImage = new ImageView("/maximize_button_64px.png");
+		btnFull.setGraphic(fullImage);
+		fullImage.setFitHeight(25);
+		fullImage.setFitWidth(25);
+		
+		ImageView minimizeImage = new ImageView("/minimize_window_64px.png");
+		btnMinimize.setGraphic(minimizeImage);
+		minimizeImage.setFitHeight(25);
+		minimizeImage.setFitWidth(25);
+		
+		ImageView closeImage = new ImageView("/close_window_64px.png");
+		btnClose.setGraphic(closeImage);
+		closeImage.setFitHeight(25);
+		closeImage.setFitWidth(25);
+		
 		ImageView loginImage = new ImageView("/steamicon.png");
 		loginButton.setGraphic(loginImage);
 		loginButton.setPadding(Insets.EMPTY);

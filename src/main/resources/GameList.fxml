@@ -49,7 +49,7 @@
 								<Insets bottom="10.0" top="10.0" />
 							</padding>
                      <HBox.margin>
-                        <Insets right="10.0" />
+                        <Insets left="5.0" right="10.0" />
                      </HBox.margin>
 						</VBox>
 						<ComboBox fx:id="sortingChoice" prefWidth="150.0" promptText="Sort by">
@@ -63,18 +63,18 @@
 								<Insets top="15.0" />
 							</HBox.margin>
 						</ComboBox>
-                  <Label fx:id="actionLabel">
+                  <Label fx:id="actionLabel" prefHeight="48.0" prefWidth="298.0" wrapText="true">
                      <HBox.margin>
-                        <Insets left="20.0" top="20.0" />
+                        <Insets left="20.0" top="10.0" />
                      </HBox.margin>
                   </Label>
-                  <Pane maxWidth="1.7976931348623157E308" prefHeight="67.0" prefWidth="121.0" HBox.hgrow="ALWAYS" />
+                  <Pane maxWidth="1.7976931348623157E308" prefHeight="67.0" prefWidth="15.0" HBox.hgrow="ALWAYS" />
                   <ImageView fx:id="languageIcon" fitHeight="100.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@UK.png" />
                      </image>
                      <HBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="8.0" />
                      </HBox.margin>
                   </ImageView>
                   <ComboBox fx:id="languageChoice" prefWidth="150.0" promptText="Language">
@@ -85,7 +85,7 @@
 						</FXCollections>
 				  </items>
                      <HBox.margin>
-                        <Insets left="10.0" top="20.0" />
+                        <Insets left="10.0" top="18.0" />
                      </HBox.margin>
                   </ComboBox>
 					</children>
