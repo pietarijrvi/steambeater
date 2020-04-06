@@ -81,5 +81,15 @@
             <Insets left="15.0" />
          </padding>
       	</BorderPane>
+      <Label fx:id="friendTopLabel" text="Your friend here" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="65.0">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
+      <Label text="You" AnchorPane.leftAnchor="265.0" AnchorPane.topAnchor="65.0">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
    	</children>
 </AnchorPane>

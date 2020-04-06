@@ -337,6 +337,8 @@ public class SteamOpenIDSignController implements Initializable {
 		refreshButton.setGraphic(refreshImage);
 		refreshImage.setFitHeight(35);
 		refreshImage.setFitWidth(35);
+		
+		loadStateLabel.setPadding(new Insets(10,0,0,0));
 
 		ObservableLoadingState stateObject = ObservableLoadingState.getInstance();
 		ObjectProperty<LoadingState> stateProperty = stateObject.getLoadingStateProperty();
