@@ -18,12 +18,22 @@
 
 #taskbarHbox .button{
     -fx-border-color: transparent;
-    -fx-border-width: 0.0;
-    -fx-background-radius: 0.0;
+   
     -fx-background-color: transparent;
     -fx-font-size: 1.0em; /* 12 */
     -fx-text-fill: #828282;
 }
+
+#taskbarHbox #btnMinimize.button{
+	    -fx-border-radius: 0 5 5 0;
+		-fx-background-radius: 0 5 5 0;
+}
+
+#taskbarHbox #btnClose.button{
+	    -fx-border-radius: 5 0 0 5;
+		-fx-background-radius: 5 0 0 5;
+}
+
 
 #btnClose.button:hover{
   -fx-background-color: #E81123;
@@ -36,4 +46,3 @@
 #btnMinimize.button:hover{
   -fx-background-color: #6289A1;
 }
-
