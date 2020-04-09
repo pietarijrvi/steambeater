@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController;
 import com.ryhma6.maven.steambeater.model.DatabaseController;
-import com.ryhma6.maven.steambeater.model.LoadingState;
-import com.ryhma6.maven.steambeater.model.ObservableLoadingState;
+import com.ryhma6.maven.steambeater.model.LoadingStatus;
+import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
@@ -123,7 +123,7 @@ public class MainApp extends Application {
 					@Override
 					protected Integer call() throws Exception {
 						// load game list from Steam API
-						ObservableLoadingState.getInstance().setLoadingState(LoadingState.API_GAMES);
+						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_GAMES);
 						if (steamAPI.loadSteamGames()) {
 							// add game list to database after successful load (new user)
 							if (databaseController.getUserGameCount(UserPreferences.getSteamID()) < 1) {
@@ -136,10 +136,11 @@ public class MainApp extends Application {
 						} else {
 							// if loading game data from Steam API failed, load (possibly outdated) game
 							// list from database
+							ObservableLoadingStatus.getInstance().setApiLoadFailure();
 							steamAPI.loadGamesFromDatabase(
 									databaseController.getAllUserGames(UserPreferences.getSteamID()));
 						}
-						ObservableLoadingState.getInstance().setLoadingState(LoadingState.API_FRIENDS);
+						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_FRIENDS);
 						steamAPI.loadSteamFriends();
 						return null;
 					}
@@ -147,7 +148,7 @@ public class MainApp extends Application {
 					@Override
 					protected void succeeded() {
 						super.succeeded();
-						ObservableLoadingState.getInstance().setLoadingState(LoadingState.COMPLETED);
+						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.COMPLETED);
 						// steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
 					}
 				};
@@ -160,7 +161,7 @@ public class MainApp extends Application {
 			loadSteamAPIData();
 			System.out.println("Steam login id: " + UserPreferences.getSteamID());
 		} else
-			ObservableLoadingState.getInstance().setLoadingState(LoadingState.PRELOAD);
+			ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.PRELOAD);
 	}
 
 	/**
@@ -191,7 +192,7 @@ public class MainApp extends Application {
 	public void resetSteamAPIData() {
 		steamAPIService.cancel();
 		steamAPI.resetItems();
-		ObservableLoadingState.getInstance().setLoadingState(LoadingState.PRELOAD);
+		ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.PRELOAD);
 	}
 
 	/**

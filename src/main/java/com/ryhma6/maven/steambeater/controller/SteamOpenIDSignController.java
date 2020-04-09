@@ -17,8 +17,8 @@ import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
 import com.ryhma6.maven.steambeater.MainApp;
-import com.ryhma6.maven.steambeater.model.LoadingState;
-import com.ryhma6.maven.steambeater.model.ObservableLoadingState;
+import com.ryhma6.maven.steambeater.model.LoadingStatus;
+import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
 import com.ryhma6.maven.steambeater.model.TimeConverter;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 
@@ -340,9 +340,9 @@ public class SteamOpenIDSignController implements Initializable {
 		
 		loadStateLabel.setPadding(new Insets(10,0,0,0));
 
-		ObservableLoadingState stateObject = ObservableLoadingState.getInstance();
-		ObjectProperty<LoadingState> stateProperty = stateObject.getLoadingStateProperty();
-		loadStateLabel.setText(LoadingState.getDescription(stateProperty.getValue()));
+		ObservableLoadingStatus stateObject = ObservableLoadingStatus.getInstance();
+		ObjectProperty<LoadingStatus> stateProperty = stateObject.getLoadingStateProperty();
+		loadStateLabel.setText(LoadingStatus.getDescription(stateProperty.getValue()));
 		logoutButton.setDisable(true);
 		refreshButton.setDisable(true);
 
@@ -351,19 +351,24 @@ public class SteamOpenIDSignController implements Initializable {
 		 * sign, logout- and refresh-buttons when data loading is still in progress.
 		 */
 		stateProperty.addListener(obs -> {
-			loadStateLabel.setText(LoadingState.getDescription(stateProperty.getValue()));
-			if(stateProperty.getValue() == LoadingState.PRELOAD) {
+			loadStateLabel.setText(LoadingStatus.getDescription(stateProperty.getValue()));
+			if(stateProperty.getValue() == LoadingStatus.PRELOAD) {
 				loginButton.setDisable(false);
 				signTestButton.setDisable(false);
 				logoutButton.setDisable(true);
 				refreshButton.setDisable(true);
-			}else if (stateProperty.getValue() == LoadingState.COMPLETED) {
+			}else if (stateProperty.getValue() == LoadingStatus.COMPLETED) {
 				loginButton.setDisable(false);
 				signTestButton.setDisable(false);
 				logoutButton.setDisable(false);
 				refreshButton.setDisable(false);
 				loadStateLabel.setText(loadStateLabel.getText() + ": " + TimeConverter.epochMillisToLocalTimestamp(stateObject.getLastCompletionMillis()));
-			} else {
+			}else if(stateProperty.getValue() == LoadingStatus.FAILURE){
+				loginButton.setDisable(false);
+				signTestButton.setDisable(false);
+				logoutButton.setDisable(false);
+				refreshButton.setDisable(false);
+			}else {
 				loginButton.setDisable(true);
 				signTestButton.setDisable(true);
 				logoutButton.setDisable(true);

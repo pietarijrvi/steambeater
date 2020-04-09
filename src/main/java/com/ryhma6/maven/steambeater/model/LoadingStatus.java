@@ -1,14 +1,14 @@
 package com.ryhma6.maven.steambeater.model;
 
 /**
- * Data object containing loading state options for defining the current load
- * status state descriptions. One state should be always active.
+ * Data object containing loading status options for defining the current load
+ * status descriptions. One status should be always active.
  *
  */
-public enum LoadingState {
+public enum LoadingStatus {
 	// PRELOAD when not logged in, SteamApi data loading, COMPLETED when loading
 	// completed
-	PRELOAD, API_GAMES, API_FRIENDS, COMPLETED;
+	PRELOAD, API_GAMES, API_FRIENDS, COMPLETED, FAILURE;
 
 	/**
 	 * Returns the description of the loading state.
@@ -16,9 +16,9 @@ public enum LoadingState {
 	 * @param loadingState
 	 * @return description of the loadingState (arg)
 	 */
-	public static String getDescription(LoadingState loadingState) {
+	public static String getDescription(LoadingStatus loadingStatus) {
 		String description = "";
-		switch (loadingState) {
+		switch (loadingStatus) {
 		case PRELOAD:
 			// sign in to show data
 			description = "Not signed in";
@@ -34,6 +34,10 @@ public enum LoadingState {
 		case COMPLETED:
 			// Steam data updated: + timestamp
 			description = "Steam data loading completed";
+			break;
+		case FAILURE:
+			// Failed to load steam data
+			description = "Failed to load up-to-date Steam data, refresh to try again";
 			break;
 		}
 		return description;
