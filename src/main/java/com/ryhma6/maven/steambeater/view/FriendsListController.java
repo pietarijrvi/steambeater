@@ -52,20 +52,14 @@ public class FriendsListController implements Initializable {
 	@FXML
 	private ListView<Friend> friendsList;
 
-	/**
-	 * The minimized version of the friends list
-	 */
-	@FXML
-	private ListView<Friend> friendsListSmall;
-
 	private StatComparisonController scCont;
 
 	private final Image IMAGE_TEST = new Image("test.png");
 
-	double smallWidth = 85.0;
-	double normalWidth = 250.0;
-	BorderPane borderPane = new BorderPane();
-	Button resizeButton = new Button();
+	private double smallWidth = 85.0;
+	private double normalWidth = 250.0;
+	private BorderPane borderPane = new BorderPane();
+	private Button resizeButton = new Button();
 
 	/**
 	 * loads the friends into the friends list, minimized one is separate from the
@@ -74,7 +68,6 @@ public class FriendsListController implements Initializable {
 	private void loadFriends() {
 		ObservableList<Friend> names = SteamAPICalls.getFriendList();
 		friendsList.setItems(names);
-		friendsListSmall.setItems(names);
 
 		friendsList.setCellFactory(param -> new ListCell<Friend>() {
 
@@ -196,8 +189,6 @@ public class FriendsListController implements Initializable {
 			loadFriends();
 //			friendsList.setManaged(false);
 //			friendsList.setVisible(false);
-//			friendsListSmall.setManaged(true);
-//			friendsListSmall.setVisible(true);
 			friendsList.setPrefWidth(85);
 			borderPane.setPrefWidth(smallWidth);
 			friendsAnchor.setPrefWidth(95);
@@ -211,8 +202,6 @@ public class FriendsListController implements Initializable {
 			resizeButton.setGraphic(back);
 		} else {
 			loadFriends();
-//			friendsListSmall.setManaged(false);
-//			friendsListSmall.setVisible(false);
 //			friendsList.setManaged(true);
 //			friendsList.setVisible(true);
 			borderPane.setPrefWidth(normalWidth);
