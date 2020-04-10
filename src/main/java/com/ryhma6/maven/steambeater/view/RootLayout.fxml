@@ -16,36 +16,36 @@
 	xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
 	<top>
-		<HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0"
-			prefWidth="1330.0" spacing="5.0">
+		<HBox nodeOrientation="LEFT_TO_RIGHT" minHeight="80.0"
+			prefHeight="80.0" prefWidth="1330.0" spacing="5.0">
 			<children>
 				<Button fx:id="loginButton" mnemonicParsing="false"
 					onAction="#handleLoginButtonAction">
 					<HBox.margin>
-						<Insets left="2.0" right="58.0" top="11.0" />
+						<Insets left="2.0" right="58.0" top="13.0" />
 					</HBox.margin>
 				</Button>
 				<Button fx:id="refreshButton" maxHeight="27.0"
 					onAction="#refreshData">
 					<HBox.margin>
-						<Insets right="10.0" top="8.0" />
+						<Insets right="10.0" top="10.0" />
 					</HBox.margin>
 				</Button>
 				<Button fx:id="signTestButton" maxHeight="27.0"
 					onAction="#loadWithTestValues" text="test sign">
 					<HBox.margin>
-						<Insets right="10.0" top="8.0" />
+						<Insets right="10.0" top="10.0" />
 					</HBox.margin>
 				</Button>
 				<Button fx:id="logoutButton" maxHeight="30.0"
 					onAction="#logout" stylesheets="@../stylesheet.css" text="logout">
 					<HBox.margin>
-						<Insets top="8.0" />
+						<Insets top="10.0" />
 					</HBox.margin>
 				</Button>
 				<Label fx:id="loadStateLabel" text="">
 					<HBox.margin>
-						<Insets left="25.0" top="6.0" />
+						<Insets left="25.0" />
 					</HBox.margin>
 				</Label>
 				<HBox fx:id="taskbarHbox" alignment="TOP_RIGHT"
@@ -66,7 +66,7 @@
 				</HBox>
 			</children>
 			<BorderPane.margin>
-				<Insets bottom="30.0" top="15.0" />
+				<Insets bottom="20.0" top="12.0" />
 			</BorderPane.margin>
 		</HBox>
 	</top>

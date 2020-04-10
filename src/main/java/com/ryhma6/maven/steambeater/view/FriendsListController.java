@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
@@ -123,6 +124,9 @@ public class FriendsListController implements Initializable {
 					setGraphic(hbox);
 					label.setStyle("-fx-padding: 0 0 0 5");
 					hbox.setAlignment(Pos.CENTER_LEFT);
+					Tooltip compareTip = new Tooltip();
+					compareTip.setText("Compare statistics");
+					button.setTooltip(compareTip);
 
 					// Removing label, pane and compare button when friendslist is smaller
 					if (friendsList.getPrefWidth() == smallWidth) {
