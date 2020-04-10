@@ -75,21 +75,21 @@
 								<Insets top="15.0" />
 							</HBox.margin>
 						</ComboBox>
-						<Label fx:id="actionLabel" prefHeight="48.0"
+						<Label fx:id="actionLabel" prefHeight="58.0"
 							prefWidth="300.0" wrapText="true">
 							<HBox.margin>
-								<Insets left="20.0"/>
+								<Insets left="20.0" right="5.0"/>
 							</HBox.margin>
 						</Label>
 						<Pane maxWidth="1.7976931348623157E308" prefHeight="67.0"
 							prefWidth="15.0" HBox.hgrow="ALWAYS" />
-						<ImageView fx:id="languageIcon" fitHeight="100.0"
-							fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+						<ImageView fx:id="languageIcon" fitHeight="76.0"
+							fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
 							<image>
 								<Image url="@UK.png" />
 							</image>
 							<HBox.margin>
-								<Insets top="8.0" />
+								<Insets top="10.0" />
 							</HBox.margin>
 						</ImageView>
 						<ComboBox fx:id="languageChoice" prefWidth="220.0"
@@ -101,7 +101,7 @@
 								</FXCollections>
 							</items>
 							<HBox.margin>
-								<Insets left="10.0" top="18.0" />
+								<Insets left="3.0" top="16.0" />
 							</HBox.margin>
 						</ComboBox>
 					</children>

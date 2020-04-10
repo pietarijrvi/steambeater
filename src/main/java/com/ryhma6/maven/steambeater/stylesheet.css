@@ -2,7 +2,7 @@
     -fx-font-family: "Helvetica";
     -fx-text-background-color: "white";
 	-fx-base: rgb(60.0,60.0,60.0);	
-	-fx-background-color: rgb(20.0,20.0,22.0);
+	-fx-background-color: rgb(27.0,27.0,29.0);
 }
 
 .combo-box-popup .list-view .list-cell:filled:hover 
@@ -17,7 +17,7 @@
 }
 
 ListView{
-	-fx-background-color: rgb(27.0,27.0,28.0);
+	-fx-background-color: rgb(34.0,34.0,36.0);
 }
 
 Label{
@@ -25,11 +25,11 @@ Label{
 }
 
 .list-cell:odd {
-	-fx-background-color: rgb(35.0,35.0,37.0);
+	-fx-background-color: rgb(40.0,40.0,42.0);
 }
 
 .list-cell:even {
-	-fx-background-color: rgb(40.0,40.0,42.0);
+	-fx-background-color: rgb(45.0,45.0,47.0);
 }
 
 
