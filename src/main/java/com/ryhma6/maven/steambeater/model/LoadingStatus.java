@@ -6,9 +6,11 @@ package com.ryhma6.maven.steambeater.model;
  *
  */
 public enum LoadingStatus {
-	// PRELOAD when not logged in, SteamApi data loading, COMPLETED when loading
-	// completed
-	PRELOAD, API_GAMES, API_FRIENDS, COMPLETED, FAILURE;
+	/*
+	 * PRELOAD when not logged in, SteamApi data loading, COMPLETED when loading
+	 * completed, FAILURE when any data load has failed
+	 */
+	PRELOAD, API_GAMES, API_FRIENDS, COMPLETED, FAILURE, API_FAILURE, DATABASE_CONNECTING, DATABASE_FAILURE;
 
 	/**
 	 * Returns the description of the loading state.
@@ -36,8 +38,20 @@ public enum LoadingStatus {
 			description = "Steam data loading completed";
 			break;
 		case FAILURE:
+			// Failed to load data
+			description = "Loading was not successful, refresh to try again";
+			break;
+		case API_FAILURE:
 			// Failed to load steam data
-			description = "Failed to load up-to-date Steam data, refresh to try again";
+			description = "Failed to load up-to-date Steam game data";
+			break;
+		case DATABASE_CONNECTING:
+			// connecting to database
+			description = "Connecting to database";
+			break;
+		case DATABASE_FAILURE:
+			// Failed to load database data
+			description = "Database connection error, modifications not saved";
 			break;
 		}
 		return description;

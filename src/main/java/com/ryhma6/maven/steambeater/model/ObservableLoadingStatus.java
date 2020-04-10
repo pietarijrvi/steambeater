@@ -1,5 +1,8 @@
 package com.ryhma6.maven.steambeater.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -22,6 +25,7 @@ public class ObservableLoadingStatus {
 	 */
 	private long lastCompletionMillis;
 	private boolean apiLoadFailure = false;
+	private boolean databaseFailure = false;
 
 	/**
 	 * Sets a flag that shows that the api data was not loaded successfully so final
@@ -29,6 +33,14 @@ public class ObservableLoadingStatus {
 	 */
 	public void setApiLoadFailure() {
 		apiLoadFailure = true;
+	}
+
+	/**
+	 * Sets a flag that shows that the database data was not loaded successfully so
+	 * final status will be failure.
+	 */
+	public void setDatabaseFailure() {
+		databaseFailure = true;
 	}
 
 	private ObservableLoadingStatus() {
@@ -58,9 +70,6 @@ public class ObservableLoadingStatus {
 	public void setLoadingStatus(LoadingStatus newStatus) {
 		if (newStatus == LoadingStatus.COMPLETED) {
 			lastCompletionMillis = System.currentTimeMillis();
-		} else if (newStatus == LoadingStatus.PRELOAD) {
-			// reset failure flag
-			apiLoadFailure = false;
 		}
 
 		new Thread(new Runnable() {
@@ -70,8 +79,15 @@ public class ObservableLoadingStatus {
 					@Override
 					public void run() {
 						// if loading data has failed, set failure status instead of completion
-						if (apiLoadFailure && newStatus == LoadingStatus.COMPLETED) {
-							loadingStatus.setValue(LoadingStatus.FAILURE);
+						if (newStatus == LoadingStatus.COMPLETED) {
+							if (apiLoadFailure) {
+								loadingStatus.setValue(LoadingStatus.FAILURE);
+							} else {
+								loadingStatus.setValue(newStatus);
+							}
+							// reset failure flag
+							apiLoadFailure = false;
+							databaseFailure = false;
 						} else {
 							loadingStatus.setValue(newStatus);
 						}
@@ -79,6 +95,7 @@ public class ObservableLoadingStatus {
 				});
 			}
 		}).start();
+
 	}
 
 	/**
@@ -88,6 +105,20 @@ public class ObservableLoadingStatus {
 	 */
 	public ObjectProperty<LoadingStatus> getLoadingStateProperty() {
 		return loadingStatus;
+	}
+
+	/**
+	 * Returns a list that contains all current errors in separate strings
+	 * 
+	 * @return list of error messages
+	 */
+	public List<String> getErrorMessages() {
+		List<String> msg = new ArrayList<String>();
+		if (apiLoadFailure)
+			msg.add(LoadingStatus.getDescription(LoadingStatus.API_FAILURE));
+		if (databaseFailure)
+			msg.add(LoadingStatus.getDescription(LoadingStatus.DATABASE_FAILURE));
+		return msg;
 	}
 
 }
