@@ -335,7 +335,7 @@ public class GameListController implements Initializable {
 						timePlayed.setText("Time played: " + timePlayedInHours + " hour");
 					}
 					gameName.setText(game.getName());
-					hbox.setSpacing(35);
+					hbox.setSpacing(30);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
 						imageView.setImage(new Image(game.getImgLogoFullUrl(), true)); // true: load in background
@@ -346,7 +346,9 @@ public class GameListController implements Initializable {
 					hbox.getChildren().clear();
 					
 					imageView.setFitWidth(184);
-					gameName.setPrefWidth(260);
+					gameName.setPrefWidth(270);
+					gameName.setPrefHeight(50);
+					gameName.setWrapText(true);
 					
 					hbox.getChildren().addAll(imageView, gameName, timePlayed, pane, setAsBeaten, setUnbeatable,
 							ignoreButton);
@@ -394,7 +396,7 @@ public class GameListController implements Initializable {
 				} else {
 					achievementName.setText(ach.getDisplayName());
 					description.setText(ach.getDescription());
-					hbox.setSpacing(35);
+					hbox.setSpacing(30);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
 						imageView.setImage(new Image(ach.getIcon(), true)); // true: load in background
