@@ -344,6 +344,10 @@ public class GameListController implements Initializable {
 						imageView.setImage(IMAGE_TEST);
 					}
 					hbox.getChildren().clear();
+					
+					imageView.setFitWidth(184);
+					gameName.setPrefWidth(260);
+					
 					hbox.getChildren().addAll(imageView, gameName, timePlayed, pane, setAsBeaten, setUnbeatable,
 							ignoreButton);
 					HBox.setHgrow(pane, Priority.ALWAYS);

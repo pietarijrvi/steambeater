@@ -238,13 +238,14 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@FXML
 	private void logout() {
-		Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure you want to logout?", ButtonType.YES, ButtonType.CANCEL);
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure you want to logout?", ButtonType.YES,
+				ButtonType.CANCEL);
 		alert.showAndWait();
 		if (alert.getResult() == ButtonType.YES) {
 			UserPreferences.setSteamID("null");
 			mainApp.resetSteamAPIData();
 		}
-		
+
 	}
 
 	/**
@@ -266,8 +267,8 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@FXML
 	private void handleMouseEvent(MouseEvent event) throws IOException, URISyntaxException {
-		if(event.getSource() == btnClose) {
-				System.exit(0);
+		if (event.getSource() == btnClose) {
+			System.exit(0);
 		} else if (event.getSource() == btnMinimize) {
 			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
 			primaryStage.setIconified(true);
@@ -299,20 +300,22 @@ public class SteamOpenIDSignController implements Initializable {
 		btnFull.setGraphic(fullImage);
 		fullImage.setFitHeight(25);
 		fullImage.setFitWidth(25);
-		
+
 		ImageView minimizeImage = new ImageView("/minimize_window_64px.png");
 		btnMinimize.setGraphic(minimizeImage);
 		minimizeImage.setFitHeight(25);
 		minimizeImage.setFitWidth(25);
-		
+
 		ImageView closeImage = new ImageView("/close_window_64px.png");
 		btnClose.setGraphic(closeImage);
 		closeImage.setFitHeight(25);
 		closeImage.setFitWidth(25);
-		
+
 		ImageView loginImage = new ImageView("/steamicon.png");
 		loginButton.setGraphic(loginImage);
 		loginButton.setPadding(Insets.EMPTY);
+		loginImage.setPreserveRatio(true);
+		loginImage.setFitWidth(200);
 
 		ImageView loginTestImage = new ImageView("/enter.png");
 		signTestButton.setGraphic(loginTestImage);
@@ -337,8 +340,8 @@ public class SteamOpenIDSignController implements Initializable {
 		refreshButton.setGraphic(refreshImage);
 		refreshImage.setFitHeight(35);
 		refreshImage.setFitWidth(35);
-		
-		loadStateLabel.setPadding(new Insets(10,0,0,0));
+
+		loadStateLabel.setPadding(new Insets(10, 0, 0, 0));
 
 		ObservableLoadingStatus stateObject = ObservableLoadingStatus.getInstance();
 		ObjectProperty<LoadingStatus> stateProperty = stateObject.getLoadingStateProperty();
@@ -352,23 +355,24 @@ public class SteamOpenIDSignController implements Initializable {
 		 */
 		stateProperty.addListener(obs -> {
 			loadStateLabel.setText(LoadingStatus.getDescription(stateProperty.getValue()));
-			if(stateProperty.getValue() == LoadingStatus.PRELOAD) {
+			if (stateProperty.getValue() == LoadingStatus.PRELOAD) {
 				loginButton.setDisable(false);
 				signTestButton.setDisable(false);
 				logoutButton.setDisable(true);
 				refreshButton.setDisable(true);
-			}else if (stateProperty.getValue() == LoadingStatus.COMPLETED) {
+			} else if (stateProperty.getValue() == LoadingStatus.COMPLETED) {
 				loginButton.setDisable(false);
 				signTestButton.setDisable(false);
 				logoutButton.setDisable(false);
 				refreshButton.setDisable(false);
-				loadStateLabel.setText(loadStateLabel.getText() + ": " + TimeConverter.epochMillisToLocalTimestamp(stateObject.getLastCompletionMillis()));
-			}else if(stateProperty.getValue() == LoadingStatus.FAILURE){
+				loadStateLabel.setText(loadStateLabel.getText() + ": "
+						+ TimeConverter.epochMillisToLocalTimestamp(stateObject.getLastCompletionMillis()));
+			} else if (stateProperty.getValue() == LoadingStatus.FAILURE) {
 				loginButton.setDisable(false);
 				signTestButton.setDisable(false);
 				logoutButton.setDisable(false);
 				refreshButton.setDisable(false);
-			}else {
+			} else {
 				loginButton.setDisable(true);
 				signTestButton.setDisable(true);
 				logoutButton.setDisable(true);

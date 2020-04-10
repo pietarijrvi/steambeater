@@ -1,8 +1,27 @@
 .root{
     -fx-font-family: "Helvetica";
-	-fx-base: rgb(60.0,60.0,60.0);
-	-fx-background-color: linear-gradient(to top right, rgba(60.0,60.0,60.0,1.0) 0.0%, rgba(73.0,73.0,73.0,1.0) 10.0%, rgba(102.0,102.0,102.0,1.0) 36.0%, rgba(102.0,102.0,102.0,1.0) 64.0%, rgba(73.0,73.0,73.0,1.0) 90.0%, rgba(60.0,60.0,60.0,1.0) 100.0%);
+    -fx-font-color: "white";
+    -fx-text-fill: white;
+	-fx-base: rgb(60.0,60.0,60.0);	
+	-fx-background-color: rgb(20.0,20.0,22.0);
 }
+
+ListView{
+	-fx-background-color: rgb(27.0,27.0,28.0);
+}
+
+Label{
+	-fx-text-fill: white;
+}
+
+.list-cell:odd {
+	-fx-background-color: rgb(35.0,35.0,37.0);
+}
+
+.list-cell:even {
+	-fx-background-color: rgb(40.0,40.0,42.0);
+}
+
 
 .button:hover {
     -fx-background-color: #6289A1;
@@ -13,27 +32,15 @@
 }
 
 #loadStateLabel{
-	-fx-font-size: 1.3em;
+	-fx-font-size: 1.2em;
 }
 
 #taskbarHbox .button{
-    -fx-border-color: transparent;
-   
+    -fx-border-color: transparent;  
     -fx-background-color: transparent;
     -fx-font-size: 1.0em; /* 12 */
     -fx-text-fill: #828282;
 }
-
-#taskbarHbox #btnMinimize.button{
-	    -fx-border-radius: 0 5 5 0;
-		-fx-background-radius: 0 5 5 0;
-}
-
-#taskbarHbox #btnClose.button{
-	    -fx-border-radius: 5 0 0 5;
-		-fx-background-radius: 5 0 0 5;
-}
-
 
 #btnClose.button:hover{
   -fx-background-color: #E81123;
