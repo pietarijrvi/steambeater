@@ -1,9 +1,19 @@
 .root{
     -fx-font-family: "Helvetica";
-    -fx-font-color: "white";
-    -fx-text-fill: white;
+    -fx-text-background-color: "white";
 	-fx-base: rgb(60.0,60.0,60.0);	
 	-fx-background-color: rgb(20.0,20.0,22.0);
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover 
+{
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text-inner-color;
+}
+
+.combo-box-base:focused {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: -1.4, 0, 1, 2;
 }
 
 ListView{
