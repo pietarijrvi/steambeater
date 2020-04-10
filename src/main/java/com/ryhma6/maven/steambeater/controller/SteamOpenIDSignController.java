@@ -204,7 +204,7 @@ public class SteamOpenIDSignController implements Initializable {
 					// save retrieved SteamID to preferences
 					UserPreferences.setSteamID(cookie.getValue().substring(0, 17));
 					newWindow.close();
-					mainApp.loadSteamAPIData();
+					mainApp.reloadData();
 				}
 			}
 		} catch (Exception e) {
@@ -220,7 +220,7 @@ public class SteamOpenIDSignController implements Initializable {
 	@FXML
 	private void loadWithTestValues() {
 		UserPreferences.setSteamID("76561197960505737");
-		mainApp.loadSteamAPIData();
+		mainApp.reloadData();
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class SteamOpenIDSignController implements Initializable {
 	@FXML
 	private void refreshData() {
 		if (UserPreferences.getSteamID() != null)
-			mainApp.loadSteamAPIData();
+			mainApp.reloadData();
 	}
 
 	/**
@@ -378,6 +378,12 @@ public class SteamOpenIDSignController implements Initializable {
 				logoutButton.setDisable(true);
 				refreshButton.setDisable(true);
 			}
+			String errors = "";
+			for(String msg: stateObject.getErrorMessages()) {
+				errors+="\n";
+				errors+=msg;
+			}
+			loadStateLabel.setText(loadStateLabel.getText()+errors);
 
 		});
 	}

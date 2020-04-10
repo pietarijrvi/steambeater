@@ -98,6 +98,9 @@ public class MainApp extends Application {
 		showGameList();
 		showFriendsList();
 
+		// databaseController.init();
+		// initDatabase();
+
 		// grab your root here
 		rootLayout.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -124,21 +127,30 @@ public class MainApp extends Application {
 					protected Integer call() throws Exception {
 						// load game list from Steam API
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_GAMES);
+						Long count = databaseController.getUserGameCount(UserPreferences.getSteamID());
+						if (count == null)
+							ObservableLoadingStatus.getInstance().setDatabaseFailure();
 						if (steamAPI.loadSteamGames()) {
 							// add game list to database after successful load (new user)
-							if (databaseController.getUserGameCount(UserPreferences.getSteamID()) < 1) {
+							if (count != null && count < 1) {
 								databaseController.addAllGames(steamAPI.getLoadedGames(), UserPreferences.getSteamID());
 							} else {
 								// load selection data (beaten, unbeatable, ignored) from database
-								steamAPI.setSavedSelections(
-										databaseController.getAllUserGames(UserPreferences.getSteamID()));
+								if (count != null) {
+									steamAPI.setSavedSelections(
+											databaseController.getAllUserGames(UserPreferences.getSteamID()));
+								} else {
+									steamAPI.setSavedSelections(null);
+								}
 							}
 						} else {
 							// if loading game data from Steam API failed, load (possibly outdated) game
 							// list from database
 							ObservableLoadingStatus.getInstance().setApiLoadFailure();
-							steamAPI.loadGamesFromDatabase(
-									databaseController.getAllUserGames(UserPreferences.getSteamID()));
+							if (count != null) {
+								steamAPI.loadGamesFromDatabase(
+										databaseController.getAllUserGames(UserPreferences.getSteamID()));
+							}
 						}
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_FRIENDS);
 						steamAPI.loadSteamFriends();
@@ -155,13 +167,8 @@ public class MainApp extends Application {
 			}
 		};
 
-		// if logged in (steamID exists and saved to preferences), automatically load
-		// user data (SteamAPI and database)
-		if (!UserPreferences.getSteamID().equals("null")) {
-			loadSteamAPIData();
-			System.out.println("Steam login id: " + UserPreferences.getSteamID());
-		} else
-			ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.PRELOAD);
+		// inits database and loads api data after succeeding
+		initDatabase();
 	}
 
 	/**
@@ -177,13 +184,24 @@ public class MainApp extends Application {
 	/**
 	 * Starts up the steam API
 	 */
-	public void loadSteamAPIData() {
+	private void loadSteamAPIData() {
 		if (!steamAPIService.isRunning()) {
 			steamAPIService.reset();
 			steamAPIService.start();
 		} else {
 			System.out.println("Loading SteamData not finished");
 		}
+	}
+
+	/**
+	 * Reloads api data (and initialises database if session factory doesn't exist
+	 * yet)
+	 */
+	public void reloadData() {
+		if (databaseController.getSessionFactoryStatus())
+			loadSteamAPIData();
+		else
+			initDatabase();
 	}
 
 	/**
@@ -213,6 +231,38 @@ public class MainApp extends Application {
 			public void handle(WorkerStateEvent t) {
 				gameListController.refreshAchievementList();
 				System.out.println("Achiev load finish, starting refresh");
+			}
+		});
+
+		// start the background task
+		Thread th = new Thread(task);
+		th.start();
+	}
+
+	/**
+	 * Initializes database (task/new thread) and after succeeding starts loading
+	 * api data
+	 */
+	private void initDatabase() {
+		Task<Boolean> task = new Task<Boolean>() {
+			@Override
+			protected Boolean call() throws Exception {
+				ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.DATABASE_CONNECTING);
+				databaseController.init();
+				return true;
+			}
+		};
+		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent t) {
+				System.out.println("Database load finish");
+				// if logged in (steamID exists and saved to preferences), automatically load
+				// user data (SteamAPI and database)
+				if (!UserPreferences.getSteamID().equals("null")) {
+					loadSteamAPIData();
+					System.out.println("Steam login id: " + UserPreferences.getSteamID());
+				} else
+					ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.PRELOAD);
 			}
 		});
 

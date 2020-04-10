@@ -133,8 +133,7 @@ public class SteamAPICalls {
 				gameData.setUnbeatable(g.getUnbeatable());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Setting db selections failed - no selections or no game list from Steam");
+			System.out.println("Setting db selections failed - no selections");
 		}
 		setGamesToUI();
 	}
