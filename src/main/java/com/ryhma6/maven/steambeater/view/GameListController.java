@@ -188,11 +188,6 @@ public class GameListController implements Initializable {
 		this.games = games;
 	}
 
-	@FXML
-	private ImageView languageIcon;
-
-	@FXML
-	private ComboBox languageChoice;
 
 	/**
 	 * Initializes gamelist with games, achievements, filtering and sorting Hides
@@ -201,7 +196,6 @@ public class GameListController implements Initializable {
 	public void loadGames() {
 		initGameListCellFactory();
 		initAchievementCellFactory();
-		initLanguageChoice();
 		initFilterListeners();
 		initListenerSortGameList();
 		hideStats();
@@ -634,22 +628,6 @@ public class GameListController implements Initializable {
 
 		// Plays the SequentialTransition with both transitions
 		t.play();
-	}
-
-	
-	private void initLanguageChoice() {
-		languageChoice.getSelectionModel().clearSelection();	
-		
-		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
-			// sorting in alphabetical order
-			if (languageChoice.getSelectionModel().getSelectedIndex() == 0) {
-				Image image = new Image("/UK.png");
-				languageIcon.setImage(image);
-			} else if (languageChoice.getSelectionModel().getSelectedIndex() == 1) {
-				Image image = new Image("/finland.png");
-				languageIcon.setImage(image);
-			}
-		});
 	}
 
 	/**

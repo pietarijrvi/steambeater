@@ -19,6 +19,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -61,6 +62,7 @@ public class FriendsListController implements Initializable {
 	private double normalWidth = 250.0;
 	private BorderPane borderPane = new BorderPane();
 	private Button resizeButton = new Button();
+	
 
 	/**
 	 * loads the friends into the friends list, minimized one is separate from the
@@ -231,6 +233,7 @@ public class FriendsListController implements Initializable {
 	public void setStatComparisonController(StatComparisonController scCont) {
 		this.scCont = scCont;
 	}
+	
 
 	/**
 	 * Initializes the side bar by creating the toggle button and giving it its

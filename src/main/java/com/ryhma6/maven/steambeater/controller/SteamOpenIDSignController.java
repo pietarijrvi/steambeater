@@ -34,6 +34,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -120,6 +121,12 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@FXML
 	private Label loadStateLabel;
+	
+	@FXML
+	private ImageView languageIcon;
+
+	@FXML
+	private ComboBox languageChoice;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -289,6 +296,21 @@ public class SteamOpenIDSignController implements Initializable {
 			}
 		}
 	}
+	
+	private void initLanguageChoice() {
+		languageChoice.getSelectionModel().clearSelection();	
+		
+		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
+			// sorting in alphabetical order
+			if (languageChoice.getSelectionModel().getSelectedIndex() == 0) {
+				Image image = new Image("/UK.png");
+				languageIcon.setImage(image);
+			} else if (languageChoice.getSelectionModel().getSelectedIndex() == 1) {
+				Image image = new Image("/finland.png");
+				languageIcon.setImage(image);
+			}
+		});
+	}
 
 	/**
 	 * Runs when application is started, sets steam's login image to the login
@@ -296,6 +318,7 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		initLanguageChoice();
 		ImageView fullImage = new ImageView("/maximize_button_64px.png");
 		btnFull.setGraphic(fullImage);
 		fullImage.setFitHeight(25);
