@@ -15,39 +15,34 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1330.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
 	<top>
-		<HBox minHeight="80.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="80.0" prefWidth="1330.0" spacing="5.0">
+		<HBox alignment="CENTER" minHeight="80.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="80.0" spacing="5.0" BorderPane.alignment="CENTER_LEFT">
 			<children>
 				<Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction">
 					<HBox.margin>
-						<Insets left="2.0" right="58.0" top="13.0" />
+						<Insets left="2.0" right="58.0" />
 					</HBox.margin>
 				</Button>
 				<Button fx:id="refreshButton" maxHeight="27.0" onAction="#refreshData">
 					<HBox.margin>
-						<Insets right="10.0" top="10.0" />
+						<Insets right="10.0" />
 					</HBox.margin>
 				</Button>
 				<Button fx:id="signTestButton" maxHeight="27.0" onAction="#loadWithTestValues" text="test sign">
 					<HBox.margin>
-						<Insets right="10.0" top="10.0" />
+						<Insets right="10.0" />
 					</HBox.margin>
 				</Button>
 				<Button fx:id="logoutButton" maxHeight="30.0" onAction="#logout" stylesheets="@../stylesheet.css" text="logout">
 					<HBox.margin>
-						<Insets top="10.0" />
+						<Insets />
 					</HBox.margin>
 				</Button>
-				<Label fx:id="loadStateLabel" prefHeight="65.0" wrapText="true" HBox.hgrow="ALWAYS">
-					<HBox.margin>
-						<Insets left="10.0" />
-					</HBox.margin>
-				</Label>
             <ImageView fx:id="languageIcon" fitHeight="76.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@UK.png" />
                </image>
                <HBox.margin>
-                  <Insets top="15.0" />
+                  <Insets left="5.0" />
                </HBox.margin>
             </ImageView>
             <ComboBox fx:id="languageChoice" nodeOrientation="LEFT_TO_RIGHT" prefHeight="31.0" prefWidth="120.0" promptText="Language">
@@ -58,9 +53,14 @@
                   </FXCollections>
                </items>
                <HBox.margin>
-                  <Insets right="5.0" top="20.0" />
+                  <Insets right="5.0" />
                </HBox.margin>
             </ComboBox>
+				<Label fx:id="loadStateLabel" prefHeight="73.0" wrapText="true" HBox.hgrow="ALWAYS">
+					<HBox.margin>
+						<Insets left="10.0" />
+					</HBox.margin>
+				</Label>
 				<HBox fx:id="taskbarHbox" alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="52.0" HBox.hgrow="ALWAYS">
 					<children>
 						<Button fx:id="btnClose" mnemonicParsing="false" onMouseClicked="#handleMouseEvent" />

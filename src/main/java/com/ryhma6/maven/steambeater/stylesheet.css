@@ -63,3 +63,7 @@ Label{
 #btnMinimize.button:hover{
   -fx-background-color: #6289A1;
 }
+
+#loadStateLabel{
+	-fx-font-size: 16px;
+}

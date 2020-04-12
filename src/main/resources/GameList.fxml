@@ -47,7 +47,7 @@
 								<Insets bottom="10.0" top="10.0" />
 							</padding>
 							<HBox.margin>
-								<Insets left="5.0" right="5.0" />
+								<Insets left="5.0" />
 							</HBox.margin>
 						</VBox>
 						<ComboBox fx:id="sortingChoice" prefHeight="31.0" prefWidth="240.0" promptText="Sort by">
@@ -58,10 +58,10 @@
 								</FXCollections>
 							</items>
 							<HBox.margin>
-								<Insets left="10.0" top="17.0" />
+								<Insets top="17.0" />
 							</HBox.margin>
 						</ComboBox>
-						<Label fx:id="actionLabel" prefHeight="67.0" prefWidth="295.0" wrapText="true">
+						<Label fx:id="actionLabel" prefHeight="67.0" prefWidth="374.0" wrapText="true">
 							<HBox.margin>
 								<Insets left="20.0" />
 							</HBox.margin>
