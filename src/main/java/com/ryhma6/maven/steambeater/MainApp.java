@@ -325,7 +325,7 @@ public class MainApp extends Application {
 			loader.setLocation(MainApp.class.getResource("view/friendsList.fxml"));
 			AnchorPane friends = (AnchorPane) loader.load();
 			// Set person overview into the center of root layout.
-			FlowPane sidebar = (FlowPane) rootLayout.lookup("#sidebar");
+			AnchorPane sidebar = (AnchorPane) rootLayout.lookup("#sidebar");
 			sidebar.getChildren().add(friends);
 			FriendsListController controller = loader.getController();
 			loadStatComparison(controller);

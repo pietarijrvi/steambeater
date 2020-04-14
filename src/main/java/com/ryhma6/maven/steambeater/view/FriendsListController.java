@@ -62,7 +62,6 @@ public class FriendsListController implements Initializable {
 	private double normalWidth = 250.0;
 	private BorderPane borderPane = new BorderPane();
 	private Button resizeButton = new Button();
-	
 
 	/**
 	 * loads the friends into the friends list, minimized one is separate from the
@@ -233,7 +232,6 @@ public class FriendsListController implements Initializable {
 	public void setStatComparisonController(StatComparisonController scCont) {
 		this.scCont = scCont;
 	}
-	
 
 	/**
 	 * Initializes the side bar by creating the toggle button and giving it its
@@ -243,7 +241,7 @@ public class FriendsListController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		borderPane.setRight(resizeButton);
 		borderPane.setPrefWidth(normalWidth);
-		borderPane.setPadding(new Insets(5, 5, 5, 5));
+		borderPane.setPadding(new Insets(12, 6, 5, 5));
 		ImageView back = new ImageView("/back_64px.png");
 		resizeButton.setGraphic(back);
 		back.setFitHeight(25);
@@ -259,7 +257,7 @@ public class FriendsListController implements Initializable {
 			}
 		});
 
-		deepAnchor.getChildren().add(borderPane);
+		friendsAnchor.getChildren().add(borderPane);
 
 		loadFriends();
 	}

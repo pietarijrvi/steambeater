@@ -13,7 +13,7 @@
 
 .combo-box-base:focused {
     -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
-    -fx-background-insets: -1.4, 0, 1, 2;
+    -fx-background-insets: -1.4, 0.0, 1.0, 2.0;
 }
 
 ListView{
@@ -41,10 +41,6 @@ Label{
 	-fx-padding: 5.0px 1.0px 5.0px 4.0px;
 }
 
-#loadStateLabel{
-	-fx-font-size: 1.2em;
-}
-
 #taskbarHbox .button{
     -fx-border-color: transparent;  
     -fx-background-color: transparent;
@@ -65,5 +61,5 @@ Label{
 }
 
 #loadStateLabel{
-	-fx-font-size: 16px;
+	-fx-font-size: 1.3em;
 }
