@@ -122,11 +122,17 @@ public class SteamOpenIDSignController implements Initializable {
 	@FXML
 	private Label loadStateLabel;
 	
+	/**
+	 * Icon for the chosen UI language
+	 */
 	@FXML
 	private ImageView languageIcon;
 
+	/**
+	 * ComboBox for the choice of UI language
+	 */
 	@FXML
-	private ComboBox languageChoice;
+	private ComboBox<?> languageChoice;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,

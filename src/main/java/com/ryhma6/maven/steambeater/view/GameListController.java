@@ -1,7 +1,5 @@
 package com.ryhma6.maven.steambeater.view;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -41,7 +39,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -100,7 +97,7 @@ public class GameListController implements Initializable {
 	 * @param sortingChoice ComboBox for sorting the gameList by name or playtime
 	 */
 	@FXML
-	private ComboBox sortingChoice;
+	private ComboBox<?> sortingChoice;
 
 	/**
 	 * TextField for filtering the gameList by name
@@ -207,6 +204,7 @@ public class GameListController implements Initializable {
 	 */
 	private void initGameListCellFactory() {
 		abstract class CustomCell extends ListCell<GameData> {
+	
 			public Label gameName = new Label();
 			public Label timePlayed = new Label();
 			public HBox hbox = new HBox();

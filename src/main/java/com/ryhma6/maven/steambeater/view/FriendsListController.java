@@ -19,7 +19,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -42,9 +41,15 @@ public class FriendsListController implements Initializable {
 	@FXML
 	private AnchorPane deepAnchor;
 
+	/**
+	 * Top AnchorPane in the fxml
+	 */
 	@FXML
 	private AnchorPane friendsAnchor;
 
+	/**
+	 * Title label for friends list
+	 */
 	@FXML
 	private Label friendsLabel;
 
@@ -54,13 +59,34 @@ public class FriendsListController implements Initializable {
 	@FXML
 	private ListView<Friend> friendsList;
 
+	/**
+	 * Controller for comparing statistics with your Steam friends
+	 */
 	private StatComparisonController scCont;
 
+	/**
+	 * Test image used as profile picture in case of an exception
+	 */
 	private final Image IMAGE_TEST = new Image("test.png");
 
+	/**
+	 * Friends list's smaller width
+	 */
 	private double smallWidth = 85.0;
+	
+	/**
+	 * Friends list's wider width, default width when application is started
+	 */
 	private double normalWidth = 250.0;
+	
+	/**
+	 * BorderPane added to friends list. Resize button is placed to this element.
+	 */
 	private BorderPane borderPane = new BorderPane();
+	
+	/**
+	 * Button for resizing the friends list
+	 */
 	private Button resizeButton = new Button();
 
 	/**
@@ -137,41 +163,6 @@ public class FriendsListController implements Initializable {
 				}
 			}
 		});
-
-//		friendsListSmall.setCellFactory(param -> new ListCell<Friend>() {
-//
-//			private HBox hbox = new HBox();
-//			private ImageView imageView = new ImageView();
-//
-//			@Override
-//			public void updateItem(Friend name, boolean empty) {
-//
-//				super.updateItem(name, empty);
-//
-//				if (empty || name == null) {
-//					setText(null);
-//					setGraphic(null);
-//				} else {
-//
-//					Image profileImage;
-//					try {
-//						profileImage = new Image(name.getPlayerProfile().getAvatarmedium(), true); // true: load in
-//																									// background
-//					} catch (Exception e) {
-//						profileImage = IMAGE_TEST;
-//						e.printStackTrace();
-//					}
-//					imageView.setImage(profileImage);
-//
-//					imageView.setPreserveRatio(true);
-//					imageView.setFitHeight(50);
-//
-//					hbox.getChildren().clear();
-//					hbox.getChildren().addAll(imageView);
-//					setGraphic(hbox);
-//				}
-//			}
-//		});
 	}
 
 	/**
@@ -186,14 +177,12 @@ public class FriendsListController implements Initializable {
 	}
 
 	/**
-	 * toggles the friends list side bar between the minimized and expanded versions
+	 * Toggles the friends list side bar between the minimized and expanded versions
 	 */
 	public void toggleSize() {
 		int largeWidth = 250;
 		if (friendsList.getPrefWidth() == largeWidth) {
 			loadFriends();
-//			friendsList.setManaged(false);
-//			friendsList.setVisible(false);
 			friendsList.setPrefWidth(85);
 			borderPane.setPrefWidth(smallWidth);
 			friendsAnchor.setPrefWidth(95);
@@ -207,8 +196,6 @@ public class FriendsListController implements Initializable {
 			resizeButton.setGraphic(back);
 		} else {
 			loadFriends();
-//			friendsList.setManaged(true);
-//			friendsList.setVisible(true);
 			borderPane.setPrefWidth(normalWidth);
 			friendsList.setPrefWidth(250);
 			friendsAnchor.setPrefWidth(265);
