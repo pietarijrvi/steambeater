@@ -4,9 +4,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LanguageProvider {
-	Locale curLocale;
-	ResourceBundle bundle;
-	static LanguageProvider self = null;
+	private Locale curLocale;
+	private static ResourceBundle bundle;
+	private static LanguageProvider self = null;
 	
 	/**
 	 * Creates a new instance of LanguageProvider and sets the language to the default language (English)
@@ -33,7 +33,7 @@ public class LanguageProvider {
 		System.out.println("Language set to " + language);
 	}
 	
-	public String getString(String key) {
+	public static String getString(String key) {
 		return bundle.getString(key);
 	}
 }

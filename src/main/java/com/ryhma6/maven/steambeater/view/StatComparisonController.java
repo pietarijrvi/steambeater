@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import com.ryhma6.maven.steambeater.model.DatabaseController;
 import com.ryhma6.maven.steambeater.model.GameListEntry;
+import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
@@ -212,8 +213,10 @@ public class StatComparisonController implements Initializable {
 		friendTopLabel.setText(name);
 		
 		if (fGames.size() == 0) {
-			friendOwnedGames.setText(name + "'s profile is private.");
-			friendPlaytime.setText("Stats could not be retrieved.");
+			friendOwnedGames.setText(String.format(LanguageProvider.getString("compPrivate"), name));
+			friendPlaytime.setText(LanguageProvider.getString("compNotRetrieved"));
+			friendPlaytimeWeeks.setText("");
+			friendCompleted.setText("");
 
 		} else {
 			fGames.forEach((n) -> sumUpStats(n, friendsID));
@@ -231,10 +234,10 @@ public class StatComparisonController implements Initializable {
 //					+ "\nPlaytime in the last 2 weeks: "+ f2wPlaytime/60 + " hours"
 //					+ "\nLibrary completion: " + (100*fBeaten)/(100*fBeatable)*100 + "%");
 
-			friendOwnedGames.setText(name + " owns " + fCount + " games");
-			friendPlaytime.setText("Overall playtime: " + fPlaytime / 60 + " hours");
-			friendPlaytimeWeeks.setText("Playtime in the last 2 weeks: " + f2wPlaytime / 60 + " hours");
-			friendCompleted.setText("Library completion: " + (100 * fBeaten) / (100 * fBeatable) * 100 + "%");
+			friendOwnedGames.setText(String.format(LanguageProvider.getString("compFriendOwn"), name, fCount));
+			friendPlaytime.setText(String.format(LanguageProvider.getString("compOverall"), fPlaytime / 60));
+			friendPlaytimeWeeks.setText(String.format(LanguageProvider.getString("comp2Weeks"), f2wPlaytime / 60));
+			friendCompleted.setText(String.format(LanguageProvider.getString("compCompletion"), ((double)fBeaten / fBeatable) * 100));
 		}
 
 		ObservableList<GameData> oGames = SteamAPICalls.getOwnedGames();
@@ -248,18 +251,16 @@ public class StatComparisonController implements Initializable {
 		// Avoid division by 0
 		if (oBeatable == 0)
 			oBeatable = 1;
-		String libComp = String.format("%.1f", ((double) oBeaten / oBeatable) * 100);
-		System.out.println(libComp);
 
 //		userLabel.setText("You own " + oCount + " games"
 //				+ "\nOverall playtime: " + oPlaytime/60 + " hours"
 //				+ "\nPlaytime in the last 2 weeks: "+ o2wPlaytime/60 + " hours"
 //				+ "\nLibrary completion: " + libComp + "%");
 
-		youOwnedGames.setText("You own " + oCount + " games");
-		youPlaytime.setText("Overall playtime: " + oPlaytime / 60 + " hours");
-		youPlaytimeWeeks.setText("Playtime in the last 2 weeks: " + o2wPlaytime / 60 + " hours");
-		youCompleted.setText("Library completion: " + libComp + "%");
+		youOwnedGames.setText(String.format(LanguageProvider.getString("compYouOwn"), oCount));
+		youPlaytime.setText(String.format(LanguageProvider.getString("compOverall"), oPlaytime / 60));
+		youPlaytimeWeeks.setText(String.format(LanguageProvider.getString("comp2Weeks"), o2wPlaytime / 60));
+		youCompleted.setText(String.format(LanguageProvider.getString("compCompletion"), ((double)oBeaten / oBeatable) * 100));
 
 	}
 
