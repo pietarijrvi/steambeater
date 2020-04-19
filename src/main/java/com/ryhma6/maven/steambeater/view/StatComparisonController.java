@@ -246,10 +246,8 @@ public class StatComparisonController implements Initializable {
 		// Accounting for games with no database entry
 		oBeatable += oCount - dbCount;
 		// Avoid division by 0
-		System.out.println(oBeatable + "/" + oBeaten);
 		if (oBeatable == 0)
 			oBeatable = 1;
-		System.out.println(oBeatable + "/" + oBeaten);
 		String libComp = String.format("%.1f", ((double) oBeaten / oBeatable) * 100);
 		System.out.println(libComp);
 

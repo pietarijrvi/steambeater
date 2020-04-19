@@ -17,6 +17,7 @@ import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
 import com.ryhma6.maven.steambeater.MainApp;
+import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.LoadingStatus;
 import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
 import com.ryhma6.maven.steambeater.model.TimeConverter;
@@ -305,15 +306,18 @@ public class SteamOpenIDSignController implements Initializable {
 	
 	private void initLanguageChoice() {
 		languageChoice.getSelectionModel().clearSelection();	
+		LanguageProvider langProv = LanguageProvider.getInstance();
 		
 		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
 			// sorting in alphabetical order
 			if (languageChoice.getSelectionModel().getSelectedIndex() == 0) {
 				Image image = new Image("/UK.png");
 				languageIcon.setImage(image);
+				langProv.setLanguage("en", "GB");
 			} else if (languageChoice.getSelectionModel().getSelectedIndex() == 1) {
 				Image image = new Image("/finland.png");
 				languageIcon.setImage(image);
+				langProv.setLanguage("fi", "FI");
 			}
 		});
 	}

@@ -40,12 +40,12 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="friendCompleted" layoutX="9.0" layoutY="310.0" prefHeight="37.0" prefWidth="223.0" wrapText="true" AnchorPane.topAnchor="310.0">
+                        <Label fx:id="friendCompleted" layoutX="9.0" layoutY="310.0" prefHeight="90" prefWidth="223.0" wrapText="true" AnchorPane.topAnchor="310.0">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="friendPlaytimeWeeks" layoutX="13.0" layoutY="207.0" prefHeight="103.0" prefWidth="222.0" wrapText="true" AnchorPane.topAnchor="207.0">
+                        <Label fx:id="friendPlaytimeWeeks" layoutX="13.0" layoutY="207.0" prefHeight="90" prefWidth="222.0" wrapText="true" AnchorPane.topAnchor="207.0">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -63,12 +63,12 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="youCompleted" layoutX="11.0" layoutY="320.0" prefHeight="36.0" prefWidth="223.0" wrapText="true" AnchorPane.topAnchor="310.0">
+                        <Label fx:id="youCompleted" layoutX="11.0" layoutY="320.0" prefHeight="90.0" prefWidth="223.0" wrapText="true" AnchorPane.topAnchor="310.0">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="youPlaytimeWeeks" layoutX="14.0" layoutY="220.0" prefHeight="103.0" prefWidth="222.0" wrapText="true" AnchorPane.topAnchor="207.0">
+                        <Label fx:id="youPlaytimeWeeks" layoutX="14.0" layoutY="220.0" prefHeight="90.0" prefWidth="222.0" wrapText="true" AnchorPane.topAnchor="207.0">
                            <font>
                               <Font size="20.0" />
                            </font>
