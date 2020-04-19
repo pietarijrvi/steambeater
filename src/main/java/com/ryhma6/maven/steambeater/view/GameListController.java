@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import com.ryhma6.maven.steambeater.MainApp;
+import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.Achievement;
@@ -635,10 +636,10 @@ public class GameListController implements Initializable {
 		}
 		System.out.println("library completion: " + beatPercent);
 		
-		markedBeaten.setText(counts[iBeaten] + " games beaten");
-		markedNothing.setText(counts[iNothing] + " unbeaten games");
-		markedUnbeatable.setText(counts[iUnbeatable] + " unbeatable games");
-		markedIgnored.setText(counts[iIgnored] + " games ignored");
+		markedBeaten.setText(String.format(LanguageProvider.getString("markedBeaten"), counts[iBeaten]));
+		markedNothing.setText(String.format(LanguageProvider.getString("markedNothing"), counts[iNothing]));
+		markedUnbeatable.setText(String.format(LanguageProvider.getString("markedUnbeatable"), counts[iUnbeatable]));
+		markedIgnored.setText(String.format(LanguageProvider.getString("markedIgnored"), counts[iIgnored]));
 		
 	}
 
