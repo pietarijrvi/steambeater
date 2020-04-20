@@ -33,7 +33,7 @@ public class LanguageProvider {
 		System.out.println("Language set to " + language);
 	}
 	
-	public static String getString(String key) {
-		return bundle.getString(key);
+	public static String getString(String key) {			
+		return getInstance().bundle.getString(key);
 	}
 }
