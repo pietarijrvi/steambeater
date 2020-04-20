@@ -75,6 +75,17 @@
                         <Insets left="1.0" right="1.0" top="1.0" />
                      </padding>
                   </Button>
+						<VBox prefHeight="67.0" prefWidth="400.0">
+							<children>
+								<Label fx:id="markedBeaten"></Label>
+								<Label fx:id="markedNothing"></Label>
+								<Label fx:id="markedUnbeatable"></Label>
+								<Label fx:id="markedIgnored"></Label>
+							</children>
+							<padding>
+								<Insets left="25.0"/>
+							</padding>
+						</VBox>
 						<Label fx:id="actionLabel" prefHeight="67.0" prefWidth="374.0" wrapText="true">
 							<HBox.margin>
 								<Insets left="20.0" />

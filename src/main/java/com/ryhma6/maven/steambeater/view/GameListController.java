@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import com.ryhma6.maven.steambeater.MainApp;
+import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.Achievement;
@@ -131,6 +132,12 @@ public class GameListController implements Initializable {
 	 */
 	@FXML
 	private Label actionLabel;
+	
+	/**
+	 * Labels for displaying the amount of games marked
+	 */
+	@FXML
+	private Label markedBeaten, markedNothing, markedUnbeatable, markedIgnored;
 
 	/**
 	 * MainApp that runs the application
@@ -202,6 +209,7 @@ public class GameListController implements Initializable {
 		initListenerSortGameList();
 		hideStats();
 		setSavedOrDefaultOptions();
+		countMarks();
 	}
 
 	/**
@@ -439,6 +447,7 @@ public class GameListController implements Initializable {
 		gameList.maxWidth(250);
 		statsWindow.setManaged(true);
 		statsWindow.setVisible(true);
+		countMarks();
 	}
 
 	/**
@@ -633,6 +642,44 @@ public class GameListController implements Initializable {
 		includeUnbeatable.setSelected(UserPreferences.getFilterIncludeUnbeatable());
 
 		sortingChoice.getSelectionModel().select(UserPreferences.getGamelistSort());
+	}
+	
+	/**
+	 * Counts the amount of marked games and inserts the amount into the Labels meant for it
+	 */
+	private void countMarks() {
+		
+		int iBeaten = 0, iNothing = 1, iUnbeatable = 2, iIgnored = 3;
+		double beatPercent = 0;
+		int[] counts = new int[4];
+		
+		for (GameData game : getGames()) {
+			if (!game.isBeaten() && !game.isUnbeatable() && !game.isIgnored()) {
+				counts[iNothing]++;
+			}
+			else {
+				if (game.isBeaten()) {
+					counts[iBeaten]++;
+				}
+				if (game.isUnbeatable()) {
+					counts[iUnbeatable]++;
+				}
+				if (game.isIgnored()) {
+					counts[iIgnored]++;
+				}				
+			}
+		}
+		
+		if (counts[iBeaten] > 0 || counts[iNothing] > 0) {
+			beatPercent = counts[iBeaten]*1.0 / (counts[iBeaten] + counts[iNothing]);
+		}
+		System.out.println("library completion: " + beatPercent);
+		
+		markedBeaten.setText(String.format(LanguageProvider.getString("markedBeaten"), counts[iBeaten]));
+		markedNothing.setText(String.format(LanguageProvider.getString("markedNothing"), counts[iNothing]));
+		markedUnbeatable.setText(String.format(LanguageProvider.getString("markedUnbeatable"), counts[iUnbeatable]));
+		markedIgnored.setText(String.format(LanguageProvider.getString("markedIgnored"), counts[iIgnored]));
+		
 	}
 
 	/**

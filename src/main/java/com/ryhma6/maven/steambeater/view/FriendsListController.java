@@ -3,6 +3,7 @@ package com.ryhma6.maven.steambeater.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.steamAPI.Friend;
 
@@ -101,7 +102,7 @@ public class FriendsListController implements Initializable {
 
 			private HBox hbox = new HBox();
 			private ImageView imageView = new ImageView();
-			private Button button = new Button("Compare");
+			private Button button = new Button(LanguageProvider.getString("compareBtn"));
 			private Label label = new Label();
 			private Pane pane = new Pane();
 			private int smallWidth = 85;
