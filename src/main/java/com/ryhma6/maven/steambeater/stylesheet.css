@@ -63,3 +63,11 @@ Label{
 #loadStateLabel{
 	-fx-font-size: 1.3em;
 }
+
+#orderButton{
+	-fx-background-color: Transparent;
+}
+
+#orderButton.button:hover{
+	-fx-background-color: #6289A1;
+}

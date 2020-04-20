@@ -184,6 +184,11 @@ public class GameListController implements Initializable {
 	public void setGames(ObservableList<GameData> games) {
 		this.games = games;
 	}
+	
+	@FXML
+	private Button orderButton;
+	
+	private boolean clicked = false;
 
 
 	/**
@@ -466,6 +471,17 @@ public class GameListController implements Initializable {
 			gameList.setVisible(false);
 		}
 	}
+	
+	@FXML
+	private void handleOrderButton(MouseEvent arg0) {
+		if(clicked) {
+			clicked = false;
+		}else {
+			clicked = true;
+		}
+		initListenerSortGameList();
+		setSavedOrDefaultOptions();
+	}
 
 	/**
 	 * Dropdown options to sort gamelist
@@ -474,13 +490,36 @@ public class GameListController implements Initializable {
 		sortingChoice.getSelectionModel().clearSelection();
 		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
 			// sorting in alphabetical order
-			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
+			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0 && clicked == false) {
 				UserPreferences.setGamelistSort(0);
 				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName));
-			} else if (sortingChoice.getSelectionModel().getSelectedIndex() == 1) {
+				ImageView orderAz = new ImageView("/az.png");
+				orderButton.setGraphic(orderAz);
+				orderAz.setFitHeight(18);
+				orderAz.setFitWidth(18);
+			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 0 && clicked) {
+				UserPreferences.setGamelistSort(0);
+				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName).reversed());
+				ImageView orderZa = new ImageView("/za.png");
+				orderButton.setGraphic(orderZa);
+				orderZa.setFitHeight(18);
+				orderZa.setFitWidth(18);
+			} else if (sortingChoice.getSelectionModel().getSelectedIndex() == 1 && clicked == false) {
 				UserPreferences.setGamelistSort(1);
 				sortedFilteredData = filteredData
 						.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed());
+				ImageView order21 = new ImageView("/21.png");
+				orderButton.setGraphic(order21);
+				order21.setFitHeight(18);
+				order21.setFitWidth(18);
+			} else if(sortingChoice.getSelectionModel().getSelectedIndex() == 1 && clicked){
+				UserPreferences.setGamelistSort(1);
+				sortedFilteredData = filteredData
+						.sorted(Comparator.comparing(GameData::getPlaytime_forever));
+				ImageView order12 = new ImageView("/12.png");
+				orderButton.setGraphic(order12);
+				order12.setFitHeight(18);
+				order12.setFitWidth(18);
 			}
 			gameList.setItems(sortedFilteredData);
 		});
