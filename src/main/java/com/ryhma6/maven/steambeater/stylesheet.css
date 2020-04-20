@@ -1,13 +1,73 @@
 .root{
     -fx-font-family: "Helvetica";
-	-fx-base: rgb(60,60,60);
-	-fx-background-color: linear-gradient(to top right, rgba(60,60,60,1) 0%, rgba(73,73,73,1) 10%, rgba(102,102,102,1) 36%, rgba(102,102,102,1) 64%, rgba(73,73,73,1) 90%, rgba(60,60,60,1) 100%);
+    -fx-text-background-color: "white";
+	-fx-base: rgb(60.0,60.0,60.0);	
+	-fx-background-color: rgb(27.0,27.0,29.0);
 }
+
+.combo-box-popup .list-view .list-cell:filled:hover 
+{
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text-inner-color;
+}
+
+.combo-box-base:focused {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: -1.4, 0.0, 1.0, 2.0;
+}
+
+ListView{
+	-fx-background-color: rgb(34.0,34.0,36.0);
+}
+
+Label{
+	-fx-text-fill: white;
+}
+
+.list-cell:odd {
+	-fx-background-color: rgb(40.0,40.0,42.0);
+}
+
+.list-cell:even {
+	-fx-background-color: rgb(45.0,45.0,47.0);
+}
+
 
 .button:hover {
     -fx-background-color: #6289A1;
 }
 
 #friendsListSmall .list-cell{
-	-fx-padding: 5px 1px 5px 4px;
+	-fx-padding: 5.0px 1.0px 5.0px 4.0px;
+}
+
+#taskbarHbox .button{
+    -fx-border-color: transparent;  
+    -fx-background-color: transparent;
+    -fx-font-size: 1.0em; /* 12 */
+    -fx-text-fill: #828282;
+}
+
+#btnClose.button:hover{
+  -fx-background-color: #E81123;
+}
+
+#btnFull.button:hover{
+  -fx-background-color: #6289A1;
+}
+
+#btnMinimize.button:hover{
+  -fx-background-color: #6289A1;
+}
+
+#loadStateLabel{
+	-fx-font-size: 1.3em;
+}
+
+#orderButton{
+	-fx-background-color: Transparent;
+}
+
+#orderButton.button:hover{
+	-fx-background-color: #6289A1;
 }

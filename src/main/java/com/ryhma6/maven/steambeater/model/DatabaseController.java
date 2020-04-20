@@ -21,6 +21,8 @@ import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
  */
 public class DatabaseController {
 
+	private static final DatabaseController INSTANCE = new DatabaseController();
+
 	/**
 	 * Used for creating sessions for database queries
 	 */
@@ -29,13 +31,47 @@ public class DatabaseController {
 	/**
 	 * Used to build the session factory
 	 */
-	private StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+	private StandardServiceRegistry registry;
 
 	/**
 	 * Builds the session factory for the class
 	 */
-	public DatabaseController() {
+	private DatabaseController() {
+
+	}
+
+	public static DatabaseController getInstance() {
+		return INSTANCE;
+	}
+
+	/**
+	 * Builds the session factory for the class - non-default configuration location
+	 */
+	public DatabaseController(String dbConfigurationLocation) {
+		this.registry = new StandardServiceRegistryBuilder().configure(dbConfigurationLocation).build();
 		sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+	}
+
+	/**
+	 * Builds Hibernate database session factory
+	 */
+	public void init() {
+		try {
+			registry = new StandardServiceRegistryBuilder().configure().build();
+			sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch (Exception e) {
+			System.out.println("Session factory creation failed");
+		}
+	}
+
+	/**
+	 * Returns the status of session factory, true if the factory exists.
+	 * 
+	 * @return session status
+	 */
+	public boolean getSessionFactoryStatus() {
+		boolean exists = sf != null ? true : false;
+		return exists;
 	}
 
 	/**
@@ -69,8 +105,10 @@ public class DatabaseController {
 	}
 
 	/**
-	 * Adds a list of games to the database, used once for new users that don't have any data in database yet-
-	 * @param games List of game data (from Steam).
+	 * Adds a list of games to the database, used once for new users that don't have
+	 * any data in database yet-
+	 * 
+	 * @param games  List of game data (from Steam).
 	 * @param userID Steam userID
 	 * @return success returns true, fail returns false
 	 */
@@ -85,9 +123,9 @@ public class DatabaseController {
 				g.setLogoImageUrl(game.getImg_logo_url());
 				g.setName(game.getName());
 				g.setPlaytimeForever(game.getPlaytime_forever());
-				g.setBeaten(game.isBeaten());
-				g.setUnbeatable(game.isUnbeatable());
-				g.setIgnored(game.isIgnored());
+				g.setBeaten(false);
+				g.setUnbeatable(false);
+				g.setIgnored(false);
 				g.setEntryID();
 				session.saveOrUpdate(g);
 				i++;
@@ -110,7 +148,8 @@ public class DatabaseController {
 	 * 
 	 * @param gameID
 	 * @param userID
-	 * @return a single GameListEntry object, returns null if something goes wrong or no game is found
+	 * @return a single GameListEntry object, returns null if something goes wrong
+	 *         or no game is found
 	 */
 	public GameListEntry getUserGame(String gameID, String userID) {
 		try (Session session = sf.openSession()) {
@@ -130,7 +169,7 @@ public class DatabaseController {
 	 * Fetches all the games the user has in the database
 	 * 
 	 * @param userID
-	 * @return  List<GameListEntry> list of users games
+	 * @return List<GameListEntry> list of users games
 	 */
 	public List<GameListEntry> getAllUserGames(String userID) {
 		try (Session session = sf.openSession()) {
@@ -155,6 +194,7 @@ public class DatabaseController {
 
 	/**
 	 * Returns the amount of database rows related to a specific userID.
+	 * 
 	 * @param userID Steam userID
 	 * @return count
 	 */

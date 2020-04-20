@@ -30,7 +30,7 @@ class DatabaseTest {
 	 */
 	@BeforeEach
 	void init() {
-		dbController = new DatabaseController();
+		dbController = new DatabaseController("hibernate.cfg-test.xml");
 	}
 
 	/**

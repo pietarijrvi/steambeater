@@ -3,6 +3,7 @@ package com.ryhma6.maven.steambeater.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.steamAPI.Friend;
 
@@ -12,8 +13,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
@@ -39,12 +42,18 @@ public class FriendsListController implements Initializable {
 	@FXML
 	private AnchorPane deepAnchor;
 
+	/**
+	 * Top AnchorPane in the fxml
+	 */
 	@FXML
 	private AnchorPane friendsAnchor;
-	
+
+	/**
+	 * Title label for friends list
+	 */
 	@FXML
 	private Label friendsLabel;
-	
+
 	/**
 	 * The expanded version of the friends list
 	 */
@@ -52,19 +61,34 @@ public class FriendsListController implements Initializable {
 	private ListView<Friend> friendsList;
 
 	/**
-	 * The minimized version of the friends list
+	 * Controller for comparing statistics with your Steam friends
 	 */
-	@FXML
-	private ListView<Friend> friendsListSmall;
-
 	private StatComparisonController scCont;
 
+	/**
+	 * Test image used as profile picture in case of an exception
+	 */
 	private final Image IMAGE_TEST = new Image("test.png");
 
-	double smallWidth = 85.0;
-	double normalWidth = 250.0;
-	BorderPane borderPane = new BorderPane();
-	Button resizeButton = new Button();
+	/**
+	 * Friends list's smaller width
+	 */
+	private double smallWidth = 85.0;
+	
+	/**
+	 * Friends list's wider width, default width when application is started
+	 */
+	private double normalWidth = 250.0;
+	
+	/**
+	 * BorderPane added to friends list. Resize button is placed to this element.
+	 */
+	private BorderPane borderPane = new BorderPane();
+	
+	/**
+	 * Button for resizing the friends list
+	 */
+	private Button resizeButton = new Button();
 
 	/**
 	 * loads the friends into the friends list, minimized one is separate from the
@@ -73,15 +97,15 @@ public class FriendsListController implements Initializable {
 	private void loadFriends() {
 		ObservableList<Friend> names = SteamAPICalls.getFriendList();
 		friendsList.setItems(names);
-		friendsListSmall.setItems(names);
 
 		friendsList.setCellFactory(param -> new ListCell<Friend>() {
 
 			private HBox hbox = new HBox();
 			private ImageView imageView = new ImageView();
-			private Button button = new Button("Compare");
+			private Button button = new Button(LanguageProvider.getString("compareBtn"));
 			private Label label = new Label();
 			private Pane pane = new Pane();
+			private int smallWidth = 85;
 
 			@Override
 			public void updateItem(Friend name, boolean empty) {
@@ -126,41 +150,17 @@ public class FriendsListController implements Initializable {
 					hbox.getChildren().clear();
 					hbox.getChildren().addAll(imageView, label, pane, button);
 					setGraphic(hbox);
-				}
-			}
-		});
+					label.setStyle("-fx-padding: 0 0 0 5");
+					hbox.setAlignment(Pos.CENTER_LEFT);
+					Tooltip compareTip = new Tooltip();
+					compareTip.setText("Compare statistics");
+					button.setTooltip(compareTip);
 
-		friendsListSmall.setCellFactory(param -> new ListCell<Friend>() {
-
-			private HBox hbox = new HBox();
-			private ImageView imageView = new ImageView();
-
-			@Override
-			public void updateItem(Friend name, boolean empty) {
-
-				super.updateItem(name, empty);
-
-				if (empty || name == null) {
-					setText(null);
-					setGraphic(null);
-				} else {
-
-					Image profileImage;
-					try {
-						profileImage = new Image(name.getPlayerProfile().getAvatarmedium(), true); // true: load in
-																									// background
-					} catch (Exception e) {
-						profileImage = IMAGE_TEST;
-						e.printStackTrace();
+					// Removing label, pane and compare button when friendslist is smaller
+					if (friendsList.getPrefWidth() == smallWidth) {
+						hbox.getChildren().removeAll(label, pane, button);
 					}
-					imageView.setImage(profileImage);
 
-					imageView.setPreserveRatio(true);
-					imageView.setFitHeight(50);
-
-					hbox.getChildren().clear();
-					hbox.getChildren().addAll(imageView);
-					setGraphic(hbox);
 				}
 			}
 		});
@@ -178,19 +178,16 @@ public class FriendsListController implements Initializable {
 	}
 
 	/**
-	 * toggles the friends list side bar between the minimized and expanded versions
+	 * Toggles the friends list side bar between the minimized and expanded versions
 	 */
 	public void toggleSize() {
-		boolean visible = friendsList.isManaged();
-		if (visible == true) {
-			friendsList.setManaged(false);
-			friendsList.setVisible(false);
-			friendsListSmall.setManaged(true);
-			friendsListSmall.setVisible(true);
-			friendsListSmall.setPadding(new Insets(0));
+		int largeWidth = 250;
+		if (friendsList.getPrefWidth() == largeWidth) {
+			loadFriends();
+			friendsList.setPrefWidth(85);
 			borderPane.setPrefWidth(smallWidth);
-			friendsAnchor.setPrefWidth(85);
-			deepAnchor.setPrefWidth(75);
+			friendsAnchor.setPrefWidth(95);
+			deepAnchor.setPrefWidth(85);
 			friendsLabel.setManaged(false);
 			friendsLabel.setVisible(false);
 
@@ -199,17 +196,14 @@ public class FriendsListController implements Initializable {
 			back.setFitWidth(20);
 			resizeButton.setGraphic(back);
 		} else {
-			friendsListSmall.setManaged(false);
-			friendsListSmall.setVisible(false);
-			friendsList.setManaged(true);
-			friendsList.setVisible(true);
+			loadFriends();
 			borderPane.setPrefWidth(normalWidth);
+			friendsList.setPrefWidth(250);
 			friendsAnchor.setPrefWidth(265);
 			deepAnchor.setPrefWidth(250);
 			friendsLabel.setManaged(true);
 			friendsLabel.setVisible(true);
 
-		
 			ImageView back = new ImageView("/back_64px.png");
 			back.setFitHeight(25);
 			back.setFitWidth(20);
@@ -233,14 +227,14 @@ public class FriendsListController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
 		borderPane.setRight(resizeButton);
 		borderPane.setPrefWidth(normalWidth);
-		borderPane.setPadding(new Insets(5, 5, 5, 5));
+		borderPane.setPadding(new Insets(12, 6, 5, 5));
 		ImageView back = new ImageView("/back_64px.png");
 		resizeButton.setGraphic(back);
 		back.setFitHeight(25);
 		back.setFitWidth(20);
+		resizeButton.setPadding(new Insets(5));
 
 		// button for toggling the friends list between the minimized and expanded
 		// versions
@@ -251,7 +245,7 @@ public class FriendsListController implements Initializable {
 			}
 		});
 
-		deepAnchor.getChildren().add(borderPane);
+		friendsAnchor.getChildren().add(borderPane);
 
 		loadFriends();
 	}

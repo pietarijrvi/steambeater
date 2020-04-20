@@ -80,7 +80,7 @@ public class SteamAPICalls {
 	private String getSteamID() {
 		return UserPreferences.getSteamID();
 	}
-	
+
 	public List<GameData> getLoadedGames() {
 		List<GameData> games = new ArrayList<GameData>(gamesMappedByGameID.values());
 		return games;
@@ -130,20 +130,19 @@ public class SteamAPICalls {
 				GameData gameData = gamesMappedByGameID.get(gameID);
 				gameData.setIgnored(g.getIgnored());
 				gameData.setBeaten(g.getBeaten());
-				gameData.setUnbeatable(g.getUnbeatable());	
+				gameData.setUnbeatable(g.getUnbeatable());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Setting db selections failed - no selections or no game list from Steam");
+			System.out.println("Setting db selections failed - no selections");
 		}
 		setGamesToUI();
 	}
-	
+
 	public void loadGamesFromDatabase(List<GameListEntry> dbEntries) {
 		try {
 			for (GameListEntry g : dbEntries) {
 				int gameID = g.getGameID();
-				GameData gameData = new GameData(); //gamesMappedByGameID.get(gameID);
+				GameData gameData = new GameData(); // gamesMappedByGameID.get(gameID);
 				gameData.setIgnored(g.getIgnored());
 				gameData.setBeaten(g.getBeaten());
 				gameData.setUnbeatable(g.getUnbeatable());
@@ -232,10 +231,10 @@ public class SteamAPICalls {
 					for (GameData g : playerGamesTemp) {
 						gamesMappedByGameID.put(g.getAppid(), g);
 					}
+					returnValue = true;
 				} catch (Exception e) {
 					System.out.println("SteamAPI: loading gamelist failed");
 				}
-				returnValue = true;
 				System.out.println("Owned games (SteamAPI): " + games.getGame_count());
 			}
 		} catch (IOException e1) {
@@ -399,7 +398,7 @@ public class SteamAPICalls {
 					GameStatistics gameStats = objectReader.readValue(innerNode);
 					gamesMappedByGameID.get(appID).setGameStatistics(gameStats);
 					getAchievementCompletionInfo(appID);
-				}catch(Exception e) {
+				} catch (Exception e) {
 					System.out.println("This game has no achievements");
 				}
 			}
@@ -465,7 +464,7 @@ public class SteamAPICalls {
 
 	// TODO: METHOD IN PROGRESS
 	public void loadFriendsGames(String friendsID) {
-		List<GameData> friendsGamesTemp = new ArrayList<GameData>(); //Used for a WIP method
+		List<GameData> friendsGamesTemp = new ArrayList<GameData>(); // Used for a WIP method
 
 		friendsGames.clear();
 		fGamesMappedByGameID.clear();
@@ -490,27 +489,30 @@ public class SteamAPICalls {
 
 				// JSON string to Java Object
 				OwnedGames games = mapper.readValue(str, OwnedGames.class);
-				
-				try { 
-					friendsGamesTemp.addAll(games.getGames()); 
-					for(GameData g:friendsGamesTemp) { 
-						fGamesMappedByGameID.put(g.getAppid(), g); 
+
+				try {
+					friendsGamesTemp.addAll(games.getGames());
+					for (GameData g : friendsGamesTemp) {
+						fGamesMappedByGameID.put(g.getAppid(), g);
 					}
-				} catch(Exception e) {
-					System.out.println("SteamAPI: loading gamelist failed"); 
+				} catch (Exception e) {
+					System.out.println("SteamAPI: loading gamelist failed");
 				}
-				
+
 				System.out.println("Friend's games: " + games.getGame_count());
-								 
+
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		friendsGames.addAll(friendsGamesTemp);
 		/*
-		new Thread(new Runnable() {
-			@Override public void run() { Platform.runLater(new Runnable() {
-			@Override public void run() { friendsGames.addAll(friendsGamesTemp); } }); }
-		}).start();*/
+		 * new Thread(new Runnable() {
+		 * 
+		 * @Override public void run() { Platform.runLater(new Runnable() {
+		 * 
+		 * @Override public void run() { friendsGames.addAll(friendsGamesTemp); } }); }
+		 * }).start();
+		 */
 	}
 }

@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import com.ryhma6.maven.steambeater.MainApp;
+import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.Achievement;
@@ -97,7 +98,7 @@ public class GameListController implements Initializable {
 	 * @param sortingChoice ComboBox for sorting the gameList by name or playtime
 	 */
 	@FXML
-	private ComboBox sortingChoice;
+	private ComboBox<?> sortingChoice;
 
 	/**
 	 * TextField for filtering the gameList by name
@@ -125,12 +126,18 @@ public class GameListController implements Initializable {
 	 */
 	@FXML
 	private CheckBox includeUnbeatable, includeIgnored, includeBeaten, includeUnbeaten;
-	
+
 	/**
 	 * Displays game's updated status when the user clicks a status button
 	 */
 	@FXML
 	private Label actionLabel;
+	
+	/**
+	 * Labels for displaying the amount of games marked
+	 */
+	@FXML
+	private Label markedBeaten, markedNothing, markedUnbeatable, markedIgnored;
 
 	/**
 	 * MainApp that runs the application
@@ -184,6 +191,12 @@ public class GameListController implements Initializable {
 	public void setGames(ObservableList<GameData> games) {
 		this.games = games;
 	}
+	
+	@FXML
+	private Button orderButton;
+	
+	private boolean clicked = false;
+
 
 	/**
 	 * Initializes gamelist with games, achievements, filtering and sorting Hides
@@ -196,6 +209,7 @@ public class GameListController implements Initializable {
 		initListenerSortGameList();
 		hideStats();
 		setSavedOrDefaultOptions();
+		countMarks();
 	}
 
 	/**
@@ -203,6 +217,7 @@ public class GameListController implements Initializable {
 	 */
 	private void initGameListCellFactory() {
 		abstract class CustomCell extends ListCell<GameData> {
+	
 			public Label gameName = new Label();
 			public Label timePlayed = new Label();
 			public HBox hbox = new HBox();
@@ -325,7 +340,7 @@ public class GameListController implements Initializable {
 						timePlayed.setText("Time played: " + timePlayedInHours + " hour");
 					}
 					gameName.setText(game.getName());
-					hbox.setSpacing(35);
+					hbox.setSpacing(30);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
 						imageView.setImage(new Image(game.getImgLogoFullUrl(), true)); // true: load in background
@@ -334,6 +349,12 @@ public class GameListController implements Initializable {
 						imageView.setImage(IMAGE_TEST);
 					}
 					hbox.getChildren().clear();
+					
+					imageView.setFitWidth(184);
+					gameName.setPrefWidth(270);
+					gameName.setPrefHeight(50);
+					gameName.setWrapText(true);
+					
 					hbox.getChildren().addAll(imageView, gameName, timePlayed, pane, setAsBeaten, setUnbeatable,
 							ignoreButton);
 					HBox.setHgrow(pane, Priority.ALWAYS);
@@ -380,7 +401,7 @@ public class GameListController implements Initializable {
 				} else {
 					achievementName.setText(ach.getDisplayName());
 					description.setText(ach.getDescription());
-					hbox.setSpacing(35);
+					hbox.setSpacing(30);
 					hbox.setAlignment(Pos.CENTER_LEFT);
 					try {
 						imageView.setImage(new Image(ach.getIcon(), true)); // true: load in background
@@ -395,7 +416,7 @@ public class GameListController implements Initializable {
 					setGraphic(hbox);
 					HBox.setHgrow(achievementPane, Priority.ALWAYS);
 					HBox.setHgrow(pane, Priority.ALWAYS);
-					
+
 					if (ach.getUnlocktime() == 0) {
 						unlockTime.setText("Achievement not unlocked");
 					} else {
@@ -426,6 +447,7 @@ public class GameListController implements Initializable {
 		gameList.maxWidth(250);
 		statsWindow.setManaged(true);
 		statsWindow.setVisible(true);
+		countMarks();
 	}
 
 	/**
@@ -458,6 +480,17 @@ public class GameListController implements Initializable {
 			gameList.setVisible(false);
 		}
 	}
+	
+	@FXML
+	private void handleOrderButton(MouseEvent arg0) {
+		if(clicked) {
+			clicked = false;
+		}else {
+			clicked = true;
+		}
+		initListenerSortGameList();
+		setSavedOrDefaultOptions();
+	}
 
 	/**
 	 * Dropdown options to sort gamelist
@@ -466,13 +499,36 @@ public class GameListController implements Initializable {
 		sortingChoice.getSelectionModel().clearSelection();
 		sortingChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
 			// sorting in alphabetical order
-			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0) {
+			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0 && clicked == false) {
 				UserPreferences.setGamelistSort(0);
 				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName));
-			} else if (sortingChoice.getSelectionModel().getSelectedIndex() == 1) {
+				ImageView orderAz = new ImageView("/az.png");
+				orderButton.setGraphic(orderAz);
+				orderAz.setFitHeight(18);
+				orderAz.setFitWidth(18);
+			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 0 && clicked) {
+				UserPreferences.setGamelistSort(0);
+				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName).reversed());
+				ImageView orderZa = new ImageView("/za.png");
+				orderButton.setGraphic(orderZa);
+				orderZa.setFitHeight(18);
+				orderZa.setFitWidth(18);
+			} else if (sortingChoice.getSelectionModel().getSelectedIndex() == 1 && clicked == false) {
 				UserPreferences.setGamelistSort(1);
 				sortedFilteredData = filteredData
 						.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed());
+				ImageView order21 = new ImageView("/21.png");
+				orderButton.setGraphic(order21);
+				order21.setFitHeight(18);
+				order21.setFitWidth(18);
+			} else if(sortingChoice.getSelectionModel().getSelectedIndex() == 1 && clicked){
+				UserPreferences.setGamelistSort(1);
+				sortedFilteredData = filteredData
+						.sorted(Comparator.comparing(GameData::getPlaytime_forever));
+				ImageView order12 = new ImageView("/12.png");
+				orderButton.setGraphic(order12);
+				order12.setFitHeight(18);
+				order12.setFitWidth(18);
 			}
 			gameList.setItems(sortedFilteredData);
 		});
@@ -587,6 +643,44 @@ public class GameListController implements Initializable {
 
 		sortingChoice.getSelectionModel().select(UserPreferences.getGamelistSort());
 	}
+	
+	/**
+	 * Counts the amount of marked games and inserts the amount into the Labels meant for it
+	 */
+	private void countMarks() {
+		
+		int iBeaten = 0, iNothing = 1, iUnbeatable = 2, iIgnored = 3;
+		double beatPercent = 0;
+		int[] counts = new int[4];
+		
+		for (GameData game : getGames()) {
+			if (!game.isBeaten() && !game.isUnbeatable() && !game.isIgnored()) {
+				counts[iNothing]++;
+			}
+			else {
+				if (game.isBeaten()) {
+					counts[iBeaten]++;
+				}
+				if (game.isUnbeatable()) {
+					counts[iUnbeatable]++;
+				}
+				if (game.isIgnored()) {
+					counts[iIgnored]++;
+				}				
+			}
+		}
+		
+		if (counts[iBeaten] > 0 || counts[iNothing] > 0) {
+			beatPercent = counts[iBeaten]*1.0 / (counts[iBeaten] + counts[iNothing]);
+		}
+		System.out.println("library completion: " + beatPercent);
+		
+		markedBeaten.setText(String.format(LanguageProvider.getString("markedBeaten"), counts[iBeaten]));
+		markedNothing.setText(String.format(LanguageProvider.getString("markedNothing"), counts[iNothing]));
+		markedUnbeatable.setText(String.format(LanguageProvider.getString("markedUnbeatable"), counts[iUnbeatable]));
+		markedIgnored.setText(String.format(LanguageProvider.getString("markedIgnored"), counts[iIgnored]));
+		
+	}
 
 	/**
 	 * Is called by the main application to give a reference back to itself
@@ -596,28 +690,28 @@ public class GameListController implements Initializable {
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
-	
+
 	/**
 	 * Fades in and out actionLabel with the game's updated status
 	 */
 	private void activateFade() {
 		// SequentialTransition for multiple transitions in a row
 		SequentialTransition t = new SequentialTransition();
-		
+
 		// Fades in the label, added to SequentialTransition
 		FadeTransition fadeIn = new FadeTransition(Duration.seconds(2), actionLabel);
-	    fadeIn.setFromValue(0.0);
-	    fadeIn.setToValue(1.0);
-	    t.getChildren().add(fadeIn);
-	    
-	    // Fades out the label, added to SequentialTransition
+		fadeIn.setFromValue(0.0);
+		fadeIn.setToValue(1.0);
+		t.getChildren().add(fadeIn);
+
+		// Fades out the label, added to SequentialTransition
 		FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.5), actionLabel);
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        t.getChildren().add(fadeOut);
-        
-        // Plays the SequentialTransition with both transitions
-        t.play();
+		fadeOut.setFromValue(1.0);
+		fadeOut.setToValue(0.0);
+		t.getChildren().add(fadeOut);
+
+		// Plays the SequentialTransition with both transitions
+		t.play();
 	}
 
 	/**
