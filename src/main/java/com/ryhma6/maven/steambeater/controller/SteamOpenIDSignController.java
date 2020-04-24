@@ -17,6 +17,7 @@ import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
 import com.ryhma6.maven.steambeater.MainApp;
+import com.ryhma6.maven.steambeater.model.DatabaseController;
 import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.LoadingStatus;
 import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
@@ -134,6 +135,11 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@FXML
 	private ComboBox<?> languageChoice;
+	
+	@FXML
+	private Label profileLabel;
+	
+	private DatabaseController db = DatabaseController.getInstance();
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -321,6 +327,7 @@ public class SteamOpenIDSignController implements Initializable {
 			}
 		});
 	}
+	
 
 	/**
 	 * Runs when application is started, sets steam's login image to the login

@@ -11,6 +11,7 @@ import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 import com.ryhma6.maven.steambeater.view.FriendsListController;
 import com.ryhma6.maven.steambeater.view.GameListController;
+import com.ryhma6.maven.steambeater.view.ProfileController;
 import com.ryhma6.maven.steambeater.view.StatComparisonController;
 
 import javafx.application.Application;
@@ -28,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -83,6 +85,7 @@ public class MainApp extends Application {
 	 */
 	private double yOffset = 0;
 
+
 	/**
 	 * Starts the app and loads everything in
 	 */
@@ -96,6 +99,8 @@ public class MainApp extends Application {
 		initRootLayout();
 		showGameList();
 		showFriendsList();
+		showProfile();
+		
 
 		// databaseController.init();
 		// initDatabase();
@@ -357,6 +362,23 @@ public class MainApp extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	private void showProfile() {
+		try {
+			// Load person overview.
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/profile.fxml"));
+			VBox profile = (VBox) loader.load();
+			// Set person overview into the center of root layout.
+			rootLayout.setBottom(profile);
+			// Give the controller access to the main app.
+			ProfileController controller = loader.getController();
+			controller.setMainApp(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	/**
 	 * Returns the main stage.

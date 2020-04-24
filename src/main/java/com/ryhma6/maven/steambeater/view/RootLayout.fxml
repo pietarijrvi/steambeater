@@ -8,49 +8,38 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0"
-	prefWidth="1330.0" stylesheets="@../stylesheet.css"
-	xmlns="http://javafx.com/javafx/8.0.171"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1330.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
 	<top>
-		<HBox alignment="CENTER" minHeight="90.0"
-			nodeOrientation="LEFT_TO_RIGHT" prefHeight="90.0" spacing="5.0"
-			BorderPane.alignment="CENTER_LEFT">
+		<HBox alignment="CENTER" minHeight="90.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="90.0" spacing="5.0" BorderPane.alignment="CENTER_LEFT">
 			<children>
-				<Button fx:id="loginButton" mnemonicParsing="false"
-					onAction="#handleLoginButtonAction">
-					<HBox.margin>
-						<Insets left="2.0" right="58.0" />
-					</HBox.margin>
-				</Button>
-				<Button fx:id="refreshButton" maxHeight="27.0"
-					onAction="#refreshData">
-					<HBox.margin>
-						<Insets right="10.0" />
-					</HBox.margin>
-				</Button>
-				<Button fx:id="signTestButton" maxHeight="27.0"
-					onAction="#loadWithTestValues" text="test sign">
+            <Button mnemonicParsing="false" text="Button" />
+            <Label fx:id="profileLabel" text="profiilinimi">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+				<Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction" />
+				<Button fx:id="refreshButton" maxHeight="27.0" onAction="#refreshData">
 					<HBox.margin>
 						<Insets right="10.0" />
 					</HBox.margin>
 				</Button>
-				<Button fx:id="logoutButton" maxHeight="30.0"
-					onAction="#logout" stylesheets="@../stylesheet.css" text="logout">
+				<Button fx:id="signTestButton" maxHeight="27.0" onAction="#loadWithTestValues" text="Test Sign">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="logoutButton" maxHeight="30.0" onAction="#logout" stylesheets="@../stylesheet.css" text="Logout">
 					<HBox.margin>
 						<Insets />
 					</HBox.margin>
 				</Button>
-				<ImageView fx:id="languageIcon" fitHeight="76.0"
-					fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView fx:id="languageIcon" fitHeight="76.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
 					<image>
 						<Image url="@UK.png" />
 					</image>
@@ -58,9 +47,7 @@
 						<Insets left="5.0" />
 					</HBox.margin>
 				</ImageView>
-				<ComboBox fx:id="languageChoice"
-					nodeOrientation="LEFT_TO_RIGHT" prefHeight="31.0" prefWidth="120.0"
-					promptText="Language">
+				<ComboBox fx:id="languageChoice" nodeOrientation="LEFT_TO_RIGHT" prefHeight="31.0" prefWidth="120.0" promptText="Language">
 					<items>
 						<FXCollections fx:factory="observableArrayList">
 							<String fx:value="English" />
@@ -71,22 +58,16 @@
 						<Insets right="5.0" />
 					</HBox.margin>
 				</ComboBox>
-				<Label fx:id="loadStateLabel" minHeight="90.0" minWidth="400"
-					wrapText="true" HBox.hgrow="ALWAYS">
+				<Label fx:id="loadStateLabel" minHeight="90.0" minWidth="400" wrapText="true" HBox.hgrow="ALWAYS">
 					<HBox.margin>
 						<Insets left="10.0" />
 					</HBox.margin>
 				</Label>
-				<HBox fx:id="taskbarHbox" alignment="TOP_RIGHT"
-					maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT"
-					prefHeight="52.0" HBox.hgrow="ALWAYS">
+				<HBox fx:id="taskbarHbox" alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="52.0" HBox.hgrow="ALWAYS">
 					<children>
-						<Button fx:id="btnClose" mnemonicParsing="false"
-							onMouseClicked="#handleMouseEvent" />
-						<Button fx:id="btnFull" mnemonicParsing="false"
-							onMouseClicked="#handleMouseEvent" />
-						<Button fx:id="btnMinimize" mnemonicParsing="false"
-							onMouseClicked="#handleMouseEvent" />
+						<Button fx:id="btnClose" mnemonicParsing="false" onMouseClicked="#handleMouseEvent" />
+						<Button fx:id="btnFull" mnemonicParsing="false" onMouseClicked="#handleMouseEvent" />
+						<Button fx:id="btnMinimize" mnemonicParsing="false" onMouseClicked="#handleMouseEvent" />
 						<Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
 					</children>
 					<opaqueInsets>
@@ -100,8 +81,7 @@
 		</HBox>
 	</top>
 	<left>
-		<AnchorPane fx:id="sidebar" prefWidth="20.0"
-			BorderPane.alignment="CENTER" />
+		<AnchorPane fx:id="sidebar" prefWidth="20.0" BorderPane.alignment="CENTER" />
 	</left>
 	<padding>
 		<Insets bottom="20.0" left="20.0" right="20.0" />
