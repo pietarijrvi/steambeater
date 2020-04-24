@@ -21,8 +21,10 @@ import com.ryhma6.maven.steambeater.model.DatabaseController;
 import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.LoadingStatus;
 import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
+import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.TimeConverter;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
+import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.Worker;
@@ -383,6 +385,15 @@ public class SteamOpenIDSignController implements Initializable {
 
 		loadStateLabel.setPadding(new Insets(10, 0, 0, 0));
 
+		ObjectProperty<PlayerProfile> userProfile = SteamAPICalls.getSignedPlayerProfile();
+		userProfile.addListener(obs -> {
+			try {
+				profileLabel.setText(userProfile.get().getPersonaname());
+			}catch(Exception e) {
+				profileLabel.setText("Not logged in");
+			}
+		});
+		
 		ObservableLoadingStatus stateObject = ObservableLoadingStatus.getInstance();
 		ObjectProperty<LoadingStatus> stateProperty = stateObject.getLoadingStateProperty();
 		loadStateLabel.setText(LoadingStatus.getDescription(stateProperty.getValue()));

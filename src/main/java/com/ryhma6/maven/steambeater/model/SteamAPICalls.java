@@ -225,6 +225,8 @@ public class SteamAPICalls {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
+						if(getSteamID().equals("null"))
+							signedPlayerProfile.set(null);
 						playerGames.clear();
 						friendList.clear();
 						friendsGames.clear();
