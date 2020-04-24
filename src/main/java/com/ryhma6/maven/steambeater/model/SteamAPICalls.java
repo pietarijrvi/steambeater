@@ -24,6 +24,8 @@ import com.ryhma6.maven.steambeater.model.steamAPI.OwnedGames;
 import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
 
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,6 +38,10 @@ import javafx.collections.ObservableList;
  */
 public class SteamAPICalls {
 
+	/**
+	 * Observable player profile of the user that is signed in
+	 */
+	private static ObjectProperty<PlayerProfile> signedPlayerProfile = new SimpleObjectProperty<>();
 	/**
 	 * UI game list is formed from the data in this list.
 	 */
@@ -87,6 +93,15 @@ public class SteamAPICalls {
 	}
 
 	/**
+	 * Returns the observable profile of the player that is signed in.
+	 * 
+	 * @return signedPlayerProfile
+	 */
+	public static ObjectProperty<PlayerProfile> getSignedPlayerProfile() {
+		return signedPlayerProfile;
+	}
+
+	/**
 	 * Returns the ObservableList that contain game data retrieved from SteamAPI,
 	 * used for forming UI game list.
 	 * 
@@ -114,6 +129,28 @@ public class SteamAPICalls {
 	 */
 	public static ObservableList<GameData> getFriendsGames() {
 		return friendsGames;
+	}
+
+	/**
+	 * Load profile of the player that is signed in and update the value of the
+	 * observable profile object
+	 */
+	public void loadSignedPlayerProfileFromSteam() {
+		List<String> playerProfile = new ArrayList<String>();
+		playerProfile.add(getSteamID());
+		Map<String, PlayerProfile> profile = loadSteamPlayerProfiles(playerProfile);
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						signedPlayerProfile.setValue(profile.get(getSteamID()));
+					}
+				});
+			}
+		}).start();
 	}
 
 	/**

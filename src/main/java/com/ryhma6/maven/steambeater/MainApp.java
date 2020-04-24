@@ -124,6 +124,7 @@ public class MainApp extends Application {
 				return new Task<Integer>() {
 					@Override
 					protected Integer call() throws Exception {
+						steamAPI.loadSignedPlayerProfileFromSteam();
 						// load game list from Steam API
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_GAMES);
 						Long count = databaseController.getUserGameCount(UserPreferences.getSteamID());
