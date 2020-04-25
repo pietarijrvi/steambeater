@@ -65,6 +65,9 @@ public class GameListController implements Initializable {
 	 */
 	@FXML
 	private ListView<Achievement> achievementList;
+	
+	@FXML
+	private Label achievementStatusLabel;
 
 	/**
 	 * Hides statsWindow with achievements
@@ -437,6 +440,7 @@ public class GameListController implements Initializable {
 	public void refreshAchievementList() {
 		GameData game = gameList.getSelectionModel().getSelectedItem();
 		System.out.println("Ach list size: " + game.getGameStatistics().getAchievements().size());
+		achievementStatusLabel.setText("Achievements: " + String.valueOf(game.getGameStatistics().getAchievements().size()));
 		achievementList.setItems(FXCollections.observableArrayList(game.getGameStatistics().getAchievements()));
 	}
 
@@ -473,6 +477,9 @@ public class GameListController implements Initializable {
 	private void handleMouseClick(MouseEvent arg0) {
 		GameData game = gameList.getSelectionModel().getSelectedItem();
 		if (game != null) {
+			achievementStatusLabel.setText("Loading achievements...");
+			//clears the list so it doesn't show the achievements of the previously loaded game
+			achievementList.setItems(null);
 			statLabel.setText(game.getName());
 			mainApp.loadAchievementData(game.getAppid());
 

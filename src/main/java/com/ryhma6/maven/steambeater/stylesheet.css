@@ -71,3 +71,8 @@ Label{
 #orderButton.button:hover{
 	-fx-background-color: #6289A1;
 }
+
+#achievementStatusLabel{
+	-fx-font-size: 1.4em;
+	-fx-padding: 10.0px 0 0 0;
+}

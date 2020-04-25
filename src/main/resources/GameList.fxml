@@ -115,7 +115,8 @@
 														<Insets left="10.0" top="10.0" />
 													</HBox.margin>
 												</Label>
-												<Pane fx:id="achievementPane" prefHeight="64.0" prefWidth="351.0" />
+												<Pane fx:id="achievementPane" prefHeight="64.0" prefWidth="351.0">
+												 </Pane>
 												<Button fx:id="hideStatsButton" mnemonicParsing="false" onAction="#setStatsVisibility" prefHeight="29.0" prefWidth="180.0" text="Close">
 													<HBox.margin>
 														<Insets right="5.0" top="15.0" />
@@ -126,6 +127,7 @@
 												<Insets top="10.0" />
 											</VBox.margin>
 										</HBox>
+										<Label fx:id="achievementStatusLabel" alignment="TOP_LEFT" prefHeight="40.0" prefWidth="1250.0"></Label>
 										<ListView fx:id="achievementList" fixedCellSize="0" maxHeight="1.7976931348623157E308" prefHeight="502.0" prefWidth="1250.0" VBox.vgrow="ALWAYS">
 											<opaqueInsets>
 												<Insets />
