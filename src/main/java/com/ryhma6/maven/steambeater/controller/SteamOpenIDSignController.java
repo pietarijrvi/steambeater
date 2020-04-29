@@ -330,11 +330,11 @@ public class SteamOpenIDSignController implements Initializable {
 		
 		switch(langProv.getCurrentLocale().getLanguage()) {
 			case "en":
-				languageIcon.setImage(new Image("/UK.png"));
+				languageIcon.setImage(new Image("/img/UK.png"));
 				languageChoice.getSelectionModel().select(0);
 				break;
 			case "fi":
-				languageIcon.setImage(new Image("/finland.png"));
+				languageIcon.setImage(new Image("/img/finland.png"));
 				languageChoice.getSelectionModel().select(1);
 				break;
 		}
@@ -342,10 +342,10 @@ public class SteamOpenIDSignController implements Initializable {
 		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
 			// sorting in alphabetical order
 			if (languageChoice.getSelectionModel().getSelectedIndex() == 0) {
-				languageIcon.setImage(new Image("/UK.png"));
+				languageIcon.setImage(new Image("/img/UK.png"));
 				langProv.setLanguage("en", "GB");
 			} else if (languageChoice.getSelectionModel().getSelectedIndex() == 1) {
-				languageIcon.setImage(new Image("/finland.png"));
+				languageIcon.setImage(new Image("/img/finland.png"));
 				langProv.setLanguage("fi", "FI");
 			}
 			mainApp.loadUI();
@@ -372,28 +372,28 @@ public class SteamOpenIDSignController implements Initializable {
 		profileLabel.setVisible(false);
 
 		initLanguageChoice();
-		ImageView fullImage = new ImageView("/maximize_button_64px.png");
+		ImageView fullImage = new ImageView("/img/maximize_button_64px.png");
 		btnFull.setGraphic(fullImage);
 		fullImage.setFitHeight(25);
 		fullImage.setFitWidth(25);
 
-		ImageView minimizeImage = new ImageView("/minimize_window_64px.png");
+		ImageView minimizeImage = new ImageView("/img/minimize_window_64px.png");
 		btnMinimize.setGraphic(minimizeImage);
 		minimizeImage.setFitHeight(25);
 		minimizeImage.setFitWidth(25);
 
-		ImageView closeImage = new ImageView("/close_window_64px.png");
+		ImageView closeImage = new ImageView("/img/close_window_64px.png");
 		btnClose.setGraphic(closeImage);
 		closeImage.setFitHeight(25);
 		closeImage.setFitWidth(25);
 
-		ImageView loginImage = new ImageView("/steamicon.png");
+		ImageView loginImage = new ImageView("/img/steamicon.png");
 		loginButton.setGraphic(loginImage);
 		loginButton.setPadding(Insets.EMPTY);
 		loginImage.setPreserveRatio(true);
 		loginImage.setFitWidth(200);
 
-		ImageView loginTestImage = new ImageView("/enter.png");
+		ImageView loginTestImage = new ImageView("/img/enter.png");
 		signTestButton.setGraphic(loginTestImage);
 		Tooltip loginTip = new Tooltip();
 		loginTip.setText("Test gamelist");
@@ -401,7 +401,7 @@ public class SteamOpenIDSignController implements Initializable {
 		loginTestImage.setFitHeight(35);
 		loginTestImage.setFitWidth(35);
 
-		ImageView exitImage = new ImageView("/exit.png");
+		ImageView exitImage = new ImageView("/img/exit.png");
 		logoutButton.setGraphic(exitImage);
 		Tooltip exitTip = new Tooltip();
 		exitTip.setText("logout");
@@ -409,7 +409,7 @@ public class SteamOpenIDSignController implements Initializable {
 		exitImage.setFitHeight(35);
 		exitImage.setFitWidth(35);
 
-		ImageView refreshImage = new ImageView("/refresh.png");
+		ImageView refreshImage = new ImageView("/img/refresh.png");
 		Tooltip refreshTip = new Tooltip();
 		refreshTip.setText("Refresh");
 		refreshButton.setTooltip(refreshTip);
