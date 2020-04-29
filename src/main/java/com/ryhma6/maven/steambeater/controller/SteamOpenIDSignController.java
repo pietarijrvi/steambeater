@@ -152,7 +152,6 @@ public class SteamOpenIDSignController implements Initializable {
 	
 	private ProfileController profileController;
 	private GameListController gameListController;
-	private BorderPane rootLayout;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -277,6 +276,8 @@ public class SteamOpenIDSignController implements Initializable {
 		if (alert.getResult() == ButtonType.YES) {
 			UserPreferences.setSteamID("null");
 			mainApp.resetSteamAPIData();
+			loginButton.setManaged(true);
+			loginButton.setVisible(true);
 		}
 
 	}
@@ -450,6 +451,8 @@ public class SteamOpenIDSignController implements Initializable {
 				refreshButton.setDisable(true);
 			} else if (stateProperty.getValue() == LoadingStatus.COMPLETED) {
 				loginButton.setDisable(false);
+				loginButton.setVisible(false);
+				loginButton.setManaged(false);
 				signTestButton.setDisable(false);
 				logoutButton.setDisable(false);
 				refreshButton.setDisable(false);

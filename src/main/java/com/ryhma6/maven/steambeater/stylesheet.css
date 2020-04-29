@@ -76,3 +76,7 @@ Label{
 	-fx-font-size: 1.4em;
 	-fx-padding: 10.0px 0 0 0;
 }
+
+#profileImage{
+	-fx-background-color: Transparent;
+}
