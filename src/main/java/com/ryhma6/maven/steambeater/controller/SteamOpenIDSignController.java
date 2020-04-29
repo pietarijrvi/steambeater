@@ -327,17 +327,27 @@ public class SteamOpenIDSignController implements Initializable {
 		languageChoice.getSelectionModel().clearSelection();	
 		LanguageProvider langProv = LanguageProvider.getInstance();
 		
+		switch(langProv.getCurrentLocale().getLanguage()) {
+			case "en":
+				languageIcon.setImage(new Image("/UK.png"));
+				languageChoice.getSelectionModel().select(0);
+				break;
+			case "fi":
+				languageIcon.setImage(new Image("/finland.png"));
+				languageChoice.getSelectionModel().select(1);
+				break;
+		}
+		
 		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
 			// sorting in alphabetical order
 			if (languageChoice.getSelectionModel().getSelectedIndex() == 0) {
-				Image image = new Image("/UK.png");
-				languageIcon.setImage(image);
+				languageIcon.setImage(new Image("/UK.png"));
 				langProv.setLanguage("en", "GB");
 			} else if (languageChoice.getSelectionModel().getSelectedIndex() == 1) {
-				Image image = new Image("/finland.png");
-				languageIcon.setImage(image);
+				languageIcon.setImage(new Image("/finland.png"));
 				langProv.setLanguage("fi", "FI");
 			}
+			mainApp.loadUI();
 		});
 	}
 	

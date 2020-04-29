@@ -96,11 +96,7 @@ public class MainApp extends Application {
 
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 
-		initRootLayout();
-		showGameList();
-		showFriendsList();
-		showProfile();
-		
+		loadUI();
 
 		// databaseController.init();
 		// initDatabase();
@@ -174,6 +170,13 @@ public class MainApp extends Application {
 
 		// inits database and loads api data after succeeding
 		initDatabase();
+	}
+	
+	public void loadUI() {
+		initRootLayout();
+		showGameList();
+		showFriendsList();
+		showProfile();
 	}
 
 	/**
