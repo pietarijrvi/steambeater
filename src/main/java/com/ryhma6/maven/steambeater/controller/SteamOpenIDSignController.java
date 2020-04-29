@@ -24,7 +24,10 @@ import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.TimeConverter;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
+import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
+import com.ryhma6.maven.steambeater.view.GameListController;
+import com.ryhma6.maven.steambeater.view.ProfileController;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.Worker;
@@ -44,6 +47,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
@@ -141,7 +145,14 @@ public class SteamOpenIDSignController implements Initializable {
 	@FXML
 	private Label profileLabel;
 	
+	@FXML
+	private Button profileImage;
+	
 	private DatabaseController db = DatabaseController.getInstance();
+	
+	private ProfileController profileController;
+	private GameListController gameListController;
+	private BorderPane rootLayout;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -330,6 +341,11 @@ public class SteamOpenIDSignController implements Initializable {
 		});
 	}
 	
+	@FXML
+	private void handleProfileImageClicked(MouseEvent arg0) {
+		profileController.openProfile();
+	}
+	
 
 	/**
 	 * Runs when application is started, sets steam's login image to the login
@@ -337,6 +353,13 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
+		profileImage.setManaged(false);
+		profileImage.setVisible(false);
+		
+		profileLabel.setManaged(false);
+		profileLabel.setVisible(false);
+
 		initLanguageChoice();
 		ImageView fullImage = new ImageView("/maximize_button_64px.png");
 		btnFull.setGraphic(fullImage);
@@ -388,8 +411,12 @@ public class SteamOpenIDSignController implements Initializable {
 		ObjectProperty<PlayerProfile> userProfile = SteamAPICalls.getSignedPlayerProfile();
 		userProfile.addListener(obs -> {
 			try {
+				ImageView avatar = new ImageView(userProfile.get().getAvatar());
+				profileImage.setGraphic(avatar);
 				profileLabel.setText(userProfile.get().getPersonaname());
 			}catch(Exception e) {
+				profileLabel.setManaged(true);
+				profileLabel.setVisible(true);
 				profileLabel.setText("Not logged in");
 			}
 		});
@@ -416,6 +443,10 @@ public class SteamOpenIDSignController implements Initializable {
 				signTestButton.setDisable(false);
 				logoutButton.setDisable(false);
 				refreshButton.setDisable(false);
+				profileImage.setVisible(true);
+				profileImage.setManaged(true);
+				profileLabel.setManaged(true);
+				profileLabel.setVisible(true);
 				loadStateLabel.setText(loadStateLabel.getText() + ": "
 						+ TimeConverter.epochMillisToLocalTimestamp(stateObject.getLastCompletionMillis()));
 			} else if (stateProperty.getValue() == LoadingStatus.FAILURE) {
@@ -437,5 +468,13 @@ public class SteamOpenIDSignController implements Initializable {
 			loadStateLabel.setText(loadStateLabel.getText()+errors);
 
 		});
+	}
+
+	public void setProfileController(ProfileController controller) {
+		this.profileController = controller;
+	}
+	
+	public void setGameListController(GameListController controller) {
+		this.gameListController = controller;
 	}
 }

@@ -11,7 +11,9 @@ import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
+import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +21,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class ProfileController implements Initializable {
@@ -92,15 +96,22 @@ public class ProfileController implements Initializable {
 
 	@FXML
 	private Button loadStatsButton;
+	
+	@FXML
+	private ImageView profilePageImage;
+	
+	@FXML
+	private Label profilePageName;
 
 	public void closeProfile() {
 		profileVbox.setManaged(false);
 		profileVbox.setVisible(false);
 	}
 
-	public void openComparison() {
+	public void openProfile() {
 		profileVbox.setManaged(true);
 		profileVbox.setVisible(true);
+		loadStats();
 	}
 
 	/**
@@ -130,6 +141,7 @@ public class ProfileController implements Initializable {
 		profilePlaytimeWeeks.setText(String.format(LanguageProvider.getString("comp2Weeks"), o2wPlaytime / 60));
 		profileCompleted.setText(
 				String.format(LanguageProvider.getString("compCompletion"), ((double) oBeaten / oBeatable) * 100));
+		
 	}
 
 	/**
@@ -187,7 +199,12 @@ public class ProfileController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		api = new SteamAPICalls();
-
+		profilePageImage.setManaged(false);
+		profilePageImage.setVisible(false);
+		
+		profilePageName.setManaged(false);
+		profilePageName.setVisible(false);
+		
 		// Give functionality to the close button
 		closeProfile.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -195,15 +212,24 @@ public class ProfileController implements Initializable {
 				closeProfile();
 			}
 		});
-
-		loadStatsButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
+		
+		ObjectProperty<PlayerProfile> userProfilePage = SteamAPICalls.getSignedPlayerProfile();
+		userProfilePage.addListener(obs -> {
+			try {
 				loadStats();
+				Image avatar = new Image(userProfilePage.get().getAvatarfull());
+				profilePageImage.setImage(avatar);
+				profilePageName.setText(userProfilePage.get().getPersonaname());
+				profilePageImage.setVisible(true);
+				profilePageImage.setManaged(true);
+				profilePageName.setManaged(true);
+				profilePageName.setVisible(true);
+			}catch(Exception e) {
+				
 			}
 		});
-
 		closeProfile();
+
 	}
 
 	public void setMainApp(MainApp mainApp) {
