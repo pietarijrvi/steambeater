@@ -26,8 +26,8 @@ public class LanguageProvider {
 	 * default language (English)
 	 */
 	private LanguageProvider() {
-		curLocale = getLocale();
-		bundle = getBundle(curLocale);
+		curLocale = getSavedLocale();
+		setBundle(curLocale);
 	}
 
 	/**
@@ -42,18 +42,20 @@ public class LanguageProvider {
 		return self;
 	}
 	
+	public static String getString(String key) {
+		return getInstance().bundle.getString(key);
+	}
+	
 	public Locale getCurrentLocale() {
 		return curLocale;
-	}
-
-	private ResourceBundle getBundle(Locale locale) {
-		return ResourceBundle.getBundle("TextResources", locale);
 	}
 
 	public boolean setLanguage(String language, String country) {
 
 		boolean success = false;
 		if (isValidISOLanguage(language) && isValidISOCountry(country)) {
+			curLocale = new Locale(language, country);
+			setBundle(curLocale);
 			Properties properties = loadLanguageProperties();
 			properties.setProperty("language", language);
 			properties.setProperty("country", country);
@@ -80,7 +82,7 @@ public class LanguageProvider {
 		return success;
 	}
 
-	private Locale getLocale() {
+	private Locale getSavedLocale() {
 		Locale locale = Locale.getDefault();
 		Properties properties = loadLanguageProperties();
 
@@ -116,9 +118,9 @@ public class LanguageProvider {
 		}
 		return properties;
 	}
-
-	public static String getString(String key) {
-		return getInstance().bundle.getString(key);
+	
+	private void setBundle(Locale locale) {
+		bundle = ResourceBundle.getBundle("TextResources", locale);
 	}
 
 	private boolean isValidISOLanguage(String s) {

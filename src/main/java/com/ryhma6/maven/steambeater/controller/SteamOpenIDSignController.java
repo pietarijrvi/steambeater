@@ -336,6 +336,7 @@ public class SteamOpenIDSignController implements Initializable {
 				languageIcon.setImage(new Image("/finland.png"));
 				langProv.setLanguage("fi", "FI");
 			}
+			mainApp.loadUI();
 		});
 	}
 	
