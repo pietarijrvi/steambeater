@@ -278,6 +278,10 @@ public class SteamOpenIDSignController implements Initializable {
 			mainApp.resetSteamAPIData();
 			loginButton.setManaged(true);
 			loginButton.setVisible(true);
+			profileImage.setManaged(false);
+			profileImage.setVisible(false);
+			profileLabel.setManaged(false);
+			profileLabel.setVisible(false);
 		}
 
 	}
@@ -426,9 +430,7 @@ public class SteamOpenIDSignController implements Initializable {
 				profileImage.setGraphic(avatar);
 				profileLabel.setText(userProfile.get().getPersonaname());
 			}catch(Exception e) {
-				profileLabel.setManaged(true);
-				profileLabel.setVisible(true);
-				profileLabel.setText("Not logged in");
+				System.out.println("Logged out");
 			}
 		});
 		
