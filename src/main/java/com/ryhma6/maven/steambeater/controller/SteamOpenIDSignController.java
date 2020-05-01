@@ -315,6 +315,7 @@ public class SteamOpenIDSignController implements Initializable {
 	private void initLanguageChoice() {
 		languageChoice.getSelectionModel().clearSelection();	
 		LanguageProvider langProv = LanguageProvider.getInstance();
+		langProv.setLanguage("en", "GB");
 		
 		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
 			// sorting in alphabetical order

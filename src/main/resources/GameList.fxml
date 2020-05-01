@@ -53,8 +53,8 @@
 						<ComboBox fx:id="sortingChoice" prefHeight="31.0" prefWidth="240.0" promptText="Sort by">
 							<items>
 								<FXCollections fx:factory="observableArrayList">
-									<String fx:value="Name" />
-									<String fx:value="Playtime" />
+									<String fx:id="sortName" fx:value="Name" />
+									<String fx:id="sortPlaytime" fx:value="Playtime" />
 								</FXCollections>
 							</items>
 							<HBox.margin>

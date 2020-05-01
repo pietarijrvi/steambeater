@@ -213,6 +213,15 @@ public class GameListController implements Initializable {
 		hideStats();
 		setSavedOrDefaultOptions();
 		countMarks();
+		loadTexts();
+	}
+	
+	public void loadTexts() {
+		includeUnbeatable.setText(LanguageProvider.getString("includeUnbeatable"));
+		includeBeaten.setText(LanguageProvider.getString("includeBeaten"));
+		includeUnbeaten.setText(LanguageProvider.getString("includeUnbeaten"));
+		includeIgnored.setText(LanguageProvider.getString("includeIgnored"));
+		sortingChoice.setPromptText(LanguageProvider.getString("sortBy"));
 	}
 
 	/**
@@ -312,9 +321,9 @@ public class GameListController implements Initializable {
 					Tooltip ignoreTip = new Tooltip();
 					Tooltip beatenTip = new Tooltip();
 					Tooltip unbeatableTip = new Tooltip();
-					ignoreTip.setText("Ignore game");
-					beatenTip.setText("Set game as beaten");
-					unbeatableTip.setText("Set game as unbeatable");
+					ignoreTip.setText(LanguageProvider.getString("tipIgnore"));
+					beatenTip.setText(LanguageProvider.getString("tipSetBeaten"));
+					unbeatableTip.setText(LanguageProvider.getString("tipSetUnbeatable"));
 					ignoreButton.setTooltip(ignoreTip);
 					setAsBeaten.setTooltip(beatenTip);
 					setUnbeatable.setTooltip(unbeatableTip);
@@ -331,16 +340,16 @@ public class GameListController implements Initializable {
 
 					int timePlayedInHours = game.getPlaytime_forever() / 60;
 					if (game.getPlaytime_forever() < 60) {
-						timePlayed.setText("Time played: " + game.getPlaytime_forever() + " minutes");
+						timePlayed.setText(String.format(LanguageProvider.getString("timePlayedMinutes"), game.getPlaytime_forever()));
 					}
 					if (game.getPlaytime_forever() < 1) {
-						timePlayed.setText("Time played: none");
+						timePlayed.setText(LanguageProvider.getString("timePlayedNone"));
 					} else if (timePlayedInHours > 1) {
-						timePlayed.setText("Time played: " + timePlayedInHours + " hours");
+						timePlayed.setText(String.format(LanguageProvider.getString("timePlayed"), timePlayedInHours));
 					}
 
 					if (timePlayedInHours == 1) {
-						timePlayed.setText("Time played: " + timePlayedInHours + " hour");
+						timePlayed.setText(String.format(LanguageProvider.getString("timePlayed1"), timePlayedInHours));
 					}
 					gameName.setText(game.getName());
 					hbox.setSpacing(30);
