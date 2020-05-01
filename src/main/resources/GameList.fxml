@@ -77,13 +77,13 @@
                   </Button>
 						<VBox prefHeight="67.0" prefWidth="400.0">
 							<children>
-								<Label fx:id="markedBeaten"></Label>
-								<Label fx:id="markedNothing"></Label>
-								<Label fx:id="markedUnbeatable"></Label>
-								<Label fx:id="markedIgnored"></Label>
+								<Label fx:id="markedBeaten" />
+								<Label fx:id="markedNothing" />
+								<Label fx:id="markedUnbeatable" />
+								<Label fx:id="markedIgnored" />
 							</children>
 							<padding>
-								<Insets left="25.0"/>
+								<Insets left="25.0" />
 							</padding>
 						</VBox>
 						<Label fx:id="actionLabel" prefHeight="67.0" prefWidth="374.0" wrapText="true">
@@ -112,7 +112,7 @@
 														<Font size="28.0" />
 													</font>
 													<HBox.margin>
-														<Insets left="10.0" top="10.0" />
+														<Insets top="10.0" />
 													</HBox.margin>
 												</Label>
 												<Pane fx:id="achievementPane" prefHeight="64.0" prefWidth="351.0">
@@ -127,7 +127,7 @@
 												<Insets top="10.0" />
 											</VBox.margin>
 										</HBox>
-										<Label fx:id="achievementStatusLabel" alignment="TOP_LEFT" prefHeight="40.0" prefWidth="1250.0"></Label>
+										<Label fx:id="achievementStatusLabel" alignment="TOP_LEFT" prefHeight="40.0" prefWidth="1250.0" />
 										<ListView fx:id="achievementList" fixedCellSize="0" maxHeight="1.7976931348623157E308" prefHeight="502.0" prefWidth="1250.0" VBox.vgrow="ALWAYS">
 											<opaqueInsets>
 												<Insets />

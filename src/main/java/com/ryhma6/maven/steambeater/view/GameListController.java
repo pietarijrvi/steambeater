@@ -154,7 +154,7 @@ public class GameListController implements Initializable {
 	 * 
 	 * @param IMAGE_TEST Image for testing gameList
 	 */
-	private final Image IMAGE_TEST = new Image("/test.png");
+	private final Image IMAGE_TEST = new Image("/img/test.png");
 
 	/**
 	 * ObservableList for user´s games got from the Steam API
@@ -295,7 +295,7 @@ public class GameListController implements Initializable {
 					setGraphic(null);
 				} else {
 					cellGame = game;
-					ImageView ignoreImage = new ImageView("/hide.png");
+					ImageView ignoreImage = new ImageView("/img/hide.png");
 					ignoreImage.setFitHeight(40);
 					ignoreImage.setFitWidth(40);
 					ignoreButton.setGraphic(ignoreImage);
@@ -329,11 +329,11 @@ public class GameListController implements Initializable {
 					setUnbeatable.setTooltip(unbeatableTip);
 
 					// images for statusbuttons
-					ImageView beatenImage = new ImageView("/trophy.png");
+					ImageView beatenImage = new ImageView("/img/trophy.png");
 					beatenImage.setFitHeight(40);
 					beatenImage.setFitWidth(40);
 					setAsBeaten.setGraphic(beatenImage);
-					ImageView unbeatableImage = new ImageView("/unbeatable.png");
+					ImageView unbeatableImage = new ImageView("/img/unbeatable.png");
 					unbeatableImage.setFitHeight(40);
 					unbeatableImage.setFitWidth(40);
 					setUnbeatable.setGraphic(unbeatableImage);
@@ -518,14 +518,14 @@ public class GameListController implements Initializable {
 			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0 && clicked == false) {
 				UserPreferences.setGamelistSort(0);
 				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName));
-				ImageView orderAz = new ImageView("/az.png");
+				ImageView orderAz = new ImageView("/img/az.png");
 				orderButton.setGraphic(orderAz);
 				orderAz.setFitHeight(18);
 				orderAz.setFitWidth(18);
 			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 0 && clicked) {
 				UserPreferences.setGamelistSort(0);
 				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName).reversed());
-				ImageView orderZa = new ImageView("/za.png");
+				ImageView orderZa = new ImageView("/img/za.png");
 				orderButton.setGraphic(orderZa);
 				orderZa.setFitHeight(18);
 				orderZa.setFitWidth(18);
@@ -533,7 +533,7 @@ public class GameListController implements Initializable {
 				UserPreferences.setGamelistSort(1);
 				sortedFilteredData = filteredData
 						.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed());
-				ImageView order21 = new ImageView("/21.png");
+				ImageView order21 = new ImageView("/img/21.png");
 				orderButton.setGraphic(order21);
 				order21.setFitHeight(18);
 				order21.setFitWidth(18);

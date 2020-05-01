@@ -95,15 +95,14 @@ public class MainApp extends Application {
 		this.primaryStage.setTitle("Steambeater");
 
 		primaryStage.initStyle(StageStyle.UNDECORATED);
-
-		initRootLayout();
-		showGameList();
-		showFriendsList();
-		showProfile();
 		
+		initRootLayout();
+		showProfile();
+		loadUI();
 
 		// databaseController.init();
 		// initDatabase();
+		
 
 		// grab your root here
 		rootLayout.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -174,6 +173,11 @@ public class MainApp extends Application {
 
 		// inits database and loads api data after succeeding
 		initDatabase();
+	}
+	
+	public void loadUI() {
+		showGameList();
+		showFriendsList();
 	}
 
 	/**

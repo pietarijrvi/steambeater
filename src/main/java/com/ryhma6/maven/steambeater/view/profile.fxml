@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -15,20 +14,18 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0">
         <buttons>
             <Button fx:id="closeProfile" mnemonicParsing="false" text="Close" />
-            <Button fx:id="loadStatsButton" mnemonicParsing="false" text="load stats" />
         </buttons>
       </ButtonBar>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="189.0" prefWidth="838.0">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@friends.png" />
-               </image>
-            </ImageView>
-            <Label text="Profiilinimi">
+            <ImageView fx:id="profilePageImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="profilePageName" text="Profiilinimi">
                <font>
                   <Font size="29.0" />
                </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
             </Label>
          </children>
          <padding>
