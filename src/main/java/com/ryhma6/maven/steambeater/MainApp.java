@@ -200,7 +200,7 @@ public class MainApp extends Application {
 	 * Starts up the steam API
 	 */
 	private void loadSteamAPIData() {
-		if (!steamAPIService.isRunning()) {
+		if (!steamAPIService.isRunning()&&!UserPreferences.getSteamID().equals("null")) {
 			steamAPIService.reset();
 			steamAPIService.start();
 		} else {
