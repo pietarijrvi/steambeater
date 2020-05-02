@@ -331,7 +331,6 @@ public class SteamOpenIDSignController implements Initializable {
 	private void initLanguageChoice() {
 		languageChoice.getSelectionModel().clearSelection();	
 		LanguageProvider langProv = LanguageProvider.getInstance();
-		langProv.setLanguage("en", "GB");
 		
 		switch(langProv.getCurrentLocale().getLanguage()) {
 			case "en":

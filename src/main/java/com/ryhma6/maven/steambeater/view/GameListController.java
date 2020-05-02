@@ -556,7 +556,7 @@ public class GameListController implements Initializable {
 				UserPreferences.setGamelistSort(1);
 				sortedFilteredData = filteredData
 						.sorted(Comparator.comparing(GameData::getPlaytime_forever));
-				ImageView order12 = new ImageView("/12.png");
+				ImageView order12 = new ImageView("/img/12.png");
 				orderButton.setGraphic(order12);
 				order12.setFitHeight(18);
 				order12.setFitWidth(18);
