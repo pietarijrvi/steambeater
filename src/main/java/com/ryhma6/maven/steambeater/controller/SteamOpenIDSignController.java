@@ -320,7 +320,7 @@ public class SteamOpenIDSignController implements Initializable {
 				image.setFitWidth(25);
 			} else {
 				primaryStage.setMaximized(true);
-				ImageView image = new ImageView("/restore_down_64px.png");
+				ImageView image = new ImageView("/img/restore_down_64px.png");
 				btnFull.setGraphic(image);
 				image.setFitHeight(25);
 				image.setFitWidth(25);

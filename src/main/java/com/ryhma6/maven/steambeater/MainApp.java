@@ -23,6 +23,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
@@ -63,7 +64,12 @@ public class MainApp extends Application {
 	 * Controls the game list
 	 */
 	private GameListController gameListController;
-
+	
+	/**
+	 * 
+	 */
+	private SteamOpenIDSignController steamOpenIDSignController;
+	
 	/**
 	 * Used to access to the database
 	 */
@@ -290,8 +296,8 @@ public class MainApp extends Application {
 			loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			// Give the controller access to the main app.
-			SteamOpenIDSignController controller = loader.getController();
-			controller.setMainApp(this);
+			steamOpenIDSignController = loader.getController();
+			steamOpenIDSignController.setMainApp(this);
 			ListView<String> list = new ListView<String>();
 			ObservableList<String> items = FXCollections.observableArrayList("Single", "Double", "Suite", "Family App");
 			list.setItems(items);
@@ -335,7 +341,13 @@ public class MainApp extends Application {
 			AnchorPane friends = (AnchorPane) loader.load();
 			// Set person overview into the center of root layout.
 			AnchorPane sidebar = (AnchorPane) rootLayout.lookup("#sidebar");
-			sidebar.getChildren().add(friends);
+			
+			ObservableList<Node> sidebarChildren = sidebar.getChildren();
+			
+			if (sidebarChildren.size() > 0) 
+				sidebarChildren.remove(0);
+			
+			sidebarChildren.add(friends);
 			FriendsListController controller = loader.getController();
 			loadStatComparison(controller);
 		} catch (IOException e) {
@@ -378,6 +390,7 @@ public class MainApp extends Application {
 			// Give the controller access to the main app.
 			ProfileController controller = loader.getController();
 			controller.setMainApp(this);
+			steamOpenIDSignController.setProfileController(controller);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

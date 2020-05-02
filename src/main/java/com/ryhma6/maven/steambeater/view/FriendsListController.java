@@ -97,6 +97,7 @@ public class FriendsListController implements Initializable {
 	private void loadFriends() {
 		ObservableList<Friend> names = SteamAPICalls.getFriendList();
 		friendsList.setItems(names);
+		friendsLabel.setText(LanguageProvider.getString("friends"));
 
 		friendsList.setCellFactory(param -> new ListCell<Friend>() {
 

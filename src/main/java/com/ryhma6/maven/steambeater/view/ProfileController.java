@@ -102,6 +102,12 @@ public class ProfileController implements Initializable {
 	
 	@FXML
 	private Label profilePageName;
+	
+	/**
+	 * Label for Statistics text
+	 */
+	@FXML
+	private Label statText;
 
 	public void closeProfile() {
 		profileVbox.setManaged(false);
@@ -111,6 +117,7 @@ public class ProfileController implements Initializable {
 	public void openProfile() {
 		profileVbox.setManaged(true);
 		profileVbox.setVisible(true);
+		loadTexts();
 		loadStats();
 	}
 
@@ -230,6 +237,11 @@ public class ProfileController implements Initializable {
 		});
 		closeProfile();
 
+	}
+	
+	private void loadTexts() {
+		closeProfile.setText(LanguageProvider.getString("close"));
+		statText.setText(LanguageProvider.getString("statistics"));
 	}
 
 	public void setMainApp(MainApp mainApp) {

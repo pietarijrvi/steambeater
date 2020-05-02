@@ -32,7 +32,7 @@
             <Insets bottom="10.0" />
          </padding>
       </HBox>
-      <Label text="Statistiikat">
+      <Label fx:id="statText" text="Statistics">
          <font>
             <Font size="38.0" />
          </font>

@@ -2,8 +2,10 @@ package com.ryhma6.maven.steambeater.view;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -102,6 +104,9 @@ public class GameListController implements Initializable {
 	 */
 	@FXML
 	private ComboBox<?> sortingChoice;
+	
+	@FXML
+	private String sortName, sortPlaytime;
 
 	/**
 	 * TextField for filtering the gameList by name
@@ -221,7 +226,17 @@ public class GameListController implements Initializable {
 		includeBeaten.setText(LanguageProvider.getString("includeBeaten"));
 		includeUnbeaten.setText(LanguageProvider.getString("includeUnbeaten"));
 		includeIgnored.setText(LanguageProvider.getString("includeIgnored"));
+		
+		searchField.setPromptText(LanguageProvider.getString("searchGame"));
 		sortingChoice.setPromptText(LanguageProvider.getString("sortBy"));
+		
+		List<String> arr = new ArrayList<String>();
+		arr.add(LanguageProvider.getString("name"));
+		arr.add(LanguageProvider.getString("playtime"));
+		ObservableList combox1 = FXCollections.observableList(arr);
+		sortingChoice.setItems(combox1);
+		
+		hideStatsButton.setText(LanguageProvider.getString("close"));
 	}
 
 	/**

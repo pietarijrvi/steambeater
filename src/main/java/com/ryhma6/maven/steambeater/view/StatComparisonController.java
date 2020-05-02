@@ -47,6 +47,12 @@ public class StatComparisonController implements Initializable {
 	 */
 	@FXML
 	private BorderPane topBar;
+	
+	/**
+	 * The text "you"
+	 */
+	@FXML
+	private Label youText;
 
 	/**
 	 * Pane into which the friend's stats are put into
@@ -192,6 +198,8 @@ public class StatComparisonController implements Initializable {
 	 * Opens comparison stat window
 	 */
 	public void openComparison() {
+		closeBtn.setText(LanguageProvider.getString("close"));
+		youText.setText(LanguageProvider.getString("you"));
 		statAnchor.setManaged(true);
 		statAnchor.setVisible(true);
 	}
