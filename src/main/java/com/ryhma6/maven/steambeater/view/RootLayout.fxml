@@ -17,8 +17,8 @@
 	<top>
 		<HBox alignment="CENTER" minHeight="90.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="90.0" spacing="5.0" BorderPane.alignment="CENTER_LEFT">
 			<children>
-            <Button fx:id="profileImage" mnemonicParsing="false" onMouseClicked="#handleProfileImageClicked" />
-            <Label fx:id="profileLabel">
+            <Button fx:id="profileImage" mnemonicParsing="false" onMouseClicked="#handleProfileImageClicked"/>
+            <Label fx:id="profileLabel" minWidth="100.0">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>

@@ -314,7 +314,7 @@ public class SteamOpenIDSignController implements Initializable {
 			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
 			if (primaryStage.isMaximized()) {
 				primaryStage.setMaximized(false);
-				ImageView image = new ImageView("/maximize_button_64px.png");
+				ImageView image = new ImageView("/img/maximize_button_64px.png");
 				btnFull.setGraphic(image);
 				image.setFitHeight(25);
 				image.setFitWidth(25);
@@ -331,8 +331,6 @@ public class SteamOpenIDSignController implements Initializable {
 	private void initLanguageChoice() {
 		languageChoice.getSelectionModel().clearSelection();	
 		LanguageProvider langProv = LanguageProvider.getInstance();
-		langProv.setLanguage("en", "GB");
-		loadTexts();
 		
 		switch(langProv.getCurrentLocale().getLanguage()) {
 			case "en":
@@ -344,7 +342,9 @@ public class SteamOpenIDSignController implements Initializable {
 				languageChoice.getSelectionModel().select(1);
 				break;
 		}
-		
+
+		loadTexts();
+
 		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
 			// sorting in alphabetical order
 			if (languageChoice.getSelectionModel().getSelectedIndex() == 0) {
@@ -432,8 +432,27 @@ public class SteamOpenIDSignController implements Initializable {
 				ImageView avatar = new ImageView(userProfile.get().getAvatar());
 				profileImage.setGraphic(avatar);
 				profileLabel.setText(userProfile.get().getPersonaname());
+				
+				profileImage.setVisible(true);
+				profileImage.setManaged(true);
+				profileLabel.setManaged(true);
+				profileLabel.setVisible(true);
+				signTestButton.setVisible(false);
+				signTestButton.setManaged(false);
+				signTestButton.setDisable(false);
+				loginButton.setDisable(false);
+				loginButton.setVisible(false);
+				loginButton.setManaged(false);
 			}catch(Exception e) {
 				System.out.println("Logged out");
+				signTestButton.setVisible(true);
+				signTestButton.setManaged(true);
+				loginButton.setVisible(true);
+				loginButton.setManaged(true);
+				profileImage.setVisible(false);
+				profileImage.setManaged(false);
+				profileLabel.setManaged(false);
+				profileLabel.setVisible(false);
 			}
 		});
 		
@@ -451,20 +470,16 @@ public class SteamOpenIDSignController implements Initializable {
 			loadStateLabel.setText(LoadingStatus.getDescription(stateProperty.getValue()));
 			if (stateProperty.getValue() == LoadingStatus.PRELOAD) {
 				loginButton.setDisable(false);
+				loginButton.setVisible(true);
+				loginButton.setManaged(true);
 				signTestButton.setDisable(false);
+				signTestButton.setVisible(true);
+				signTestButton.setManaged(true);
 				logoutButton.setDisable(true);
 				refreshButton.setDisable(true);
 			} else if (stateProperty.getValue() == LoadingStatus.COMPLETED) {
-				loginButton.setDisable(false);
-				loginButton.setVisible(false);
-				loginButton.setManaged(false);
-				signTestButton.setDisable(false);
 				logoutButton.setDisable(false);
 				refreshButton.setDisable(false);
-				profileImage.setVisible(true);
-				profileImage.setManaged(true);
-				profileLabel.setManaged(true);
-				profileLabel.setVisible(true);
 				loadStateLabel.setText(loadStateLabel.getText() + ": "
 						+ TimeConverter.epochMillisToLocalTimestamp(stateObject.getLastCompletionMillis()));
 			} else if (stateProperty.getValue() == LoadingStatus.FAILURE) {
