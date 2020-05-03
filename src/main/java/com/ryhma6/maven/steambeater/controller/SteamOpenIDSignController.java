@@ -332,6 +332,7 @@ public class SteamOpenIDSignController implements Initializable {
 		languageChoice.getSelectionModel().clearSelection();	
 		LanguageProvider langProv = LanguageProvider.getInstance();
 		langProv.setLanguage("en", "GB");
+		loadTexts();
 		
 		switch(langProv.getCurrentLocale().getLanguage()) {
 			case "en":
@@ -353,6 +354,7 @@ public class SteamOpenIDSignController implements Initializable {
 				languageIcon.setImage(new Image("/img/finland.png"));
 				langProv.setLanguage("fi", "FI");
 			}
+			loadTexts();
 			mainApp.loadUI();
 		});
 	}
@@ -409,14 +411,14 @@ public class SteamOpenIDSignController implements Initializable {
 		ImageView exitImage = new ImageView("/img/exit.png");
 		logoutButton.setGraphic(exitImage);
 		Tooltip exitTip = new Tooltip();
-		exitTip.setText("logout");
+		exitTip.setText(LanguageProvider.getString("logout"));
 		logoutButton.setTooltip(exitTip);
 		exitImage.setFitHeight(35);
 		exitImage.setFitWidth(35);
 
 		ImageView refreshImage = new ImageView("/img/refresh.png");
 		Tooltip refreshTip = new Tooltip();
-		refreshTip.setText("Refresh");
+		refreshTip.setText(LanguageProvider.getString("refresh"));
 		refreshButton.setTooltip(refreshTip);
 		refreshButton.setGraphic(refreshImage);
 		refreshImage.setFitHeight(35);
@@ -484,6 +486,14 @@ public class SteamOpenIDSignController implements Initializable {
 			loadStateLabel.setText(loadStateLabel.getText()+errors);
 
 		});
+	}
+	
+	private void loadTexts() {
+		logoutButton.setText(LanguageProvider.getString("logout"));
+		loginButton.setText(LanguageProvider.getString("login"));
+		logoutButton.setTooltip(new Tooltip(LanguageProvider.getString("logout")));
+		loginButton.setTooltip(new Tooltip(LanguageProvider.getString("login")));
+		refreshButton.setTooltip(new Tooltip(LanguageProvider.getString("refresh")));
 	}
 
 	public void setProfileController(ProfileController controller) {
