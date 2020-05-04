@@ -14,11 +14,23 @@ import java.util.Set;
 
 public class LanguageProvider {
 	private final String appConfigPath = "languageSettings.properties";
+	/**
+	 * Active locale, used to load correct resource bundle
+	 */
 	private Locale curLocale;
+	/**
+	 * Active resource bundle (locale-specific resources)
+	 */
 	private ResourceBundle bundle;
 	private static LanguageProvider self = null;
 
+	/**
+	 * List that contains ISO language codes
+	 */
 	private final Set<String> ISO_LANGUAGES = new HashSet<String>(Arrays.asList(Locale.getISOLanguages()));
+	/**
+	 * List that contains ISO country codes
+	 */
 	private final Set<String> ISO_COUNTRIES = new HashSet<String>(Arrays.asList(Locale.getISOCountries()));
 
 	/**
@@ -41,25 +53,41 @@ public class LanguageProvider {
 		}
 		return self;
 	}
-	
+
+	/**
+	 * Returns string from the active resource bundle.
+	 * @param key key for the string
+	 * @return string that can be used in UI
+	 */
 	public static String getString(String key) {
 		return getInstance().bundle.getString(key);
 	}
-	
+
+	/**
+	 * Returns the locale that is currently active
+	 * @return
+	 */
 	public Locale getCurrentLocale() {
 		return curLocale;
 	}
 
-	public boolean setLanguage(String language, String country) {
+	/**
+	 * Set locale based on language and country codes. Valid ISO codes have to be used (en and GB etc.)
+	 * @param ISOlanguage ISO language code
+	 * @param ISOcountry ISO country code
+	 * @return
+	 */
+	public boolean setLanguage(String ISOlanguage, String ISOcountry) {
 
 		boolean success = false;
-		if (isValidISOLanguage(language) && isValidISOCountry(country)) {
-			curLocale = new Locale(language, country);
+		if (isValidISOLanguage(ISOlanguage) && isValidISOCountry(ISOcountry)) {
+			curLocale = new Locale(ISOlanguage, ISOcountry);
 			setBundle(curLocale);
 			Properties properties = loadLanguageProperties();
-			properties.setProperty("language", language);
-			properties.setProperty("country", country);
+			properties.setProperty("language", ISOlanguage);
+			properties.setProperty("country", ISOcountry);
 
+			//save locale settings to a .properties -file
 			FileOutputStream fos = null;
 			try {
 				File file = new File(getClass().getClassLoader().getResource(appConfigPath).getFile());
@@ -75,13 +103,17 @@ public class LanguageProvider {
 				}
 			}
 
-			System.out.println("Language set to " + language);
-		}else {
+			System.out.println("Language set to " + ISOlanguage);
+		} else {
 			System.out.println("Trying to save invalid locale settings, aborted.");
 		}
 		return success;
 	}
 
+	/**
+	 * Loads locale (language and country codes) from a file
+	 * @return locale
+	 */
 	private Locale getSavedLocale() {
 		Locale locale = Locale.getDefault();
 		Properties properties = loadLanguageProperties();
@@ -97,6 +129,10 @@ public class LanguageProvider {
 		return locale;
 	}
 
+	/**
+	 * Loads the properties file that contains the locale information (language and country codes)
+	 * @return properties
+	 */
 	private Properties loadLanguageProperties() {
 		Properties properties = new Properties();
 		FileInputStream fis = null;
@@ -118,15 +154,25 @@ public class LanguageProvider {
 		}
 		return properties;
 	}
-	
+
 	private void setBundle(Locale locale) {
 		bundle = ResourceBundle.getBundle("TextResources", locale);
 	}
 
+	/**
+	 * Language code validation - checks that the param string is a valid ISO language code.
+	 * @param s
+	 * @return true if valid ISO lang code
+	 */
 	private boolean isValidISOLanguage(String s) {
 		return ISO_LANGUAGES.contains(s);
 	}
 
+	/**
+	 * Country code validation - checks that the param string is a valid ISO country code.
+	 * @param s
+	 * @return true if valid ISO country code
+	 */
 	private boolean isValidISOCountry(String s) {
 		return ISO_COUNTRIES.contains(s);
 	}
