@@ -21,7 +21,7 @@
 			<children>
 				<HBox prefHeight="67.0" prefWidth="513.0">
 					<children>
-						<TextField fx:id="searchField" prefHeight="46.0" minWidth="150.0" prefWidth="330.0" promptText="Search for a game">
+						<TextField fx:id="searchField" prefHeight="46.0" prefWidth="330.0" promptText="Search for a game">
 							<HBox.margin>
 								<Insets bottom="10.0" right="5.0" top="10.0" />
 							</HBox.margin>
