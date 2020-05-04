@@ -12,6 +12,10 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+/**
+ * Class for setting and getting locale resources. Locale-dependent resources (UI strings, numbers etc.) should be
+ * accessed using the methods of this class. Locale settings are saved to a properties file.
+ */
 public class LanguageProvider {
 	private final String appConfigPath = "languageSettings.properties";
 	/**
@@ -56,6 +60,7 @@ public class LanguageProvider {
 
 	/**
 	 * Returns string from the active resource bundle.
+	 * 
 	 * @param key key for the string
 	 * @return string that can be used in UI
 	 */
@@ -65,6 +70,7 @@ public class LanguageProvider {
 
 	/**
 	 * Returns the locale that is currently active
+	 * 
 	 * @return
 	 */
 	public Locale getCurrentLocale() {
@@ -72,9 +78,11 @@ public class LanguageProvider {
 	}
 
 	/**
-	 * Set locale based on language and country codes. Valid ISO codes have to be used (en and GB etc.)
+	 * Set locale based on language and country codes. Valid ISO codes have to be
+	 * used (en and GB etc.)
+	 * 
 	 * @param ISOlanguage ISO language code
-	 * @param ISOcountry ISO country code
+	 * @param ISOcountry  ISO country code
 	 * @return
 	 */
 	public boolean setLanguage(String ISOlanguage, String ISOcountry) {
@@ -87,7 +95,7 @@ public class LanguageProvider {
 			properties.setProperty("language", ISOlanguage);
 			properties.setProperty("country", ISOcountry);
 
-			//save locale settings to a .properties -file
+			// save locale settings to a .properties -file
 			FileOutputStream fos = null;
 			try {
 				File file = new File(getClass().getClassLoader().getResource(appConfigPath).getFile());
@@ -112,6 +120,7 @@ public class LanguageProvider {
 
 	/**
 	 * Loads locale (language and country codes) from a file
+	 * 
 	 * @return locale
 	 */
 	private Locale getSavedLocale() {
@@ -130,7 +139,9 @@ public class LanguageProvider {
 	}
 
 	/**
-	 * Loads the properties file that contains the locale information (language and country codes)
+	 * Loads the properties file that contains the locale information (language and
+	 * country codes)
+	 * 
 	 * @return properties
 	 */
 	private Properties loadLanguageProperties() {
@@ -160,7 +171,9 @@ public class LanguageProvider {
 	}
 
 	/**
-	 * Language code validation - checks that the param string is a valid ISO language code.
+	 * Language code validation - checks that the param string is a valid ISO
+	 * language code.
+	 * 
 	 * @param s
 	 * @return true if valid ISO lang code
 	 */
@@ -169,7 +182,9 @@ public class LanguageProvider {
 	}
 
 	/**
-	 * Country code validation - checks that the param string is a valid ISO country code.
+	 * Country code validation - checks that the param string is a valid ISO country
+	 * code.
+	 * 
 	 * @param s
 	 * @return true if valid ISO country code
 	 */
