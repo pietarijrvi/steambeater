@@ -269,6 +269,7 @@ public class GameListController implements Initializable {
 						actionLabel.setText(cellGame.getName() + " ignored: " + cellGame.isIgnored());
 						activateFade();
 						filterGameData();
+						countMarks();
 					}
 				};
 				EventHandler<MouseEvent> eventBeaten = new EventHandler<MouseEvent>() {
@@ -280,6 +281,7 @@ public class GameListController implements Initializable {
 						actionLabel.setText(cellGame.getName() + " beaten: " + cellGame.isBeaten());
 						activateFade();
 						filterGameData();
+						countMarks();
 					}
 				};
 				EventHandler<MouseEvent> eventUnbeatable = new EventHandler<MouseEvent>() {
@@ -291,6 +293,7 @@ public class GameListController implements Initializable {
 						actionLabel.setText(cellGame.getName() + " unbeatable: " + cellGame.isUnbeatable());
 						activateFade();
 						filterGameData();
+						countMarks();
 					}
 				};
 				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventIgnored);
