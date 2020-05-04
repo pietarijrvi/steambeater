@@ -80,3 +80,7 @@ Label{
 #profileImage{
 	-fx-background-color: Transparent;
 }
+
+#profileImage.button:hover{
+	-fx-background-color: #6289A1;
+}

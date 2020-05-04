@@ -66,7 +66,7 @@ public class MainApp extends Application {
 	private GameListController gameListController;
 	
 	/**
-	 * 
+	 * Controls rootlayout
 	 */
 	private SteamOpenIDSignController steamOpenIDSignController;
 	
@@ -181,6 +181,9 @@ public class MainApp extends Application {
 		initDatabase();
 	}
 	
+	/**
+	 * Loads gamelist and friendlist to the rootlayout
+	 */
 	public void loadUI() {
 		showGameList();
 		showFriendsList();
@@ -379,6 +382,9 @@ public class MainApp extends Application {
 		}
 	}
 	
+	/**
+	 * Loads profilepage to rootlayout
+	 */
 	private void showProfile() {
 		try {
 			// Load person overview.

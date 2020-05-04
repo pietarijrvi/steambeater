@@ -24,7 +24,6 @@ import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
 import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.TimeConverter;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
-import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
 import com.ryhma6.maven.steambeater.view.GameListController;
 import com.ryhma6.maven.steambeater.view.ProfileController;
@@ -47,7 +46,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
@@ -142,9 +140,15 @@ public class SteamOpenIDSignController implements Initializable {
 	@FXML
 	private ComboBox<?> languageChoice;
 	
+	/**
+	 * Label for the user's profilename in rootlayout
+	 */
 	@FXML
 	private Label profileLabel;
 	
+	/**
+	 * Button to open the profilepage. Also shows user's avatar.
+	 */
 	@FXML
 	private Button profileImage;
 	
@@ -359,6 +363,10 @@ public class SteamOpenIDSignController implements Initializable {
 		});
 	}
 	
+	/**
+	 * Listener for profile image button. Opens the profile page.
+	 * @param arg0
+	 */
 	@FXML
 	private void handleProfileImageClicked(MouseEvent arg0) {
 		profileController.openProfile();
@@ -503,6 +511,9 @@ public class SteamOpenIDSignController implements Initializable {
 		});
 	}
 	
+	/**
+	 * Loads texts for the rootlayouts top buttons
+	 */
 	private void loadTexts() {
 		logoutButton.setText(LanguageProvider.getString("logout"));
 		loginButton.setText(LanguageProvider.getString("login"));
