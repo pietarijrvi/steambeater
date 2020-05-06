@@ -13,8 +13,9 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
- * Class for setting and getting locale resources. Locale-dependent resources (UI strings, numbers etc.) should be
- * accessed using the methods of this class. Locale settings are saved to a properties file.
+ * Class for setting and getting locale resources. Locale-dependent resources
+ * (UI strings, numbers etc.) should be accessed using the methods of this
+ * class. Locale settings are saved to a properties file.
  */
 public class LanguageProvider {
 	private final String appConfigPath = "languageSettings.properties";
@@ -79,11 +80,11 @@ public class LanguageProvider {
 
 	/**
 	 * Set locale based on language and country codes. Valid ISO codes have to be
-	 * used (en and GB etc.)
+	 * used (en and GB etc.). Returns false of loading locale setting file fails.
 	 * 
 	 * @param ISOlanguage ISO language code
 	 * @param ISOcountry  ISO country code
-	 * @return
+	 * @return true if the language was set successfully
 	 */
 	public boolean setLanguage(String ISOlanguage, String ISOcountry) {
 
@@ -119,7 +120,8 @@ public class LanguageProvider {
 	}
 
 	/**
-	 * Loads locale (language and country codes) from a file
+	 * Parses current locale (language and country codes) from a loaded properties.
+	 * Returns default values if properties include invalid locale values.
 	 * 
 	 * @return locale
 	 */
@@ -140,7 +142,7 @@ public class LanguageProvider {
 
 	/**
 	 * Loads the properties file that contains the locale information (language and
-	 * country codes)
+	 * country codes). Returns empty properties if loading data from the file fails.
 	 * 
 	 * @return properties
 	 */
@@ -166,6 +168,11 @@ public class LanguageProvider {
 		return properties;
 	}
 
+	/**
+	 * Set the resource bundle that corresponds to the arg locale
+	 * 
+	 * @param locale
+	 */
 	private void setBundle(Locale locale) {
 		bundle = ResourceBundle.getBundle("TextResources", locale);
 	}
