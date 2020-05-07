@@ -20,8 +20,11 @@ import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.LoadingStatus;
 import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
+import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.TimeConverter;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
+import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
+import com.ryhma6.maven.steambeater.view.ProfileController;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.Worker;
@@ -134,6 +137,20 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@FXML
 	private ComboBox<?> languageChoice;
+	
+	/**
+	 * Label for the user's profilename in rootlayout
+	 */
+	@FXML
+	private Label profileLabel;
+	
+	/**
+	 * Button to open the profilepage. Also shows user's avatar.
+	 */
+	@FXML
+	private Button profileImage;
+	
+	private ProfileController profileController;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -258,6 +275,12 @@ public class SteamOpenIDSignController implements Initializable {
 		if (alert.getResult() == ButtonType.YES) {
 			UserPreferences.setSteamID("null");
 			mainApp.resetSteamAPIData();
+			loginButton.setManaged(true);
+			loginButton.setVisible(true);
+			profileImage.setManaged(false);
+			profileImage.setVisible(false);
+			profileLabel.setManaged(false);
+			profileLabel.setVisible(false);
 		}
 
 	}
@@ -290,13 +313,13 @@ public class SteamOpenIDSignController implements Initializable {
 			Stage primaryStage = (Stage) btnClose.getScene().getWindow();
 			if (primaryStage.isMaximized()) {
 				primaryStage.setMaximized(false);
-				ImageView image = new ImageView("/maximize_button_64px.png");
+				ImageView image = new ImageView("/img/maximize_button_64px.png");
 				btnFull.setGraphic(image);
 				image.setFitHeight(25);
 				image.setFitWidth(25);
 			} else {
 				primaryStage.setMaximized(true);
-				ImageView image = new ImageView("/restore_down_64px.png");
+				ImageView image = new ImageView("/img/restore_down_64px.png");
 				btnFull.setGraphic(image);
 				image.setFitHeight(25);
 				image.setFitWidth(25);
@@ -304,23 +327,49 @@ public class SteamOpenIDSignController implements Initializable {
 		}
 	}
 	
+	/**
+	 * Initializes the language selection menu and fetches saved selection
+	 */
 	private void initLanguageChoice() {
 		languageChoice.getSelectionModel().clearSelection();	
 		LanguageProvider langProv = LanguageProvider.getInstance();
 		
+		switch(langProv.getCurrentLocale().getLanguage()) {
+			case "en":
+				languageIcon.setImage(new Image("/img/UK.png"));
+				languageChoice.getSelectionModel().select(0);
+				break;
+			case "fi":
+				languageIcon.setImage(new Image("/img/finland.png"));
+				languageChoice.getSelectionModel().select(1);
+				break;
+		}
+
+		loadTexts();
+
 		languageChoice.getSelectionModel().selectedItemProperty().addListener(obs -> {
 			// sorting in alphabetical order
 			if (languageChoice.getSelectionModel().getSelectedIndex() == 0) {
-				Image image = new Image("/UK.png");
-				languageIcon.setImage(image);
+				languageIcon.setImage(new Image("/img/UK.png"));
 				langProv.setLanguage("en", "GB");
 			} else if (languageChoice.getSelectionModel().getSelectedIndex() == 1) {
-				Image image = new Image("/finland.png");
-				languageIcon.setImage(image);
+				languageIcon.setImage(new Image("/img/finland.png"));
 				langProv.setLanguage("fi", "FI");
 			}
+			loadTexts();
+			mainApp.loadUI();
 		});
 	}
+	
+	/**
+	 * Listener for profile image button. Opens the profile page.
+	 * @param arg0
+	 */
+	@FXML
+	private void handleProfileImageClicked(MouseEvent arg0) {
+		profileController.openProfile();
+	}
+	
 
 	/**
 	 * Runs when application is started, sets steam's login image to the login
@@ -328,29 +377,36 @@ public class SteamOpenIDSignController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
+		profileImage.setManaged(false);
+		profileImage.setVisible(false);
+		
+		profileLabel.setManaged(false);
+		profileLabel.setVisible(false);
+
 		initLanguageChoice();
-		ImageView fullImage = new ImageView("/maximize_button_64px.png");
+		ImageView fullImage = new ImageView("/img/maximize_button_64px.png");
 		btnFull.setGraphic(fullImage);
 		fullImage.setFitHeight(25);
 		fullImage.setFitWidth(25);
 
-		ImageView minimizeImage = new ImageView("/minimize_window_64px.png");
+		ImageView minimizeImage = new ImageView("/img/minimize_window_64px.png");
 		btnMinimize.setGraphic(minimizeImage);
 		minimizeImage.setFitHeight(25);
 		minimizeImage.setFitWidth(25);
 
-		ImageView closeImage = new ImageView("/close_window_64px.png");
+		ImageView closeImage = new ImageView("/img/close_window_64px.png");
 		btnClose.setGraphic(closeImage);
 		closeImage.setFitHeight(25);
 		closeImage.setFitWidth(25);
 
-		ImageView loginImage = new ImageView("/steamicon.png");
+		ImageView loginImage = new ImageView("/img/steamicon.png");
 		loginButton.setGraphic(loginImage);
 		loginButton.setPadding(Insets.EMPTY);
 		loginImage.setPreserveRatio(true);
 		loginImage.setFitWidth(200);
 
-		ImageView loginTestImage = new ImageView("/enter.png");
+		ImageView loginTestImage = new ImageView("/img/enter.png");
 		signTestButton.setGraphic(loginTestImage);
 		Tooltip loginTip = new Tooltip();
 		loginTip.setText("Test gamelist");
@@ -358,17 +414,17 @@ public class SteamOpenIDSignController implements Initializable {
 		loginTestImage.setFitHeight(35);
 		loginTestImage.setFitWidth(35);
 
-		ImageView exitImage = new ImageView("/exit.png");
+		ImageView exitImage = new ImageView("/img/exit.png");
 		logoutButton.setGraphic(exitImage);
 		Tooltip exitTip = new Tooltip();
-		exitTip.setText("logout");
+		exitTip.setText(LanguageProvider.getString("logout"));
 		logoutButton.setTooltip(exitTip);
 		exitImage.setFitHeight(35);
 		exitImage.setFitWidth(35);
 
-		ImageView refreshImage = new ImageView("/refresh.png");
+		ImageView refreshImage = new ImageView("/img/refresh.png");
 		Tooltip refreshTip = new Tooltip();
-		refreshTip.setText("Refresh");
+		refreshTip.setText(LanguageProvider.getString("refresh"));
 		refreshButton.setTooltip(refreshTip);
 		refreshButton.setGraphic(refreshImage);
 		refreshImage.setFitHeight(35);
@@ -376,6 +432,36 @@ public class SteamOpenIDSignController implements Initializable {
 
 		loadStateLabel.setPadding(new Insets(10, 0, 0, 0));
 
+		ObjectProperty<PlayerProfile> userProfile = SteamAPICalls.getSignedPlayerProfile();
+		userProfile.addListener(obs -> {
+			try {
+				ImageView avatar = new ImageView(userProfile.get().getAvatar());
+				profileImage.setGraphic(avatar);
+				profileLabel.setText(userProfile.get().getPersonaname());
+				
+				profileImage.setVisible(true);
+				profileImage.setManaged(true);
+				profileLabel.setManaged(true);
+				profileLabel.setVisible(true);
+				signTestButton.setVisible(false);
+				signTestButton.setManaged(false);
+				signTestButton.setDisable(false);
+				loginButton.setDisable(false);
+				loginButton.setVisible(false);
+				loginButton.setManaged(false);
+			}catch(Exception e) {
+				System.out.println("Logged out");
+				signTestButton.setVisible(true);
+				signTestButton.setManaged(true);
+				loginButton.setVisible(true);
+				loginButton.setManaged(true);
+				profileImage.setVisible(false);
+				profileImage.setManaged(false);
+				profileLabel.setManaged(false);
+				profileLabel.setVisible(false);
+			}
+		});
+		
 		ObservableLoadingStatus stateObject = ObservableLoadingStatus.getInstance();
 		ObjectProperty<LoadingStatus> stateProperty = stateObject.getLoadingStateProperty();
 		loadStateLabel.setText(LoadingStatus.getDescription(stateProperty.getValue()));
@@ -390,12 +476,14 @@ public class SteamOpenIDSignController implements Initializable {
 			loadStateLabel.setText(LoadingStatus.getDescription(stateProperty.getValue()));
 			if (stateProperty.getValue() == LoadingStatus.PRELOAD) {
 				loginButton.setDisable(false);
+				loginButton.setVisible(true);
+				loginButton.setManaged(true);
 				signTestButton.setDisable(false);
+				signTestButton.setVisible(true);
+				signTestButton.setManaged(true);
 				logoutButton.setDisable(true);
 				refreshButton.setDisable(true);
 			} else if (stateProperty.getValue() == LoadingStatus.COMPLETED) {
-				loginButton.setDisable(false);
-				signTestButton.setDisable(false);
 				logoutButton.setDisable(false);
 				refreshButton.setDisable(false);
 				loadStateLabel.setText(loadStateLabel.getText() + ": "
@@ -419,5 +507,24 @@ public class SteamOpenIDSignController implements Initializable {
 			loadStateLabel.setText(loadStateLabel.getText()+errors);
 
 		});
+	}
+	
+	/**
+	 * Loads texts for the rootlayouts top buttons in the selected language
+	 */
+	private void loadTexts() {
+		signTestButton.setText(LanguageProvider.getString("testLogin"));
+		logoutButton.setText(LanguageProvider.getString("logout"));
+		logoutButton.setTooltip(new Tooltip(LanguageProvider.getString("logout")));
+		loginButton.setTooltip(new Tooltip(LanguageProvider.getString("login")));
+		refreshButton.setTooltip(new Tooltip(LanguageProvider.getString("refresh")));
+	}
+
+	/**
+	 * Sets ProfileController so you can open the profile panel from the rootLayout
+	 * @param controller
+	 */
+	public void setProfileController(ProfileController controller) {
+		this.profileController = controller;
 	}
 }

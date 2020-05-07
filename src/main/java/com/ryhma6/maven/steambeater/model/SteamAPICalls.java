@@ -24,6 +24,8 @@ import com.ryhma6.maven.steambeater.model.steamAPI.OwnedGames;
 import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
 
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,6 +38,10 @@ import javafx.collections.ObservableList;
  */
 public class SteamAPICalls {
 
+	/**
+	 * Observable player profile of the user that is signed in
+	 */
+	private static ObjectProperty<PlayerProfile> signedPlayerProfile = new SimpleObjectProperty<>();
 	/**
 	 * UI game list is formed from the data in this list.
 	 */
@@ -87,6 +93,15 @@ public class SteamAPICalls {
 	}
 
 	/**
+	 * Returns the observable profile of the player that is signed in.
+	 * 
+	 * @return signedPlayerProfile
+	 */
+	public static ObjectProperty<PlayerProfile> getSignedPlayerProfile() {
+		return signedPlayerProfile;
+	}
+
+	/**
 	 * Returns the ObservableList that contain game data retrieved from SteamAPI,
 	 * used for forming UI game list.
 	 * 
@@ -117,6 +132,28 @@ public class SteamAPICalls {
 	}
 
 	/**
+	 * Load profile of the player that is signed in and update the value of the
+	 * observable profile object
+	 */
+	public void loadSignedPlayerProfileFromSteam() {
+		List<String> playerProfile = new ArrayList<String>();
+		playerProfile.add(getSteamID());
+		Map<String, PlayerProfile> profile = loadSteamPlayerProfiles(playerProfile);
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						signedPlayerProfile.setValue(profile.get(getSteamID()));
+					}
+				});
+			}
+		}).start();
+	}
+
+	/**
 	 * Modify the current incomplete gamelist (from SteamAPI) to include the data
 	 * (game status info; ignored, unbeatable, beaten) saved in database.
 	 * 
@@ -137,7 +174,11 @@ public class SteamAPICalls {
 		}
 		setGamesToUI();
 	}
-
+	
+	/**
+	 * Creates a GameData object for each game from the given list and puts them into gamesMappedByGameID
+	 * @param dbEntries list of games fetched from the database
+	 */
 	public void loadGamesFromDatabase(List<GameListEntry> dbEntries) {
 		try {
 			for (GameListEntry g : dbEntries) {
@@ -188,6 +229,8 @@ public class SteamAPICalls {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
+						if(getSteamID().equals("null"))
+							signedPlayerProfile.set(null);
 						playerGames.clear();
 						friendList.clear();
 						friendsGames.clear();

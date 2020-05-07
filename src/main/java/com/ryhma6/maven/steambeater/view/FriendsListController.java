@@ -68,7 +68,7 @@ public class FriendsListController implements Initializable {
 	/**
 	 * Test image used as profile picture in case of an exception
 	 */
-	private final Image IMAGE_TEST = new Image("test.png");
+	private final Image IMAGE_TEST = new Image("img/test.png");
 
 	/**
 	 * Friends list's smaller width
@@ -97,6 +97,7 @@ public class FriendsListController implements Initializable {
 	private void loadFriends() {
 		ObservableList<Friend> names = SteamAPICalls.getFriendList();
 		friendsList.setItems(names);
+		friendsLabel.setText(LanguageProvider.getString("friends"));
 
 		friendsList.setCellFactory(param -> new ListCell<Friend>() {
 
@@ -191,7 +192,7 @@ public class FriendsListController implements Initializable {
 			friendsLabel.setManaged(false);
 			friendsLabel.setVisible(false);
 
-			ImageView back = new ImageView("/forward_64px.png");
+			ImageView back = new ImageView("/img/forward_64px.png");
 			back.setFitHeight(25);
 			back.setFitWidth(20);
 			resizeButton.setGraphic(back);
@@ -204,7 +205,7 @@ public class FriendsListController implements Initializable {
 			friendsLabel.setManaged(true);
 			friendsLabel.setVisible(true);
 
-			ImageView back = new ImageView("/back_64px.png");
+			ImageView back = new ImageView("/img/back_64px.png");
 			back.setFitHeight(25);
 			back.setFitWidth(20);
 			resizeButton.setGraphic(back);
@@ -230,7 +231,7 @@ public class FriendsListController implements Initializable {
 		borderPane.setRight(resizeButton);
 		borderPane.setPrefWidth(normalWidth);
 		borderPane.setPadding(new Insets(12, 6, 5, 5));
-		ImageView back = new ImageView("/back_64px.png");
+		ImageView back = new ImageView("/img/back_64px.png");
 		resizeButton.setGraphic(back);
 		back.setFitHeight(25);
 		back.setFitWidth(20);

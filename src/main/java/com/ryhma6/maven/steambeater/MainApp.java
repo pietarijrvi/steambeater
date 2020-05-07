@@ -11,6 +11,7 @@ import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.GameData;
 import com.ryhma6.maven.steambeater.view.FriendsListController;
 import com.ryhma6.maven.steambeater.view.GameListController;
+import com.ryhma6.maven.steambeater.view.ProfileController;
 import com.ryhma6.maven.steambeater.view.StatComparisonController;
 
 import javafx.application.Application;
@@ -22,12 +23,14 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -61,7 +64,12 @@ public class MainApp extends Application {
 	 * Controls the game list
 	 */
 	private GameListController gameListController;
-
+	
+	/**
+	 * Controls rootlayout
+	 */
+	private SteamOpenIDSignController steamOpenIDSignController;
+	
 	/**
 	 * Used to access to the database
 	 */
@@ -83,6 +91,7 @@ public class MainApp extends Application {
 	 */
 	private double yOffset = 0;
 
+
 	/**
 	 * Starts the app and loads everything in
 	 */
@@ -92,13 +101,14 @@ public class MainApp extends Application {
 		this.primaryStage.setTitle("Steambeater");
 
 		primaryStage.initStyle(StageStyle.UNDECORATED);
-
+		
 		initRootLayout();
-		showGameList();
-		showFriendsList();
+		showProfile();
+		loadUI();
 
 		// databaseController.init();
 		// initDatabase();
+		
 
 		// grab your root here
 		rootLayout.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -124,6 +134,7 @@ public class MainApp extends Application {
 				return new Task<Integer>() {
 					@Override
 					protected Integer call() throws Exception {
+						steamAPI.loadSignedPlayerProfileFromSteam();
 						// load game list from Steam API
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_GAMES);
 						Long count = databaseController.getUserGameCount(UserPreferences.getSteamID());
@@ -151,6 +162,7 @@ public class MainApp extends Application {
 										databaseController.getAllUserGames(UserPreferences.getSteamID()));
 							}
 						}
+						
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_FRIENDS);
 						steamAPI.loadSteamFriends();
 						return null;
@@ -159,6 +171,7 @@ public class MainApp extends Application {
 					@Override
 					protected void succeeded() {
 						super.succeeded();
+						gameListController.countMarks();
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.COMPLETED);
 						// steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
 					}
@@ -168,6 +181,14 @@ public class MainApp extends Application {
 
 		// inits database and loads api data after succeeding
 		initDatabase();
+	}
+	
+	/**
+	 * Loads gamelist and friendlist to the rootlayout
+	 */
+	public void loadUI() {
+		showGameList();
+		showFriendsList();
 	}
 
 	/**
@@ -184,7 +205,7 @@ public class MainApp extends Application {
 	 * Starts up the steam API
 	 */
 	private void loadSteamAPIData() {
-		if (!steamAPIService.isRunning()) {
+		if (!steamAPIService.isRunning()&&!UserPreferences.getSteamID().equals("null")) {
 			steamAPIService.reset();
 			steamAPIService.start();
 		} else {
@@ -280,8 +301,8 @@ public class MainApp extends Application {
 			loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			// Give the controller access to the main app.
-			SteamOpenIDSignController controller = loader.getController();
-			controller.setMainApp(this);
+			steamOpenIDSignController = loader.getController();
+			steamOpenIDSignController.setMainApp(this);
 			ListView<String> list = new ListView<String>();
 			ObservableList<String> items = FXCollections.observableArrayList("Single", "Double", "Suite", "Family App");
 			list.setItems(items);
@@ -325,7 +346,13 @@ public class MainApp extends Application {
 			AnchorPane friends = (AnchorPane) loader.load();
 			// Set person overview into the center of root layout.
 			AnchorPane sidebar = (AnchorPane) rootLayout.lookup("#sidebar");
-			sidebar.getChildren().add(friends);
+			
+			ObservableList<Node> sidebarChildren = sidebar.getChildren();
+			
+			if (sidebarChildren.size() > 0) 
+				sidebarChildren.remove(0);
+			
+			sidebarChildren.add(friends);
 			FriendsListController controller = loader.getController();
 			loadStatComparison(controller);
 		} catch (IOException e) {
@@ -356,6 +383,26 @@ public class MainApp extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Loads profilepage to rootlayout
+	 */
+	private void showProfile() {
+		try {
+			// Load person overview.
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/profile.fxml"));
+			VBox profile = (VBox) loader.load();
+			// Set person overview into the center of root layout.
+			rootLayout.setBottom(profile);
+			// Give the controller access to the main app.
+			ProfileController controller = loader.getController();
+			steamOpenIDSignController.setProfileController(controller);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	/**
 	 * Returns the main stage.

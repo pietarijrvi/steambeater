@@ -18,6 +18,10 @@ public class PlayerProfile {
 	@Getter
 	@Setter
 	private String steamid;
+	
+	@Getter
+	@Setter
+	private String avatarhash;
 
 	/**
 	 * The player's persona name (display name)

@@ -23,35 +23,35 @@ public enum LoadingStatus {
 		switch (loadingStatus) {
 		case PRELOAD:
 			// sign in to show data
-			description = "Not signed in";
+			description = LanguageProvider.getString("statusPreload");
 			break;
 		case API_GAMES:
 			// loading game data from steam
-			description = "Loading Steam games";
+			description = LanguageProvider.getString("statusApiGames");
 			break;
 		case API_FRIENDS:
 			// loading friend data from steam
-			description = "Loading Steam friends";
+			description = LanguageProvider.getString("statusApiFriends");
 			break;
 		case COMPLETED:
 			// Steam data updated: + timestamp
-			description = "Steam data loading completed";
+			description = LanguageProvider.getString("statusCompletedLoad");
 			break;
 		case FAILURE:
 			// Failed to load data
-			description = "Loading was not successful, refresh to try again";
+			description = LanguageProvider.getString("statusFailureLoad");
 			break;
 		case API_FAILURE:
 			// Failed to load steam data
-			description = "Failed to load up-to-date Steam game data";
+			description = LanguageProvider.getString("statusFailureAPI");
 			break;
 		case DATABASE_CONNECTING:
 			// connecting to database
-			description = "Connecting to database";
+			description = LanguageProvider.getString("statusDatabaseConnecting");
 			break;
 		case DATABASE_FAILURE:
 			// Failed to load database data
-			description = "Database connection error, modifications not saved";
+			description = LanguageProvider.getString("statusFailureDatabase");
 			break;
 		}
 		return description;

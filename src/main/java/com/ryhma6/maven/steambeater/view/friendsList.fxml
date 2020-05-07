@@ -24,7 +24,7 @@
 					<ImageView fitHeight="40.0" fitWidth="55.0"
 						pickOnBounds="true" preserveRatio="true">
 						<image>
-							<Image url="@friends.png" />
+							<Image url="@/img/friends.png" />
 						</image>
 						<HBox.margin>
 							<Insets bottom="6.0" />

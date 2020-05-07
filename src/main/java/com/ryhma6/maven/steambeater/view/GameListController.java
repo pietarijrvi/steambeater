@@ -2,8 +2,10 @@ package com.ryhma6.maven.steambeater.view;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -65,6 +67,9 @@ public class GameListController implements Initializable {
 	 */
 	@FXML
 	private ListView<Achievement> achievementList;
+	
+	@FXML
+	private Label achievementStatusLabel;
 
 	/**
 	 * Hides statsWindow with achievements
@@ -99,6 +104,9 @@ public class GameListController implements Initializable {
 	 */
 	@FXML
 	private ComboBox<?> sortingChoice;
+	
+	@FXML
+	private String sortName, sortPlaytime;
 
 	/**
 	 * TextField for filtering the gameList by name
@@ -151,7 +159,7 @@ public class GameListController implements Initializable {
 	 * 
 	 * @param IMAGE_TEST Image for testing gameList
 	 */
-	private final Image IMAGE_TEST = new Image("/test.png");
+	private final Image IMAGE_TEST = new Image("/img/test.png");
 
 	/**
 	 * ObservableList for user´s games got from the Steam API
@@ -192,9 +200,15 @@ public class GameListController implements Initializable {
 		this.games = games;
 	}
 	
+	/**
+	 * Button for setting gamelist sorting order
+	 */
 	@FXML
 	private Button orderButton;
 	
+	/**
+	 * Boolean for orderbutton
+	 */
 	private boolean clicked = false;
 
 
@@ -210,6 +224,31 @@ public class GameListController implements Initializable {
 		hideStats();
 		setSavedOrDefaultOptions();
 		countMarks();
+		loadTexts();
+	}
+	
+	/**
+	 * Sets all the texts within the gamelist to the selected language
+	 */
+	@SuppressWarnings("unchecked")
+	public void loadTexts() {
+		includeUnbeatable.setText(LanguageProvider.getString("includeUnbeatable"));
+		includeBeaten.setText(LanguageProvider.getString("includeBeaten"));
+		includeUnbeaten.setText(LanguageProvider.getString("includeUnbeaten"));
+		includeIgnored.setText(LanguageProvider.getString("includeIgnored"));
+		
+		searchField.setPromptText(LanguageProvider.getString("searchGame"));
+		sortingChoice.setPromptText(LanguageProvider.getString("sortBy"));
+		
+		List<String> arr = new ArrayList<String>();
+		arr.add(LanguageProvider.getString("name"));
+		arr.add(LanguageProvider.getString("playtime"));
+		
+		@SuppressWarnings("rawtypes")
+		ObservableList combox1 = FXCollections.observableList(arr);
+		sortingChoice.setItems(combox1);
+		
+		hideStatsButton.setText(LanguageProvider.getString("close"));
 	}
 
 	/**
@@ -242,6 +281,7 @@ public class GameListController implements Initializable {
 						actionLabel.setText(cellGame.getName() + " ignored: " + cellGame.isIgnored());
 						activateFade();
 						filterGameData();
+						countMarks();
 					}
 				};
 				EventHandler<MouseEvent> eventBeaten = new EventHandler<MouseEvent>() {
@@ -253,6 +293,7 @@ public class GameListController implements Initializable {
 						actionLabel.setText(cellGame.getName() + " beaten: " + cellGame.isBeaten());
 						activateFade();
 						filterGameData();
+						countMarks();
 					}
 				};
 				EventHandler<MouseEvent> eventUnbeatable = new EventHandler<MouseEvent>() {
@@ -264,6 +305,7 @@ public class GameListController implements Initializable {
 						actionLabel.setText(cellGame.getName() + " unbeatable: " + cellGame.isUnbeatable());
 						activateFade();
 						filterGameData();
+						countMarks();
 					}
 				};
 				ignoreButton.addEventFilter(MouseEvent.MOUSE_CLICKED, eventIgnored);
@@ -283,7 +325,7 @@ public class GameListController implements Initializable {
 					setGraphic(null);
 				} else {
 					cellGame = game;
-					ImageView ignoreImage = new ImageView("/hide.png");
+					ImageView ignoreImage = new ImageView("/img/hide.png");
 					ignoreImage.setFitHeight(40);
 					ignoreImage.setFitWidth(40);
 					ignoreButton.setGraphic(ignoreImage);
@@ -309,35 +351,35 @@ public class GameListController implements Initializable {
 					Tooltip ignoreTip = new Tooltip();
 					Tooltip beatenTip = new Tooltip();
 					Tooltip unbeatableTip = new Tooltip();
-					ignoreTip.setText("Ignore game");
-					beatenTip.setText("Set game as beaten");
-					unbeatableTip.setText("Set game as unbeatable");
+					ignoreTip.setText(LanguageProvider.getString("tipIgnore"));
+					beatenTip.setText(LanguageProvider.getString("tipSetBeaten"));
+					unbeatableTip.setText(LanguageProvider.getString("tipSetUnbeatable"));
 					ignoreButton.setTooltip(ignoreTip);
 					setAsBeaten.setTooltip(beatenTip);
 					setUnbeatable.setTooltip(unbeatableTip);
 
 					// images for statusbuttons
-					ImageView beatenImage = new ImageView("/trophy.png");
+					ImageView beatenImage = new ImageView("/img/trophy.png");
 					beatenImage.setFitHeight(40);
 					beatenImage.setFitWidth(40);
 					setAsBeaten.setGraphic(beatenImage);
-					ImageView unbeatableImage = new ImageView("/unbeatable.png");
+					ImageView unbeatableImage = new ImageView("/img/unbeatable.png");
 					unbeatableImage.setFitHeight(40);
 					unbeatableImage.setFitWidth(40);
 					setUnbeatable.setGraphic(unbeatableImage);
 
 					int timePlayedInHours = game.getPlaytime_forever() / 60;
 					if (game.getPlaytime_forever() < 60) {
-						timePlayed.setText("Time played: " + game.getPlaytime_forever() + " minutes");
+						timePlayed.setText(String.format(LanguageProvider.getString("timePlayedMinutes"), game.getPlaytime_forever()));
 					}
 					if (game.getPlaytime_forever() < 1) {
-						timePlayed.setText("Time played: none");
+						timePlayed.setText(LanguageProvider.getString("timePlayedNone"));
 					} else if (timePlayedInHours > 1) {
-						timePlayed.setText("Time played: " + timePlayedInHours + " hours");
+						timePlayed.setText(String.format(LanguageProvider.getString("timePlayed"), timePlayedInHours));
 					}
 
 					if (timePlayedInHours == 1) {
-						timePlayed.setText("Time played: " + timePlayedInHours + " hour");
+						timePlayed.setText(String.format(LanguageProvider.getString("timePlayed1"), timePlayedInHours));
 					}
 					gameName.setText(game.getName());
 					hbox.setSpacing(30);
@@ -437,7 +479,9 @@ public class GameListController implements Initializable {
 	public void refreshAchievementList() {
 		GameData game = gameList.getSelectionModel().getSelectedItem();
 		System.out.println("Ach list size: " + game.getGameStatistics().getAchievements().size());
+		achievementStatusLabel.setText("Achievements: " + String.valueOf(game.getGameStatistics().getAchievements().size()));
 		achievementList.setItems(FXCollections.observableArrayList(game.getGameStatistics().getAchievements()));
+		countMarks();
 	}
 
 	/**
@@ -473,6 +517,9 @@ public class GameListController implements Initializable {
 	private void handleMouseClick(MouseEvent arg0) {
 		GameData game = gameList.getSelectionModel().getSelectedItem();
 		if (game != null) {
+			achievementStatusLabel.setText("Loading achievements...");
+			//clears the list so it doesn't show the achievements of the previously loaded game
+			achievementList.setItems(null);
 			statLabel.setText(game.getName());
 			mainApp.loadAchievementData(game.getAppid());
 
@@ -481,6 +528,10 @@ public class GameListController implements Initializable {
 		}
 	}
 	
+	/**
+	 * Listener for gamelist order button
+	 * @param arg0
+	 */
 	@FXML
 	private void handleOrderButton(MouseEvent arg0) {
 		if(clicked) {
@@ -502,14 +553,14 @@ public class GameListController implements Initializable {
 			if (sortingChoice.getSelectionModel().getSelectedIndex() == 0 && clicked == false) {
 				UserPreferences.setGamelistSort(0);
 				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName));
-				ImageView orderAz = new ImageView("/az.png");
+				ImageView orderAz = new ImageView("/img/az.png");
 				orderButton.setGraphic(orderAz);
 				orderAz.setFitHeight(18);
 				orderAz.setFitWidth(18);
 			}else if(sortingChoice.getSelectionModel().getSelectedIndex() == 0 && clicked) {
 				UserPreferences.setGamelistSort(0);
 				sortedFilteredData = filteredData.sorted(Comparator.comparing(GameData::getName).reversed());
-				ImageView orderZa = new ImageView("/za.png");
+				ImageView orderZa = new ImageView("/img/za.png");
 				orderButton.setGraphic(orderZa);
 				orderZa.setFitHeight(18);
 				orderZa.setFitWidth(18);
@@ -517,7 +568,7 @@ public class GameListController implements Initializable {
 				UserPreferences.setGamelistSort(1);
 				sortedFilteredData = filteredData
 						.sorted(Comparator.comparing(GameData::getPlaytime_forever).reversed());
-				ImageView order21 = new ImageView("/21.png");
+				ImageView order21 = new ImageView("/img/21.png");
 				orderButton.setGraphic(order21);
 				order21.setFitHeight(18);
 				order21.setFitWidth(18);
@@ -525,7 +576,7 @@ public class GameListController implements Initializable {
 				UserPreferences.setGamelistSort(1);
 				sortedFilteredData = filteredData
 						.sorted(Comparator.comparing(GameData::getPlaytime_forever));
-				ImageView order12 = new ImageView("/12.png");
+				ImageView order12 = new ImageView("/img/12.png");
 				orderButton.setGraphic(order12);
 				order12.setFitHeight(18);
 				order12.setFitWidth(18);
@@ -647,7 +698,7 @@ public class GameListController implements Initializable {
 	/**
 	 * Counts the amount of marked games and inserts the amount into the Labels meant for it
 	 */
-	private void countMarks() {
+	public void countMarks() {
 		
 		int iBeaten = 0, iNothing = 1, iUnbeatable = 2, iIgnored = 3;
 		double beatPercent = 0;
