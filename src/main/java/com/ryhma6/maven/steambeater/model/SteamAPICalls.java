@@ -174,7 +174,11 @@ public class SteamAPICalls {
 		}
 		setGamesToUI();
 	}
-
+	
+	/**
+	 * Creates a GameData object for each game from the given list and puts them into gamesMappedByGameID
+	 * @param dbEntries list of games fetched from the database
+	 */
 	public void loadGamesFromDatabase(List<GameListEntry> dbEntries) {
 		try {
 			for (GameListEntry g : dbEntries) {

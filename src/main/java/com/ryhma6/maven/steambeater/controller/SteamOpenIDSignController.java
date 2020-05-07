@@ -510,7 +510,7 @@ public class SteamOpenIDSignController implements Initializable {
 	}
 	
 	/**
-	 * Loads texts for the rootlayouts top buttons
+	 * Loads texts for the rootlayouts top buttons in the selected language
 	 */
 	private void loadTexts() {
 		signTestButton.setText(LanguageProvider.getString("testLogin"));
