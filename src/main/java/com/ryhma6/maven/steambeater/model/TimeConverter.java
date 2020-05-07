@@ -6,6 +6,11 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TimeConverter {
+	/**
+	 * Converts epoch timestamp got from the Steam API to local time
+	 * @param millis epoch milliseconds to be converted
+	 * @return Timestamp String 
+	 */
 	public static String epochMillisToLocalTimestamp(long millis) {
 		Instant instant = Instant.ofEpochMilli(millis);
 		ZonedDateTime zdt = ZonedDateTime.ofInstant(instant, ZoneOffset.systemDefault());

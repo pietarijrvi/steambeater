@@ -237,11 +237,6 @@ public class StatComparisonController implements Initializable {
 			if (fBeatable == 0)
 				fBeatable = 1;
 
-//			friendLabel.setText(name + " owns " +  fCount + " games"
-//					+ "\nOverall playtime: " + fPlaytime/60 + " hours"
-//					+ "\nPlaytime in the last 2 weeks: "+ f2wPlaytime/60 + " hours"
-//					+ "\nLibrary completion: " + (100*fBeaten)/(100*fBeatable)*100 + "%");
-
 			friendOwnedGames.setText(String.format(LanguageProvider.getString("compFriendOwn"), name, fCount));
 			friendPlaytime.setText(String.format(LanguageProvider.getString("compOverall"), fPlaytime / 60));
 			friendPlaytimeWeeks.setText(String.format(LanguageProvider.getString("comp2Weeks"), f2wPlaytime / 60));
@@ -259,11 +254,6 @@ public class StatComparisonController implements Initializable {
 		// Avoid division by 0
 		if (oBeatable == 0)
 			oBeatable = 1;
-
-//		userLabel.setText("You own " + oCount + " games"
-//				+ "\nOverall playtime: " + oPlaytime/60 + " hours"
-//				+ "\nPlaytime in the last 2 weeks: "+ o2wPlaytime/60 + " hours"
-//				+ "\nLibrary completion: " + libComp + "%");
 
 		youOwnedGames.setText(String.format(LanguageProvider.getString("compYouOwn"), oCount));
 		youPlaytime.setText(String.format(LanguageProvider.getString("compOverall"), oPlaytime / 60));

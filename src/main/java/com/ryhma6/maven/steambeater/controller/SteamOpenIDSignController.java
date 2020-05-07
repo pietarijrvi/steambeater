@@ -520,6 +520,10 @@ public class SteamOpenIDSignController implements Initializable {
 		refreshButton.setTooltip(new Tooltip(LanguageProvider.getString("refresh")));
 	}
 
+	/**
+	 * Sets ProfileController so you can open the profile panel from the rootLayout
+	 * @param controller
+	 */
 	public void setProfileController(ProfileController controller) {
 		this.profileController = controller;
 	}
