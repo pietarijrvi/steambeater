@@ -24,7 +24,13 @@ public class ObservableLoadingStatus {
 	 * Last successful api data load completion time
 	 */
 	private long lastCompletionMillis;
+	/**
+	 * Boolean to check if the Steam API loaded
+	 */
 	private boolean apiLoadFailure = false;
+	/**
+	 * Boolean to check if the database connected
+	 */
 	private boolean databaseFailure = false;
 
 	/**
