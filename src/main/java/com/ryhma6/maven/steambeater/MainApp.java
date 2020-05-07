@@ -162,6 +162,7 @@ public class MainApp extends Application {
 										databaseController.getAllUserGames(UserPreferences.getSteamID()));
 							}
 						}
+						
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_FRIENDS);
 						steamAPI.loadSteamFriends();
 						return null;
@@ -170,6 +171,7 @@ public class MainApp extends Application {
 					@Override
 					protected void succeeded() {
 						super.succeeded();
+						gameListController.countMarks();
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.COMPLETED);
 						// steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
 					}

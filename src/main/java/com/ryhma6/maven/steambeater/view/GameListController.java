@@ -691,7 +691,7 @@ public class GameListController implements Initializable {
 	/**
 	 * Counts the amount of marked games and inserts the amount into the Labels meant for it
 	 */
-	private void countMarks() {
+	public void countMarks() {
 		
 		int iBeaten = 0, iNothing = 1, iUnbeatable = 2, iIgnored = 3;
 		double beatPercent = 0;
