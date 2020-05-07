@@ -5,6 +5,10 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Converts Steam API's epoch timestamp to readable time
+ *
+ */
 public class TimeConverter {
 	/**
 	 * Converts epoch timestamp got from the Steam API to local time
