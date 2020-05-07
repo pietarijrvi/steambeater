@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane fx:id="rootLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1330.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
+<BorderPane fx:id="rootLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1330.0" stylesheets="stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma6.maven.steambeater.controller.SteamOpenIDSignController">
 	<top>
 		<HBox alignment="CENTER" minHeight="90.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="90.0" spacing="5.0" BorderPane.alignment="CENTER_LEFT">
 			<children>
@@ -34,7 +34,7 @@
 						<Insets right="10.0" />
 					</HBox.margin>
 				</Button>
-				<Button fx:id="logoutButton" maxHeight="30.0" onAction="#logout" stylesheets="@../stylesheet.css" text="Logout">
+				<Button fx:id="logoutButton" maxHeight="30.0" onAction="#logout" text="Logout">
 					<HBox.margin>
 						<Insets />
 					</HBox.margin>
