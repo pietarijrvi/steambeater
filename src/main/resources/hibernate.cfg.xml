@@ -12,7 +12,7 @@
 		<!-- create , create-drop, update tai validate -->
 		<!-- Älä käytä tuotantoversioissa, ts, älä anna Hibernaten enää muuttaa taulurakennetta  -->
 		<!-- Ekalla kerralla create, kun kanta olemassa validate -->
-		<property name="hbm2ddl.auto">update</property>
+		<!-- property name="hbm2ddl.auto">update</property -->
 		
 		<property name="hibernate.jdbc.batch_size">50</property>
 
