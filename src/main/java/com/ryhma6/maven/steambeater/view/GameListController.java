@@ -469,6 +469,7 @@ public class GameListController implements Initializable {
 		System.out.println("Ach list size: " + game.getGameStatistics().getAchievements().size());
 		achievementStatusLabel.setText("Achievements: " + String.valueOf(game.getGameStatistics().getAchievements().size()));
 		achievementList.setItems(FXCollections.observableArrayList(game.getGameStatistics().getAchievements()));
+		countMarks();
 	}
 
 	/**
