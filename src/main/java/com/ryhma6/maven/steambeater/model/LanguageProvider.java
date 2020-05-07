@@ -162,7 +162,7 @@ public class LanguageProvider {
 		} finally {
 			try {
 				fis.close();
-			} catch (IOException e) {
+			} catch (Exception e) {
 			}
 		}
 		return properties;
