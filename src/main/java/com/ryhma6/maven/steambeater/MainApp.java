@@ -66,7 +66,7 @@ public class MainApp extends Application {
 	private GameListController gameListController;
 	
 	/**
-	 * 
+	 * Controls rootlayout
 	 */
 	private SteamOpenIDSignController steamOpenIDSignController;
 	
@@ -162,6 +162,7 @@ public class MainApp extends Application {
 										databaseController.getAllUserGames(UserPreferences.getSteamID()));
 							}
 						}
+						
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.API_FRIENDS);
 						steamAPI.loadSteamFriends();
 						return null;
@@ -170,6 +171,7 @@ public class MainApp extends Application {
 					@Override
 					protected void succeeded() {
 						super.succeeded();
+						gameListController.countMarks();
 						ObservableLoadingStatus.getInstance().setLoadingStatus(LoadingStatus.COMPLETED);
 						// steamAPI.setSavedSelections(databaseController.getAllUserGames(UserPreferences.getSteamID()));
 					}
@@ -181,6 +183,9 @@ public class MainApp extends Application {
 		initDatabase();
 	}
 	
+	/**
+	 * Loads gamelist and friendlist to the rootlayout
+	 */
 	public void loadUI() {
 		showGameList();
 		showFriendsList();
@@ -379,6 +384,9 @@ public class MainApp extends Application {
 		}
 	}
 	
+	/**
+	 * Loads profilepage to rootlayout
+	 */
 	private void showProfile() {
 		try {
 			// Load person overview.
@@ -389,7 +397,6 @@ public class MainApp extends Application {
 			rootLayout.setBottom(profile);
 			// Give the controller access to the main app.
 			ProfileController controller = loader.getController();
-			controller.setMainApp(this);
 			steamOpenIDSignController.setProfileController(controller);
 		} catch (IOException e) {
 			e.printStackTrace();

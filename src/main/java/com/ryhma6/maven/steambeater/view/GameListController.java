@@ -200,9 +200,15 @@ public class GameListController implements Initializable {
 		this.games = games;
 	}
 	
+	/**
+	 * Button for setting gamelist sorting order
+	 */
 	@FXML
 	private Button orderButton;
 	
+	/**
+	 * Boolean for orderbutton
+	 */
 	private boolean clicked = false;
 
 
@@ -516,6 +522,10 @@ public class GameListController implements Initializable {
 		}
 	}
 	
+	/**
+	 * Listener for gamelist order button
+	 * @param arg0
+	 */
 	@FXML
 	private void handleOrderButton(MouseEvent arg0) {
 		if(clicked) {
@@ -682,7 +692,7 @@ public class GameListController implements Initializable {
 	/**
 	 * Counts the amount of marked games and inserts the amount into the Labels meant for it
 	 */
-	private void countMarks() {
+	public void countMarks() {
 		
 		int iBeaten = 0, iNothing = 1, iUnbeatable = 2, iIgnored = 3;
 		double beatPercent = 0;

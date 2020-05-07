@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.DatabaseController;
 import com.ryhma6.maven.steambeater.model.GameListEntry;
 import com.ryhma6.maven.steambeater.model.LanguageProvider;
@@ -27,6 +26,7 @@ import javafx.scene.layout.VBox;
 
 public class ProfileController implements Initializable {
 
+	@SuppressWarnings("unused")
 	private SteamAPICalls api;
 
 	/**
@@ -86,34 +86,47 @@ public class ProfileController implements Initializable {
 	@FXML
 	private Label profileCompleted;
 
+	/**
+	 * VBox for the profile page
+	 */
 	@FXML
 	private VBox profileVbox;
 
+	/**
+	 * Button that closes the profile
+	 */
 	@FXML
 	private Button closeProfile;
 
-	private MainApp mainApp;
-
-	@FXML
-	private Button loadStatsButton;
-	
+	/**
+	 * ImageView for the user's avatar inside profile page
+	 */
 	@FXML
 	private ImageView profilePageImage;
-	
+
+	/**
+	 * Label for the user's username inside profile page
+	 */
 	@FXML
 	private Label profilePageName;
-	
+
 	/**
-	 * Label for Statistics text
+	 * Label for statistics text
 	 */
 	@FXML
 	private Label statText;
 
+	/**
+	 * Hides profile page
+	 */
 	public void closeProfile() {
 		profileVbox.setManaged(false);
 		profileVbox.setVisible(false);
 	}
 
+	/**
+	 * Opens profilepage and loads everything inside
+	 */
 	public void openProfile() {
 		profileVbox.setManaged(true);
 		profileVbox.setVisible(true);
@@ -148,7 +161,7 @@ public class ProfileController implements Initializable {
 		profilePlaytimeWeeks.setText(String.format(LanguageProvider.getString("comp2Weeks"), o2wPlaytime / 60));
 		profileCompleted.setText(
 				String.format(LanguageProvider.getString("compCompletion"), ((double) oBeaten / oBeatable) * 100));
-		
+
 	}
 
 	/**
@@ -208,10 +221,10 @@ public class ProfileController implements Initializable {
 		api = new SteamAPICalls();
 		profilePageImage.setManaged(false);
 		profilePageImage.setVisible(false);
-		
+
 		profilePageName.setManaged(false);
 		profilePageName.setVisible(false);
-		
+
 		// Give functionality to the close button
 		closeProfile.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -219,7 +232,7 @@ public class ProfileController implements Initializable {
 				closeProfile();
 			}
 		});
-		
+
 		ObjectProperty<PlayerProfile> userProfilePage = SteamAPICalls.getSignedPlayerProfile();
 		userProfilePage.addListener(obs -> {
 			try {
@@ -231,20 +244,19 @@ public class ProfileController implements Initializable {
 				profilePageImage.setManaged(true);
 				profilePageName.setManaged(true);
 				profilePageName.setVisible(true);
-			}catch(Exception e) {
-				
+			} catch (Exception e) {
+
 			}
 		});
 		closeProfile();
 
 	}
-	
+
+	/**
+	 * Loads texts for statistics and button for closing the profile
+	 */
 	private void loadTexts() {
 		closeProfile.setText(LanguageProvider.getString("close"));
 		statText.setText(LanguageProvider.getString("statistics"));
-	}
-
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
 	}
 }
