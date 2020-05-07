@@ -243,6 +243,7 @@ public class GameListController implements Initializable {
 		List<String> arr = new ArrayList<String>();
 		arr.add(LanguageProvider.getString("name"));
 		arr.add(LanguageProvider.getString("playtime"));
+		
 		@SuppressWarnings("rawtypes")
 		ObservableList combox1 = FXCollections.observableList(arr);
 		sortingChoice.setItems(combox1);
