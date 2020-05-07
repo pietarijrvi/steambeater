@@ -395,7 +395,6 @@ public class MainApp extends Application {
 			rootLayout.setBottom(profile);
 			// Give the controller access to the main app.
 			ProfileController controller = loader.getController();
-			controller.setMainApp(this);
 			steamOpenIDSignController.setProfileController(controller);
 		} catch (IOException e) {
 			e.printStackTrace();

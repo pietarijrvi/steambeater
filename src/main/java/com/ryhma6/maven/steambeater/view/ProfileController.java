@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.ryhma6.maven.steambeater.MainApp;
 import com.ryhma6.maven.steambeater.model.DatabaseController;
 import com.ryhma6.maven.steambeater.model.GameListEntry;
 import com.ryhma6.maven.steambeater.model.LanguageProvider;
@@ -98,8 +97,6 @@ public class ProfileController implements Initializable {
 	 */
 	@FXML
 	private Button closeProfile;
-
-	private MainApp mainApp;
 
 	/**
 	 * ImageView for the user's avatar inside profile page
@@ -261,15 +258,5 @@ public class ProfileController implements Initializable {
 	private void loadTexts() {
 		closeProfile.setText(LanguageProvider.getString("close"));
 		statText.setText(LanguageProvider.getString("statistics"));
-	}
-
-	/**
-	 * Sets main app reference, has to be set immediately after loading the FXML
-	 * that uses this controller.
-
-	 * @param mainApp
-	 */
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
 	}
 }

@@ -17,7 +17,6 @@ import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdManager;
 
 import com.ryhma6.maven.steambeater.MainApp;
-import com.ryhma6.maven.steambeater.model.DatabaseController;
 import com.ryhma6.maven.steambeater.model.LanguageProvider;
 import com.ryhma6.maven.steambeater.model.LoadingStatus;
 import com.ryhma6.maven.steambeater.model.ObservableLoadingStatus;
@@ -25,7 +24,6 @@ import com.ryhma6.maven.steambeater.model.SteamAPICalls;
 import com.ryhma6.maven.steambeater.model.TimeConverter;
 import com.ryhma6.maven.steambeater.model.UserPreferences;
 import com.ryhma6.maven.steambeater.model.steamAPI.PlayerProfile;
-import com.ryhma6.maven.steambeater.view.GameListController;
 import com.ryhma6.maven.steambeater.view.ProfileController;
 
 import javafx.beans.property.ObjectProperty;
@@ -152,10 +150,7 @@ public class SteamOpenIDSignController implements Initializable {
 	@FXML
 	private Button profileImage;
 	
-	private DatabaseController db = DatabaseController.getInstance();
-	
 	private ProfileController profileController;
-	private GameListController gameListController;
 
 	/**
 	 * Login button action (FXML). Opens new window containing embedded browser,
@@ -515,8 +510,8 @@ public class SteamOpenIDSignController implements Initializable {
 	 * Loads texts for the rootlayouts top buttons
 	 */
 	private void loadTexts() {
+		signTestButton.setText(LanguageProvider.getString("testLogin"));
 		logoutButton.setText(LanguageProvider.getString("logout"));
-		loginButton.setText(LanguageProvider.getString("login"));
 		logoutButton.setTooltip(new Tooltip(LanguageProvider.getString("logout")));
 		loginButton.setTooltip(new Tooltip(LanguageProvider.getString("login")));
 		refreshButton.setTooltip(new Tooltip(LanguageProvider.getString("refresh")));
@@ -524,9 +519,5 @@ public class SteamOpenIDSignController implements Initializable {
 
 	public void setProfileController(ProfileController controller) {
 		this.profileController = controller;
-	}
-	
-	public void setGameListController(GameListController controller) {
-		this.gameListController = controller;
 	}
 }
