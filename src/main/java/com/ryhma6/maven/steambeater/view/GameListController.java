@@ -227,6 +227,10 @@ public class GameListController implements Initializable {
 		loadTexts();
 	}
 	
+	/**
+	 * Sets all the texts within the gamelist to the selected language
+	 */
+	@SuppressWarnings("unchecked")
 	public void loadTexts() {
 		includeUnbeatable.setText(LanguageProvider.getString("includeUnbeatable"));
 		includeBeaten.setText(LanguageProvider.getString("includeBeaten"));
@@ -239,6 +243,7 @@ public class GameListController implements Initializable {
 		List<String> arr = new ArrayList<String>();
 		arr.add(LanguageProvider.getString("name"));
 		arr.add(LanguageProvider.getString("playtime"));
+		@SuppressWarnings("rawtypes")
 		ObservableList combox1 = FXCollections.observableList(arr);
 		sortingChoice.setItems(combox1);
 		

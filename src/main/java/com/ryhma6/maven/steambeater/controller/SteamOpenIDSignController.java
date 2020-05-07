@@ -327,6 +327,9 @@ public class SteamOpenIDSignController implements Initializable {
 		}
 	}
 	
+	/**
+	 * Initializes the language selection menu and fetches saved selection
+	 */
 	private void initLanguageChoice() {
 		languageChoice.getSelectionModel().clearSelection();	
 		LanguageProvider langProv = LanguageProvider.getInstance();
